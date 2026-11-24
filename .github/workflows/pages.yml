@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Refresh external guide-data metadata each morning (UTC).
+    - cron: '17 6 * * *'
 permissions:
   contents: read
   pages: write
@@ -24,10 +27,13 @@ jobs:
           python-version: '3.12'
       - name: Bundle the Polestar converter and game data
         run: python scripts/vendor_converter.py
+      - name: Check external guide file update dates
+        run: python scripts/build_guide_sources.py
       - name: Check bundled browser scripts
         run: |
           test -s _site/compile-worker.mjs
           test -s _site/converter/forge/polestar_convert_wasm_bg.wasm
+          python -m json.tool _site/guide-sources.json > /dev/null
           node --check _site/compile-worker.mjs
           node scripts/test-groups.mjs
           python scripts/test-ui.py _site/index.html
