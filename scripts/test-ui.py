@@ -21,7 +21,7 @@ class UI(HTMLParser):
         item_id = props.get("id")
         if item_id:
             self.ids.append(item_id)
-            if item_id in ("cache", "folder", "manual", "auto", "guideReady", "wowClosed", "alreadyReady") and self.depth:
+            if item_id in ("cache", "folder", "manual", "guideReady", "wowClosed", "alreadyReady") and self.depth:
                 self.hidden_essentials.append(item_id)
             if tag == "button":
                 self.button_ids.add(item_id)
@@ -41,17 +41,18 @@ assert ui.depth == 0, "Unclosed details"
 duplicates = [k for k, n in Counter(ui.ids).items() if n > 1]
 assert not duplicates, f"Duplicate DOM ids: {duplicates}"
 assert not ui.hidden_essentials, f"Essential controls hidden inside an expandable section: {ui.hidden_essentials}"
-for item in ("step1", "step2", "step3", "guideReady", "wowClosed", "cache", "folder", "manual", "auto", "result", "status", "installedFolders", "checkedInGame", "installChecklistStatus"):
+for item in ("step0", "step1", "step2", "step3", "guideReady", "wowClosed", "cache", "folder", "manual", "auto", "result", "status", "installedFolders", "checkedInGame", "installChecklistStatus", "wowPath", "accountPath", "rxpPath", "addonsPath", "copyAccountPath", "copyRxpPath", "copyAddonsPath"):
     assert item in ui.ids, f"Missing UI component: {item}"
 for item in ("cache", "folder", "guideReady", "wowClosed", "installedFolders", "checkedInGame"):
     assert item in ui.labels, f"Missing explicit label for: {item}"
 for item in ("alreadyReady", "manual", "auto"):
     assert item in ui.button_ids, f"Missing actionable button: {item}"
-for term in ("Purge", "Reload", "Exit Game", "Interface\\AddOns", "Polestar", "RXPGuides.lua", "Backup_PolestarPack", "Estrai tutto", "Ctrl", "Suggest guides from", "/polestar packs", "/polestar guides", "PolestarPack_rxp-completo-160-horde", "Guides/GuideList-forever.xml"):
-    assert term in source, f"Missing essential instruction: {term}"
-for marker in ("1A", "1B", "1C", "1D", "2A", "3A", "3B", "3C", "3D", "3E", "3F", "3G"):
-    assert f'<span class="miniindex">{marker}</span>' in source, f"Missing visibly numbered action {marker}"
-# File selectors and confirmation controls must never be hidden inside a details element.
-assert source.index('id="step1"') < source.index('id="step2"') < source.index('id="step3"')
+for term in ("WowUp", "Get Addons", "Install from URL", "RestedXP Guides", "Polestar Guides", "Purge", "Exit Game", "Suggest guides from", "RXPGuides.lua", "disattiva", "copyAccountPath", "copyRxpPath", "copyAddonsPath", "by Katra Mundo", "C:\\Program Files (x86)\\World of Warcraft\\_forever_"):
+    assert term in source, f"Missing important quick-start instruction: {term}"
+# Each essential action is visible: optional automated import and settings may be folded.
+assert source.index('id="step0"') < source.index('id="step1"') < source.index('id="step2"') < source.index('id="step3"')
+assert source.index('id="compat"') < source.index('id="manual"')
+assert source.index('id="cache"') < source.index('id="manual"')
+assert source.count('<div class="stepnum">') == 4
 assert source.count("</body>") == 1 and source.count("</html>") == 1, "Invalid end document"
 print("Beginner UI smoke checks passed:",len(ui.ids),"IDs")
