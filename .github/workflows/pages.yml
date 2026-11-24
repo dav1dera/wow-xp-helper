@@ -25,6 +25,8 @@ jobs:
       - name: Bundle the Polestar converter and game data
         run: python scripts/vendor_converter.py
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
