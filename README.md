@@ -12,6 +12,8 @@
 4. Il tool recupera le guide presenti sul PC, le converte, compila il pacchetto con il motore di Polestar, scarica uno ZIP e prova a installare i nuovi addon con il tuo consenso.
 5. Riavvia WoW e apri **Polestar → Community guides**.
 
+**Se Chrome segnala “Can't open this folder ... contains system files”:** è un blocco di sicurezza del browser. Nella schermata principale usa **Chrome blocca la cartella? Usa il metodo compatibile**: scegli il file `WTF/Account/<account>/SavedVariables/RXPGuides.lua` e poi la cartella `Interface/AddOns/RXPGuides`, infine premi **Crea pacchetto Polestar**. Lo ZIP ottenuto va estratto manualmente in `Interface/AddOns` perché questa modalità non concede accesso in scrittura alla cartella del gioco. Non disattivare le protezioni di Chrome.
+
 **Requisiti:** Chrome o Edge aggiornato su Windows, RestedXP e Polestar già installati nel gioco. Il browser deve supportare la selezione delle cartelle locali. Se la modalità automatica non trova i file, il pannello **Impostazioni avanzate** include un caricamento manuale. Le guide convertite possono differire dall'originale e alcune possono essere escluse dal compilatore.
 
 Le impostazioni iniziali includono Horde, Alliance, Speedrun e Dungeon; non devi scegliere nulla per il caso più comune. **La copertura 1–60 non è garantita**: dipende dalle guide effettivamente presenti nell'installazione dell'utente.
