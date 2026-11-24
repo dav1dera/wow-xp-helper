@@ -6,7 +6,7 @@
 
 ## Come si usa
 
-1. **Le guide sono già visibili in RestedXP?** Se sì, passa al punto successivo. Se no, dalla pagina puoi aprire [Forever Free RXP](https://forever-free-rxp.online/en/), ottenere un codice secondo le istruzioni del servizio, importarlo manualmente in RestedXP e tornare qui.
+1. **Hai già le guide RestedXP aggiornate?** Puoi saltare il primo passaggio della pagina. Confronta la versione delle guide che stai utilizzando con la più recente disponibile per la tua lingua sul [generatore esterno](https://forever-free-rxp.online/en/). Se mancano o sono vecchie, genera un nuovo codice per il tuo BattleTag. **Prima di sostituire guide già importate**, in WoW usa RestedXP → Import Guide → **Purge**, conferma e premi **Reload**; poi incolla il nuovo codice, premi **Import** e nuovamente **Reload**. *Attenzione: Purge elimina tutte le guide importate.*
 2. **Chiudi completamente WoW** in modo che la cache delle guide venga salvata.
 3. Premi **Scegli WoW e crea le guide**. Seleziona la cartella \`World of Warcraft\` oppure \`_forever_\`, e autorizza l'accesso ai file nel browser.
 4. Il tool recupera le guide presenti sul PC, le converte, compila il pacchetto con il motore di Polestar, scarica uno ZIP e prova a installare i nuovi addon con il tuo consenso.
