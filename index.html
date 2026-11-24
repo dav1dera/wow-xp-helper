@@ -153,13 +153,13 @@ button.textlink:hover{color:#d7e9ff;background:none}
  <p class="smallprint">Seleziona preferibilmente <code>_forever_</code>. Se Chrome dice <strong>“Can't open this folder”</strong>, non modificare le protezioni del browser: usa il metodo compatibile qui sotto.</p>
  <button class="textlink" id="compatToggle" type="button" aria-expanded="false" aria-controls="compat">Chrome blocca la cartella? Usa il metodo compatibile</button>
  <div class="hint" id="compat" hidden>
-   <strong>Metodo compatibile: scegli 2 elementi</strong>
-   <p>Questa modalità legge soltanto i file scelti e non richiede l'accesso all'intera cartella di WoW.</p>
+   <strong>Metodo compatibile: basta 1 file</strong>
+   <p>Se hai già importato le guide in RestedXP e hai chiuso WoW, seleziona <strong>RXPGuides.lua</strong>. La cartella dell'addon serve solo per includere anche le guide iniziali già installate.</p>
    <label class="filelabel"><strong>1. File delle guide importate</strong><br><code>WTF\Account\TUO_ACCOUNT\SavedVariables\RXPGuides.lua</code>
       <input type="file" id="cache" accept=".lua"></label>
-   <label class="filelabel"><strong>2. Cartella delle guide iniziali</strong><br><code>Interface\AddOns\RXPGuides</code>
+   <label class="filelabel"><strong>2. Cartella guide iniziali (facoltativa)</strong><br><code>Interface\AddOns\RXPGuides</code>
       <input type="file" id="folder" webkitdirectory directory multiple></label>
-   <p id="compatState" class="smallprint" aria-live="polite">Seleziona prima il file, poi la cartella.</p>
+   <p id="compatState" class="smallprint" aria-live="polite">Seleziona RXPGuides.lua: puoi già convertire. La cartella è facoltativa.</p>
    <button id="manual" class="secondary" type="button">Crea pacchetto Polestar</button>
    <p class="smallprint">Con questo metodo il pacchetto viene scaricato come ZIP. Per installarlo estrai le cartelle <code>PolestarPack_*</code> in <code>_forever_\Interface\AddOns</code> e riavvia WoW.</p>
  </div>
@@ -433,15 +433,15 @@ function showCompatible(reason){
  $('compat').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 $('compatToggle').addEventListener('click',()=>{
- if($('compat').hidden)showCompatible('Seleziona il file RXPGuides.lua e la cartella RXPGuides.');
+ if($('compat').hidden)showCompatible('Seleziona RXPGuides.lua: la cartella RXPGuides è facoltativa.');
  else {$('compat').hidden=true;$('compatToggle').setAttribute('aria-expanded','false');}
 });
 function compatibleSelectionStatus(){
  const hasCache=!!$('cache').files.length,hasFolder=!!$('folder').files.length;
- $('compatState').textContent=hasCache&&hasFolder?'File e cartella selezionati: premi “Crea pacchetto Polestar”.':
-   hasCache?'File delle guide selezionato. Ora scegli la cartella RXPGuides.':
-   hasFolder?'Cartella selezionata. Ora scegli il file RXPGuides.lua.':
-   'Seleziona prima il file, poi la cartella.';
+ $('compatState').textContent=hasCache&&hasFolder?'File e cartella selezionati: puoi creare il pacchetto.':
+   hasCache?'File trovato: premi “Crea pacchetto Polestar”. La cartella RXPGuides è facoltativa.':
+   hasFolder?'Cartella selezionata. Se hai importato guide, aggiungi RXPGuides.lua dalla cartella SavedVariables.':
+   'Seleziona RXPGuides.lua: puoi già convertire senza scegliere altre cartelle.';
 }
 $('cache').addEventListener('change',compatibleSelectionStatus);
 $('folder').addEventListener('change',compatibleSelectionStatus);
