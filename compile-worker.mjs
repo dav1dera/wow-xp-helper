@@ -20,6 +20,7 @@ function segments(guides){
   return groups;
 }
 function groupName(group){
+  if(group.unified)return "Speedrun 1-60 Horde + Alliance";
   const [faction,route]=group.key.split("-");
   const side={horde:"Horde",alliance:"Alliance",both:"Entrambe"}[faction];
   const type={main:"Speedrun",dungeon:"Dungeon",survival:"Survival"}[route];
@@ -71,8 +72,16 @@ async function compile({files,options,includeEntries}){
   });
   const run=runs.rxp;
   if(!run?.guides?.length)throw Error("Nessuna guida convertibile dalla cache RestedXP.");
-  const parts=segments(run.guides);
-  tell("log",{text:"Guide riconosciute: "+run.guides.length+". Compilazione in "+parts.length+" pacchetti più piccoli (massimo "+LIMIT+" guide)."});
+  // The main Horde + Alliance speedrun MUST be one pack, with a common pack id.
+  // Only optional Dungeon/Survival routes are segmented into smaller packs.
+  // Compiling every main guide together preserves cross-level `next` links.
+  const main=run.guides.filter(g=>g.route==="main");
+  const other=run.guides.filter(g=>g.route!=="main");
+  const parts=[];
+  if(main.length)parts.push({key:"unified-main",index:1,count:1,guides:main,code:0,unified:true});
+  parts.push(...segments(other));
+  tell("log",{text:"Guide riconosciute: "+run.guides.length+"; Speedrun unificata: "+main.length+" guide in UN SOLO pacchetto. Altri pacchetti opzionali: "+(parts.length-(main.length?1:0))+"."});
+  if(!main.length)tell("log",{text:"Attenzione: nessuna guida Speedrun disponibile nei file selezionati."});
   const coreTexts={};
   for(const n of dm.COMPILER_NAMES){
     const t=await readData("data/forever/"+n+".json");
@@ -87,13 +96,13 @@ async function compile({files,options,includeEntries}){
   const stats={compiled:0,dropped:0,interpack:0};
   for(let i=0;i<parts.length;i++){
     const part=parts[i],label=groupName(part);
-    const suffix="-"+part.code+"-"+part.index;
-    const id=options.id.slice(0,32-suffix.length).replace(/-+$/,"")+suffix;
-    const title=(label+" - "+options.title).slice(0,64);
+    const suffix=part.unified?"":"-"+part.code+"-"+part.index;
+    const id=part.unified?options.id:options.id.slice(0,32-suffix.length).replace(/-+$/,"")+suffix;
+    const title=part.unified?"RestedXP Speedrun 1-60":(label+" - "+options.title).slice(0,64);
     const local=new Set(part.guides.map(g=>g.slug));
     const input=part.guides.map(g=>["guides/"+g.slug+".guide",guideText(g,options.id,id,local,stats)]);
-    tell("phase",{text:"Compilazione "+(i+1)+"/"+parts.length+": "+label+" ("+input.length+" guide)",progress:72+Math.floor(20*i/parts.length)});
-    tell("log",{text:"Compilazione "+(i+1)+"/"+parts.length+": "+label});
+    tell("phase",{text:"Compilazione "+(i+1)+"/"+parts.length+": "+label+" ("+input.length+" guide; i collegamenti tra livelli sono mantenuti)",progress:72+Math.floor(20*i/parts.length)});
+    tell("log",{text:"Compilazione "+(i+1)+"/"+parts.length+": "+label+(part.unified?" — un unico addon, nessuna divisione per livello":"")});
     let compiler;
     try{
       compiler=new wasm.Compiler(library,instances??"",areas??"");
@@ -123,7 +132,7 @@ async function compile({files,options,includeEntries}){
   }
   if(!stats.compiled)throw Error("Nessuna guida compilata.");
   const guideMessage=[
-    "WoW XP Helper - Pacchetti RestedXP per Polestar",
+    "WoW XP Helper - Speedrun 1-60 unificata per Polestar",
     "Chiudi WoW ed estrai TUTTE le cartelle PolestarPack_* in:",
     "World of Warcraft\\_forever_\\Interface\\AddOns",
     "Riavvia WoW. Apri Polestar > Community guides.",
@@ -132,16 +141,18 @@ async function compile({files,options,includeEntries}){
     "Guide scartate: "+stats.dropped,
     "Pacchetti: "+reports.length,
     ...reports,"",
-    "Per evitare blocchi le guide sono divise in pacchetti.",
-    "Al confine tra pacchetti potrebbe servire scegliere la guida successiva a mano.",
-    "Collegamenti tra pacchetti separati: "+stats.interpack
+    "La Speedrun Horde + Alliance 1-60 e UN SOLO pacchetto Community.",
+    "Le eventuali cartelle con suffisso _Human / _Gnome ecc. sono componenti dello stesso pacchetto Polestar: vanno installate insieme.",
+    "Solo le guide Dungeon / Survival (se selezionate) usano pacchetti separati.",
+    "Se hai i vecchi pacchetti AllianceSpeedrun/HordeSpeedrun divisi, rimuovili da AddOns prima di avviare WoW.",
+    "Collegamenti tra percorsi opzionali separati: "+stats.interpack
   ].join("\r\n");
   all["LEGGIMI_INSTALLAZIONE.txt"]=guideMessage;
   tell("phase",{text:"Preparazione dello ZIP finale…",progress:95});
   const archive=zm.zip(all);
   const entries=includeEntries?Object.fromEntries(Object.entries(all).filter(([k])=>k!=="LEGGIMI_INSTALLAZIONE.txt")):null;
   self.postMessage({
-    type:"done",filename:"PolestarPack_"+options.id+"_completo.zip",
+    type:"done",filename:"RestedXP_Speedrun_1-60_Polestar.zip",
     buffer:archive.buffer,guideCount:stats.compiled,droppedCount:stats.dropped,
     packCount:reports.length,detachedLinks:stats.interpack,warnings:stats.interpack,
     entries
