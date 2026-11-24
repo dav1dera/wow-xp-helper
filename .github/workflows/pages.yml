@@ -30,6 +30,7 @@ jobs:
           test -s _site/converter/forge/polestar_convert_wasm_bg.wasm
           node --check _site/compile-worker.mjs
           node scripts/test-groups.mjs
+          python scripts/test-ui.py _site/index.html
           python - <<'PY'
           from pathlib import Path
           html = Path('_site/index.html').read_text(encoding='utf-8')
