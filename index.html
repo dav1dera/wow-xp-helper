@@ -113,6 +113,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 .reference-links{border-top:1px solid #375171;margin:20px 0 0;padding-top:14px;display:flex;flex-direction:column;gap:7px;font-size:14px}
 @media(max-width:580px){.requirements{margin:0 12px 15px;padding:16px}.ministep{grid-template-columns:39px 1fr}.folder-example pre{font-size:11px}}
 
+.input-invalid{color:#ffbbbf!important;font-weight:800;background:#4b2831;border:1px solid #b66575;border-radius:8px;padding:11px}
 </style>
 </head>
 <body>
@@ -573,24 +574,42 @@ function showCompatible(reason){
  if(reason)status(reason,'warn');
  $('compat').scrollIntoView({behavior:'smooth',block:'start'});
 }
+function selectedFiles(){
+ const cache=$('cache').files[0]||null;
+ const validCache=!!cache&&cache.name.toLowerCase()==='rxpguides.lua';
+ const guideFiles=[...$('folder').files];
+ const validFolder=!guideFiles.length||guideFiles.some(file=>{
+   const path=(file.webkitRelativePath||file.name).replaceAll('\\','/').toLowerCase();
+   return /(^|\/)rxpguides\/guides\/guidelist-forever\.xml$/.test(path);
+ });
+ return {cache,validCache,hasFolder:guideFiles.length>0,validFolder};
+}
 function compatibleSelectionStatus(){
- const hasCache=!!$('cache').files.length,hasFolder=!!$('folder').files.length;
- $('compatState').textContent=hasCache&&hasFolder?'✓ File e cartella delle guide selezionati. Ora puoi convertire.':
-   hasCache?'✓ RXPGuides.lua selezionato. Se possibile, aggiungi anche la cartella RXPGuides per i livelli 1–20.':
-   hasFolder?'✓ Cartella RXPGuides selezionata. Scegli anche RXPGuides.lua dalla cartella SavedVariables.':
-   'Non hai ancora scelto i file. Seleziona RXPGuides.lua e, se disponibile, la cartella RXPGuides.';
+ const v=selectedFiles();
+ let message;
+ if(v.cache&&!v.validCache)message='✗ File non corretto: scegli RXPGuides.lua (non Polestar.lua o un altro file).';
+ else if(!v.validFolder)message='✗ Cartella non corretta: seleziona RXPGuides, che deve contenere Guides/GuideList-forever.xml. Riprova.';
+ else if(v.validCache&&v.hasFolder)message='✓ RXPGuides.lua e cartella RXPGuides corretti. Quando hai confermato i passaggi, premi CREA LE GUIDE.';
+ else if(v.validCache)message='✓ RXPGuides.lua corretto. Se possibile aggiungi anche RXPGuides per includere le guide iniziali 1–20.';
+ else if(v.hasFolder)message='✓ Cartella delle guide iniziali riconosciuta. Ora scegli il file RXPGuides.lua.';
+ else message='Non hai ancora selezionato il file RXPGuides.lua. La cartella RXPGuides è facoltativa ma consigliata.';
+ $('compatState').textContent=message;
+ $('compatState').classList.toggle('input-invalid',!v.validFolder||!!v.cache&&!v.validCache);
+ syncReadiness();
 }
 $('cache').addEventListener('change',compatibleSelectionStatus);
 $('folder').addEventListener('change',compatibleSelectionStatus);
 function syncReadiness(){
  const ready=$('guideReady').checked&&$('wowClosed').checked;
+ const files=selectedFiles();
  $('auto').disabled=working||!ready;
- $('manual').disabled=working||!ready;
+ $('manual').disabled=working||!ready||!files.validCache||!files.validFolder;
  $('preflightMessage').classList.toggle('ready',ready);
  $('preflightMessage').textContent=working?'Conversione in corso: segui l’avanzamento qui sotto.':
-   ready?'✓ Pronto! Ora scegli i file oppure la cartella WoW e avvia.':
-   !$('guideReady').checked?'Manca la conferma del passaggio 1: controlla le guide RestedXP.':
-   'Ora chiudi completamente WoW e spunta la conferma qui sopra.';
+   !ready?(!$('guideReady').checked?'Manca la conferma del passaggio 1: controlla le guide RestedXP.':'Ora chiudi completamente WoW e spunta la conferma qui sopra.'):
+   !files.validCache?'✓ Pronto per scegliere la cartella WoW. Per il metodo file, seleziona RXPGuides.lua con il pulsante qui sotto.':
+   !files.validFolder?'Cartella RXPGuides non riconosciuta. Seleziona la cartella corretta prima della conversione.':
+   '✓ Pronto! Puoi premere CREA LE GUIDE PER POLESTAR oppure usare il metodo automatico.';
 }
 $('guideReady').addEventListener('change',syncReadiness);
 $('wowClosed').addEventListener('change',syncReadiness);
