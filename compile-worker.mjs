@@ -20,7 +20,7 @@ function segments(guides){
   return groups;
 }
 function groupName(group){
-  if(group.unified)return "Speedrun 1-60 Horde + Alliance";
+  if(group.unified)return "Speedrun "+(group.faction==="horde"?"Horde":"Alliance")+" 1-60";
   const [faction,route]=group.key.split("-");
   const side={horde:"Horde",alliance:"Alliance",both:"Entrambe"}[faction];
   const type={main:"Speedrun",dungeon:"Dungeon",survival:"Survival"}[route];
@@ -39,14 +39,27 @@ export function guideText(g,sourceId,packId,members,stats){
     return keep.length?"next "+keep.join(", "):"";
   });
 }
-export function buildGroups(guides){
-  // Main remains ONE pack for both factions and all level brackets.
+export function buildGroups(guides, sides=["horde","alliance"]){
+  // One complete 1-60 Speedrun pack PER FACTION. Shared guides are included in both.
   const main=guides.filter(g=>g.route==="main");
   const other=guides.filter(g=>g.route!=="main");
-  return [
-    ...(main.length?[{key:"unified-main",index:1,count:1,guides:main,code:0,unified:true}]:[]),
-    ...segments(other)
-  ];
+  const wanted=new Set(sides);
+  const out=[];
+  for(const faction of ["horde","alliance"]){
+    if(!wanted.has(faction))continue;
+    const filtered=main.filter(g=>{
+      const side=(/^faction (Horde|Alliance)\s*$/mi.exec(g.text)||[])[1]?.toLowerCase();
+      return !side||side===faction;
+    });
+    if(filtered.length)out.push({
+      key:faction+"-main",index:1,count:1,guides:filtered,
+      code:faction==="horde"?1:2,unified:true,faction
+    });
+  }
+  return [...out,...segments(other).filter(g=>{
+    const side=g.key.split("-")[0];
+    return side==="both"||wanted.has(side);
+  })];
 }
 async function compile({files,options,includeEntries}){
   tell("phase",{text:"Caricamento convertitore e dati Polestar…",progress:67});
@@ -84,10 +97,10 @@ async function compile({files,options,includeEntries}){
   // The main Horde + Alliance speedrun MUST be one pack, with a common pack id.
   // Only optional Dungeon/Survival routes are segmented into smaller packs.
   // Compiling every main guide together preserves cross-level `next` links.
-  const parts=buildGroups(run.guides);
-  const mainCount=parts.find(p=>p.unified)?.guides.length||0;
-  tell("log",{text:"Guide riconosciute: "+run.guides.length+"; Speedrun unificata: "+mainCount+" guide in UN SOLO pacchetto. Altri pacchetti opzionali: "+(parts.length-(mainCount?1:0))+"."});
-  if(!mainCount)tell("log",{text:"Attenzione: nessuna guida Speedrun disponibile nei file selezionati."});
+  const parts=buildGroups(run.guides,options.factions||["horde","alliance"]);
+  const mainParts=parts.filter(p=>p.unified);
+  tell("log",{text:"Guide RXP riconosciute: "+run.guides.length+"; Speedrun: "+mainParts.map(p=>(p.faction==="horde"?"Horde":"Alliance")+" "+p.guides.length+" tappe").join(", ")+". Una sola guida Community per ogni fazione."});
+  if(!mainParts.length)tell("log",{text:"Attenzione: nessuna guida Speedrun disponibile nei file selezionati."});
   const coreTexts={};
   for(const n of dm.COMPILER_NAMES){
     const t=await readData("data/forever/"+n+".json");
@@ -102,9 +115,9 @@ async function compile({files,options,includeEntries}){
   const stats={compiled:0,dropped:0,interpack:0};
   for(let i=0;i<parts.length;i++){
     const part=parts[i],label=groupName(part);
-    const suffix=part.unified?"":"-"+part.code+"-"+part.index;
-    const id=part.unified?options.id:options.id.slice(0,32-suffix.length).replace(/-+$/,"")+suffix;
-    const title=part.unified?"RestedXP Speedrun 1-60":(label+" - "+options.title).slice(0,64);
+    const suffix=part.unified?"-"+part.faction:"-"+part.code+"-"+part.index;
+    const id=options.id.slice(0,32-suffix.length).replace(/-+$/,"")+suffix;
+    const title=part.unified?"RestedXP Speedrun "+(part.faction==="horde"?"Horde":"Alliance")+" 1-60":(label+" - "+options.title).slice(0,64);
     const local=new Set(part.guides.map(g=>g.slug));
     const input=part.guides.map(g=>["guides/"+g.slug+".guide",guideText(g,options.id,id,local,stats)]);
     tell("phase",{text:"Compilazione "+(i+1)+"/"+parts.length+": "+label+" ("+input.length+" guide; i collegamenti tra livelli sono mantenuti)",progress:72+Math.floor(20*i/parts.length)});
@@ -138,7 +151,7 @@ async function compile({files,options,includeEntries}){
   }
   if(!stats.compiled)throw Error("Nessuna guida compilata.");
   const guideMessage=[
-    "WoW XP Helper - Speedrun 1-60 unificata per Polestar",
+    "WoW XP Helper - Speedrun Horde e Alliance 1-60 per Polestar",
     "Chiudi WoW ed estrai TUTTE le cartelle PolestarPack_* in:",
     "World of Warcraft\\_forever_\\Interface\\AddOns",
     "Riavvia WoW. Apri Polestar > Community guides.",
@@ -147,9 +160,10 @@ async function compile({files,options,includeEntries}){
     "Guide scartate: "+stats.dropped,
     "Pacchetti: "+reports.length,
     ...reports,"",
-    "La Speedrun Horde + Alliance 1-60 e UN SOLO pacchetto Community.",
+    "La Speedrun Horde 1-60 e la Speedrun Alliance 1-60 sono DUE pacchetti Community distinti.",
     "Le eventuali cartelle con suffisso _Human / _Gnome ecc. sono componenti dello stesso pacchetto Polestar: vanno installate insieme.",
-    "Solo le guide Dungeon / Survival (se selezionate) usano pacchetti separati.",
+    "Ogni fazione ha una sola guida Community per i livelli 1-60; i capitoli interni sono collegati.",
+    "Solo le guide Dungeon / Survival (se selezionate) possono usare altri pacchetti.",
     "Se hai i vecchi pacchetti AllianceSpeedrun/HordeSpeedrun divisi, rimuovili da AddOns prima di avviare WoW.",
     "Collegamenti tra percorsi opzionali separati: "+stats.interpack
   ].join("\r\n");
@@ -158,7 +172,7 @@ async function compile({files,options,includeEntries}){
   const archive=zm.zip(all);
   const entries=includeEntries?Object.fromEntries(Object.entries(all).filter(([k])=>k!=="LEGGIMI_INSTALLAZIONE.txt")):null;
   self.postMessage({
-    type:"done",filename:"RestedXP_Speedrun_1-60_Polestar.zip",
+    type:"done",filename:"RestedXP_Speedrun_Horde_Alliance_1-60.zip",
     buffer:archive.buffer,guideCount:stats.compiled,droppedCount:stats.dropped,
     packCount:reports.length,detachedLinks:stats.interpack,warnings:stats.interpack,
     entries
