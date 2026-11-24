@@ -1,30 +1,125 @@
 <!doctype html>
-<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>RXP → Polestar OneClick</title><style>*{box-sizing:border-box}body{margin:0;background:#0c1220;color:#e8f0fc;font:15px/1.55 system-ui,'Segoe UI',sans-serif}main{max-width:900px;margin:auto;padding:36px 20px 70px}header{padding-bottom:18px}.eyebrow{color:#6de1c7;font-weight:700;font-size:12px;letter-spacing:1.3px}h1{font-size:34px;line-height:1.16;letter-spacing:-.7px;margin:7px 0 12px}h1 span{color:#80baff}p{color:#b1c1d8;margin:7px 0}h2{margin:0 0 7px;font-size:20px}.lead{max-width:660px;font-size:16px}.card{border:1px solid #2d405d;background:#172339;border-radius:15px;padding:23px;margin:17px 0}.card:nth-child(2){background:#15263a}.title{display:flex;align-items:center;gap:12px;margin-bottom:13px}.num{width:32px;height:32px;background:#2a5075;border-radius:9px;display:grid;place-items:center;font-weight:800}.flex{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.button,button{cursor:pointer;border:1px solid #79ace2;background:#89bffe;color:#102339;border-radius:10px;padding:13px 17px;font:700 15px system-ui}.button:hover,button:hover{background:#bcdbff}button.secondary{border:1px solid #4d688f;background:#243a58;color:#dfeefe}button.secondary:hover{background:#304c70}button:disabled{cursor:not-allowed;opacity:.5}button.primary{font-size:16px;min-height:53px}.tip{font-size:12px;color:#a6b8cf}.hint{border:1px solid #3b5373;background:#101b2d;border-radius:10px;padding:12px 15px;color:#d9e8fb;margin:13px 0}.good{background:#15362e;border-color:#397b6d}.warn{background:#3a2c1c;border-color:#8e6d36}.error{background:#3a2028;border-color:#955b62}.row{display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}.checkboxes{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.checkboxes label{padding:9px 12px;border:1px solid #344c69;border-radius:8px;background:#101d2e;cursor:pointer}input[type=checkbox]{accent-color:#84baff;margin-right:6px}.field{background:#101b2d;border:1px solid #3c5676;border-radius:9px;padding:10px 12px;color:white;width:100%;font:inherit;min-width:0}label.fieldlbl{display:block;font-size:12px;font-weight:700;color:#c6d8f2;margin:13px 0 5px}.smallprint{font-size:12px;color:#97acc7}.progress{height:8px;border-radius:15px;background:#30445e;overflow:hidden;margin:15px 0 8px}.progress div{height:100%;background:linear-gradient(90deg,#4998ec,#65dbc6);width:0;transition:width .25s}.log{max-height:290px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#090f1a;border:1px solid #273955;border-radius:10px;padding:13px;color:#c5dbf4;font:12px/1.7 Consolas,monospace}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}.metric{background:#0c182b;padding:12px;border:1px solid #35435b;border-radius:10px}.metric b{font-size:23px;display:block}.metric span{font-size:12px;color:#9bb3cf}code{color:#afd6ff}details{border:1px solid #354763;border-radius:10px;padding:13px;margin-top:15px}summary{cursor:pointer;font-weight:700}.filelabel{border:1px dashed #607999;background:#101e30;border-radius:10px;padding:12px;display:block;margin:9px 0}.filelabel input{margin:6px 0;width:100%}a{color:#acd4ff}a:hover{color:white}footer{color:#92a6c0;font-size:12px;margin-top:18px}hr{border:0;border-top:1px solid #354763;margin:20px 0}[hidden]{display:none!important}@media(max-width:600px){main{padding:20px 14px}h1{font-size:28px}.card{padding:17px}.button,button{width:100%}}</style></head>
-<body><main><header><div class="eyebrow">GITHUB PAGES · CHROME / EDGE · VERSIONE 3.2</div><h1>RestedXP <span>→</span> Polestar OneClick</h1><p class="lead">Recupera le guide importate di RestedXP, le unisce a quelle già installate e le converte direttamente in un addon Polestar. <strong>Un solo programma, nessun secondo sito e nessun CMD.</strong></p></header>
-<section class="card" id="sorgenti" style="background:#152234">
- <div class="title"><div class="num" style="background:#244b52">0</div><div><h2>Guide RestedXP: già importate oppure da ottenere?</h2>
- <p>Se hai già le guide dentro RestedXP, <strong>salta questo passaggio</strong>: usa direttamente il pulsante OneClick più sotto.</p></div></div>
- <div class="hint"><strong>Hai già importato le guide in RestedXP?</strong> Non serve alcun codice esterno: chiudi WoW e premi OneClick qui sotto. Le guide presenti nei file locali saranno lette e convertite nel browser.</div>
- <div class="flex" style="margin-top:14px"><a class="button" style="text-decoration:none;display:inline-block" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">Apri il sito esterno ↗</a><a href="https://restedxp.com/" target="_blank" rel="noopener noreferrer">RestedXP ufficiale</a></div>
- <details><summary>Come funziona la fonte esterna e cosa fa il Gist</summary><p>Il sito Forever Free RXP dichiara di basarsi sul Gist <a href="https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1" target="_blank" rel="noopener noreferrer">decrypt_guide.py di imSp4rky</a>. Lo script converte un file d'importazione RestedXP cifrato e legato a un BattleTag in guide Lua, ma <strong>non contiene le guide e non genera da solo un codice senza un file sorgente</strong>. Il sito esterno gestisce separatamente la propria sorgente e la generazione dei codici. WoW XP Helper non replica questa funzione e non acquisisce dati da quel sito.</p></details>
- <details><summary>Come far comparire le guide nel convertitore</summary><p>Importa in RestedXP soltanto guide che hai il diritto di utilizzare. Apri WoW, verifica che compaiano nell'addon, poi <strong>chiudi completamente WoW</strong> per salvare i dati in <code>WTF/Account/.../SavedVariables/RXPGuides.lua</code>. Premi OneClick e autorizza il browser a leggere la cartella del gioco.</p><p>Il BattleTag e gli eventuali codici importati sul sito esterno non vengono richiesti, copiati o inviati da WoW XP Helper. La conversione delle guide leggibili avviene localmente.</p></details>
- </section>
-<section class="card"><div class="title"><div class="num">1</div><div><h2>Scegli cosa convertire</h2><p>Le impostazioni predefinite includono le guide Speedrun Horde e Alliance, con i percorsi dungeon.</p></div></div>
-<div class="checkboxes"><label><input type="checkbox" id="horde" checked>Horde</label><label><input type="checkbox" id="alliance" checked>Alliance</label><label><input type="checkbox" id="main" checked>Speedrun / Main</label><label><input type="checkbox" id="dungeon" checked>Dungeon</label><label><input type="checkbox" id="survival">Survival</label></div>
-<div class="row"><div style="flex:1;min-width:200px"><label class="fieldlbl" for="pack">Nome del pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32" autocomplete="off" spellcheck="false"></div><div style="flex:1;min-width:200px"><label class="fieldlbl" for="title">Titolo in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60 - Horde + Alliance" maxlength="64"></div></div>
-<div class="hint">Le guide sono lette <strong>dal tuo PC</strong>: il programma non contiene né sblocca guide. Il compilatore Polestar viene distribuito assieme al sito: i file delle guide sono elaborati nel browser e non vengono caricati sui server del progetto.</div>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Converti le guide RestedXP già presenti sul tuo PC in un addon Polestar per WoW Forever, con un solo pulsante.">
+<title>WoW XP Helper — RestedXP → Polestar</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#182941;background:#f5f7fb;font-synthesis:none}
+*{box-sizing:border-box}
+body{margin:0;line-height:1.52}
+main{max-width:760px;margin:auto;padding:28px 20px 52px}
+header{padding:4px 0 25px}
+.brand{display:flex;align-items:center;gap:11px;color:#233a61;font-weight:780;font-size:16px;margin-bottom:25px;flex-wrap:wrap}
+.logo{display:grid;place-items:center;background:#174ec1;color:white;width:36px;height:36px;border-radius:11px;font-weight:850;letter-spacing:-1px}
+.brand small{font-size:12px;font-weight:620;color:#63748d;padding:4px 9px;border:1px solid #d7dfed;border-radius:20px;background:#fff}
+h1{font-size:clamp(30px,5vw,43px);line-height:1.15;letter-spacing:-1.3px;margin:0 0 12px;color:#152740;max-width:650px}
+h1 span{color:#245ed3}
+h2{margin:0;font-size:20px;line-height:1.25;letter-spacing:-.25px;color:#162947}
+p{margin:8px 0;color:#566882}
+.lead{font-size:16px;max-width:630px}
+.card{background:white;border:1px solid #dde5f0;border-radius:17px;padding:25px;margin:14px 0;box-shadow:0 4px 14px rgba(25,48,81,.035)}
+.card.action{border-color:#c8d9f7;box-shadow:0 6px 30px rgba(36,87,179,.08)}
+.title{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
+.num{width:31px;height:31px;min-width:31px;border-radius:9px;background:#e8f0ff;color:#245aca;display:grid;place-items:center;font-size:15px;font-weight:800}
+.title p{margin:6px 0 0}
+.oneclick{display:block;width:100%;max-width:460px;margin:21px 0 11px;border:0;background:#155bd2;color:white;border-radius:12px;padding:17px 23px;text-align:center;font:750 17px/1.3 inherit;font-size:17px;font-weight:760;cursor:pointer;min-height:58px;box-shadow:0 6px 15px rgba(18,87,212,.2)}
+.oneclick:hover{background:#0b48b5}
+.oneclick:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #82b5ff;outline-offset:3px}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:wait;opacity:.57}
+button.secondary{padding:10px 13px;background:#eef3ff;color:#2054b7;border:1px solid #cad9f5;border-radius:9px;font-weight:690}
+button.secondary:hover{background:#e2ebff}
+a{color:#1a58c3;text-underline-offset:2px;font-weight:680}
+a:hover{color:#10439f}
+.help-link{display:inline-flex;align-items:center;gap:5px;margin:9px 0 1px}
+.smallprint,.tip{font-size:13px;color:#64748b}
+.hint{background:#f1f5fc;border:1px solid #dbe5f5;border-radius:11px;padding:11px 14px;margin:13px 0;color:#3f5677;font-size:14px}
+.good{background:#eaf8f3;border-color:#bce7d7;color:#176145}
+.warn{background:#fff8e9;border-color:#f6dda0;color:#805310}
+.error{background:#fff0f0;border-color:#f1bfbf;color:#9d3030}
+.progress{height:9px;border-radius:12px;background:#e0e8f3;overflow:hidden;margin:17px 0 12px}
+.progress div{height:100%;width:0;background:#245ed3;transition:width .22s ease}
+.log{max-height:230px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#101a2b;color:#dbeafe;padding:13px;border-radius:10px;font:12px/1.5 Consolas,monospace;margin:12px 0}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin:14px 0}
+.metric{background:#f5f8fe;border:1px solid #e2eaf7;border-radius:10px;padding:12px}
+.metric b{display:block;color:#1b3e7b;font-size:25px}
+.metric span{font-size:12px;color:#61728b}
+details{border-top:1px solid #e5eaf3;margin-top:15px;padding-top:13px}
+details > summary{cursor:pointer;color:#234f9c;font-weight:720}
+details p{margin:9px 0}
+details ol{padding-left:23px;color:#4f6380;font-size:14px}
+details li{padding:3px 0}
+.advanced{background:white;border:1px solid #e0e6ef;border-radius:14px;padding:14px 20px;margin:18px 0;color:#384d6d}
+.advanced > summary{color:#4f6481;font-size:14px}
+.advanced .inner{padding:10px 0}
+.checkboxes{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.checkboxes label{background:#f5f8fd;border:1px solid #dce5f1;border-radius:8px;padding:8px 11px;font-size:14px;cursor:pointer}
+input[type=checkbox]{accent-color:#1456c4}
+.row,.flex{display:flex;gap:13px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1;min-width:170px}
+.fieldlbl{display:block;color:#4d5e76;font-size:13px;font-weight:730;margin:12px 0 5px}
+.field{display:block;width:100%;background:white;border:1px solid #c8d5e7;border-radius:9px;padding:10px;font:inherit;color:#1b304d}
+.filelabel{display:block;padding:12px;border:1px dashed #adc0db;border-radius:9px;margin:10px 0;font-size:14px}
+.filelabel input{width:100%;margin-top:6px}
+code{background:#f1f5fb;border-radius:4px;padding:1px 4px;color:#385d97;overflow-wrap:anywhere}
+footer{font-size:12px;color:#7d8da1;margin-top:22px}
+footer a{font-weight:600}
+[hidden]{display:none!important}
+@media(max-width:520px){main{padding:18px 12px 40px}.card{padding:18px;border-radius:13px}.brand{margin-bottom:19px}.oneclick{max-width:none}.title{gap:10px}h2{font-size:18px}header{padding-bottom:15px}}
+</style>
+</head>
+<body><main>
+<header>
+<div class="brand"><span class="logo">XP</span><span>WoW XP Helper</span><small>RestedXP → Polestar</small></div>
+<h1>Le tue guide di WoW <span>pronte per Polestar.</span></h1>
+<p class="lead">Niente comandi o programmi da installare: scegli la cartella di World of Warcraft e il resto viene preparato automaticamente.</p>
+</header>
+<section class="card" aria-label="Preparazione guide RestedXP">
+ <div class="title"><span class="num">1</span><div><h2>Hai già le guide in RestedXP?</h2><p>Se le vedi già dentro WoW, passa direttamente al punto 2.</p></div></div>
+ <p><strong>Non le hai ancora?</strong> Puoi usare il generatore esterno, inserire il BattleTag e copiare il codice in RestedXP. Poi torna qui.</p>
+ <a class="help-link" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">Apri Forever Free RXP (sito esterno) ↗</a>
+ <details><summary>Come importo il codice ottenuto?</summary>
+ <ol><li>Apri il sito esterno e segui le indicazioni per ottenere il codice associato al tuo BattleTag.</li><li>Avvia WoW Forever e apri la funzione <strong>Import</strong> di RestedXP.</li><li>Incolla il codice e verifica che le guide compaiano in RestedXP.</li><li><strong>Chiudi completamente WoW</strong> per salvare le guide, quindi torna qui.</li></ol>
+ <p class="smallprint">Il codice e il BattleTag non vengono richiesti né inviati a WoW XP Helper. La generazione sul sito esterno non è automatizzata.</p>
+ </details>
 </section>
-<section class="card"><div class="title"><div class="num">2</div><div><h2>Un clic per cercare, convertire e installare</h2><p>Seleziona la cartella <code>World of Warcraft\_forever_</code> (oppure la cartella <code>World of Warcraft</code>).</p></div></div>
-<div class="flex"><button class="primary" id="auto" type="button">Seleziona WoW e avvia tutto</button><button class="secondary" id="retry" type="button" hidden>Riprova la conversione</button></div>
-<p class="smallprint">Il programma cerca <code>WTF\Account\...\SavedVariables\RXPGuides.lua</code> e <code>Interface\AddOns\RXPGuides</code>, converte e scarica lo ZIP <code>PolestarPack</code>. Se autorizzi la scrittura, prova a installarlo direttamente in <code>AddOns</code>.</p>
-<details><summary>Modalità manuale (se la ricerca automatica non trova i file)</summary><p class="smallprint">Seleziona il file cache e/o la cartella dell'addon. Poi premi il pulsante manuale per ottenere direttamente il pacchetto finale.</p>
-<label class="filelabel">Cache <code>RXPGuides.lua</code> (SavedVariables)<input type="file" id="cache" accept=".lua"></label>
-<label class="filelabel">Cartella <code>RXPGuides</code> (da Interface\AddOns)<input type="file" id="folder" webkitdirectory directory multiple></label>
-<button id="manual" class="secondary" type="button">Converti dai file selezionati</button></details>
-<div class="progress" id="progress" hidden><div id="progressBar"></div></div><div id="status" class="hint" hidden></div><pre id="log" class="log" hidden></pre></section>
-<section class="card" id="result" hidden><div class="title"><div class="num">✓</div><div><h2>Pacchetto Polestar generato</h2><p>Pronto da usare con l'addon Polestar.</p></div></div><div id="metrics" class="metrics"></div><div class="hint good" id="installResult"></div><div class="flex"><button type="button" id="redownload">Scarica di nuovo lo ZIP</button></div><p class="smallprint">Per aprire le guide, riavvia WoW, vai su Polestar → Community guides e seleziona il nuovo pacchetto. Le guide eventualmente scartate dal compilatore sono riportate nel log.</p></section>
-<footer>Tool gratuito che elabora i file nel browser. Motore di conversione di <a href="https://github.com/aronjanosch/polestar-convert" target="_blank" rel="noopener">polestar-convert</a> (MIT; compilatore Polestar GPL-3.0). Importa e converti soltanto guide che hai il diritto di utilizzare. Il pacchetto scaricato contiene le guide selezionate e non va redistribuito senza autorizzazione.</footer>
-</main><script>"use strict";
+<section class="card action" aria-label="Conversione OneClick">
+ <div class="title"><span class="num">2</span><div><h2>Chiudi WoW e premi il pulsante</h2><p>Seleziona la cartella <code>World of Warcraft</code> oppure <code>_forever_</code>. Creeremo le guide Horde e Alliance disponibili, comprese le Speedrun, e prepareremo Polestar.</p></div></div>
+ <button class="oneclick" id="auto" type="button">Scegli WoW e crea le guide</button>
+ <button class="secondary" id="retry" type="button" hidden>Riprova</button>
+ <p class="smallprint">Chrome o Edge su PC. Il browser chiede il permesso di accedere alla cartella; per installare automaticamente il pacchetto può chiedere anche il permesso di scrittura.</p>
+ <div class="progress" id="progress" hidden aria-label="Avanzamento conversione"><div id="progressBar"></div></div>
+ <div class="hint" id="status" role="status" aria-live="polite" hidden></div>
+ <details id="technicalLog" style="margin-top:10px"><summary>Dettagli dell'operazione</summary><pre id="log" class="log" hidden></pre></details>
+</section>
+<section class="card" id="result" hidden>
+ <div class="title"><span class="num">✓</span><div><h2>Le guide per Polestar sono pronte</h2><p>Riavvia WoW e apri <strong>Polestar → Community guides</strong> per scegliere il percorso.</p></div></div>
+ <div id="metrics" class="metrics"></div>
+ <div class="hint good" id="installResult"></div>
+ <p class="smallprint">I livelli disponibili dipendono dalle guide realmente presenti nella tua installazione; alcuni percorsi potrebbero mancare o essere esclusi dalla conversione.</p>
+ <button class="secondary" type="button" id="redownload">Scarica di nuovo il pacchetto ZIP</button>
+</section>
+<details class="advanced">
+ <summary>Impostazioni avanzate e problemi di riconoscimento</summary>
+ <div class="inner">
+ <p>Le impostazioni predefinite includono le guide <strong>Horde + Alliance, Speedrun e Dungeon</strong>. Cambiale soltanto se necessario.</p>
+ <div class="checkboxes"><label><input type="checkbox" id="horde" checked>Horde</label><label><input type="checkbox" id="alliance" checked>Alliance</label><label><input type="checkbox" id="main" checked>Speedrun</label><label><input type="checkbox" id="dungeon" checked>Dungeon</label><label><input type="checkbox" id="survival">Survival</label></div>
+ <div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32" autocomplete="off" spellcheck="false"></div><div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60 - Horde + Alliance" maxlength="64"></div></div>
+ <details><summary>Non riesci a selezionare WoW? Carica i file a mano</summary>
+ <p>Utilizza questo metodo soltanto se la ricerca automatica non trova i file. Puoi selezionare sia la cache sia la cartella dell'addon.</p>
+ <label class="filelabel">File <code>RXPGuides.lua</code> da <code>WTF\Account\...\SavedVariables</code><input type="file" id="cache" accept=".lua"></label>
+ <label class="filelabel">Cartella <code>RXPGuides</code> da <code>Interface\AddOns</code><input type="file" id="folder" webkitdirectory directory multiple></label>
+ <button class="secondary" id="manual" type="button">Crea le guide dai file selezionati</button>
+ </details>
+ <details><summary>Come funziona il recupero delle guide?</summary><p>Le guide salvate localmente da RestedXP vengono lette nel tuo browser e convertite dal motore open source Polestar. Non viene effettuato alcuno sblocco automatico di guide. Il sito esterno Free RXP è indipendente e va utilizzato separatamente, se necessario.</p></details>
+ </div>
+</details>
+<footer>WoW XP Helper elabora i file delle guide nel browser; non li carica sui nostri server. Basato sul motore open source <a href="https://github.com/aronjanosch/polestar-convert" target="_blank" rel="noopener noreferrer">polestar-convert</a>. <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice su GitHub</a>. Converti soltanto guide che hai diritto di utilizzare; non ridistribuire contenuti di terzi senza autorizzazione.</footer>
+</main>
+<script>"use strict";
 
 const $=id=>document.getElementById(id);const decoder=new TextDecoder('utf-8',{fatal:true});
 const say=s=>{const l=$('log');l.hidden=false;l.textContent+=(l.textContent?'\n':'')+s;l.scrollTop=l.scrollHeight;};
