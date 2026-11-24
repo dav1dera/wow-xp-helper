@@ -54,5 +54,9 @@ assert source.index('id="step0"') < source.index('id="step1"') < source.index('i
 assert source.index('id="compat"') < source.index('id="manual"')
 assert source.index('id="cache"') < source.index('id="manual"')
 assert source.count('<div class="stepnum">') == 4
+for item in ("inariaaFreshness", "foreverFreshness", "inariaaDetails", "foreverDetails", "sourceComparison"):
+    assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
+assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
+assert 'non pubblica una data verificabile' in source, "Source date uncertainty warning missing"
 assert source.count("</body>") == 1 and source.count("</html>") == 1, "Invalid end document"
 print("Beginner UI smoke checks passed:",len(ui.ids),"IDs")
