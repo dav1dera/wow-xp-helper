@@ -5,71 +5,16 @@
 ### [Apri WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)
 
 
-## Installazione guidata: istruzioni complete
+## Guida rapida: dall'installazione alle guide in Polestar
 
-Apri il sito https://dav1dera.github.io/wow-xp-helper/ e segui tutti i passaggi visibili. Sono indicati i percorsi Windows, i pulsanti da premere, la posizione di ogni cartella e i controlli finali. Nessuna operazione essenziale richiede di espandere un menu.
+Apri **[WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)**. La pagina mostra quattro passaggi, nell'ordine:
 
-### Prerequisiti
+1. **Installa WowUp**, da [wowup.io](https://wowup.io/). Seleziona WoW Forever e, in *Get Addons*, installa **RestedXP Guides** e **Polestar Guides**. Se Polestar non compare, usa *Install from URL* con [fitzforge/polestar](https://github.com/fitzforge/polestar). Verifica di usare la versione Forever.
+2. **Importa le tue guide in RestedXP**: apri il gioco, *Import Guide*, incolla il codice delle guide che puoi utilizzare, premi *Import* e fai `/reload`. Se erano già importate e aggiornate, salta questo passaggio. Usa **Purge solo per sostituire vecchie guide**, con il codice nuovo già pronto. Chiudi WoW con **Exit Game** per salvare `RXPGuides.lua`.
+3. **Converti in Polestar** usando la pagina: seleziona `RXPGuides.lua` e, per includere le guide iniziali, la cartella `RXPGuides`. Il percorso standard precompilato è `C:\Program Files (x86)\World of Warcraft\_forever_`. La pagina offre **Copia percorso** per aprire rapidamente le cartelle dal selettore di file (incolla nella barra indirizzi con `Ctrl+L`, `Ctrl+V`, `Invio`). Se WoW è installato altrove, modifica il percorso sul sito. **Il browser non può aprire direttamente un percorso assoluto senza l'intervento dell'utente.**
+4. **Installa e gioca**: estrai le cartelle `PolestarPack_*` dello ZIP direttamente in `_forever_\Interface\AddOns\`. Sposta in un backup i vecchi pacchetti dell'helper per evitare doppioni; non cancellare `Polestar` né `RXPGuides`. Riavvia WoW, usa `/polestar packs` e *Suggest guides from* per attivare la Speedrun. Verifica con `/polestar guides`. Alla schermata personaggi **disabilita RestedXP Guides**, lasciando attivo Polestar. Non disinstallare RestedXP: ti servirà soltanto per aggiornare le guide e rigenerare i pack.
 
-Servono Chrome o Edge aggiornato su Windows, WoW Forever e gli addon RestedXP (cartella RXPGuides) e Polestar. La cartella degli addon si trova in:
-
-    World of Warcraft\_forever_\Interface\AddOns\
-
-Non spostare o cancellare gli addon originali Polestar e RXPGuides.
-
-### Passaggio 1 — Preparazione RestedXP
-
-Se hai già le guide aggiornate in WoW, premi SÌ, LE HO GIÀ e passa al punto 2. Altrimenti recupera un codice di importazione da una fonte che hai il diritto di utilizzare, quindi esegui Import Guide in RestedXP. **Se devi sostituire vecchie guide importate**, e hai già il nuovo codice pronto, fai prima Import Guide → Purge → conferma → Reload. Purge elimina le guide importate: non usarlo se sono già aggiornate.
-
-Dopo Import esegui Reload e controlla che i capitoli desiderati siano presenti, anche sopra il livello 20. La copertura fino al livello 60 dipende dalle guide effettivamente disponibili nella tua cache.
-
-### Passaggio 2 — Conversione
-
-Chiudi completamente WoW con Exit Game, poi conferma che le guide siano pronte e che WoW sia chiuso.
-
-Metodo consigliato: scegli dalla pagina il file
-
-    _forever_\WTF\Account\NOME_ACCOUNT\SavedVariables\RXPGuides.lua
-
-e, per includere le guide iniziali, la cartella
-
-    _forever_\Interface\AddOns\RXPGuides\
-
-La pagina verifica che il file abbia il nome corretto e che la cartella contenga Guides/GuideList-forever.xml. Quindi premi CREA LE GUIDE PER POLESTAR. Puoi usare anche il metodo automatico scegliendo la cartella _forever_; se Chrome la blocca per sicurezza, torna al metodo file.
-
-### Passaggio 3 — Installazione e verifica
-
-1. Premi Win + E, apri la cartella AddOns del gioco.
-2. Crea Desktop/Backup_PolestarPack; se hai vecchi pacchetti generati da precedenti prove, spostali dal gioco al backup con Ctrl+X e Ctrl+V. Esempi: PolestarPack_rxp-completo-160-1-1, PolestarPack_rxp-completo-160-1-2, PolestarPack_rxp-completo-160-2-1. Non spostare pacchetti di altri autori, né Polestar, Polestar_Options o RXPGuides.
-3. Apri il file RestedXP_Speedrun_Horde_Alliance_1-60.zip dalla cartella Download, oppure il file ZIP appena scaricato col nome mostrato da Chrome. Estrai tutto.
-4. Seleziona tutte le cartelle PolestarPack_* estratte e copiale direttamente in World of Warcraft/_forever_/Interface/AddOns/. Non creare un livello intermedio con il nome dello ZIP.
-5. Riavvia WoW, controlla che gli addon siano attivi, digita /polestar guides e apri Community guides. Verifica la presenza delle Speedrun Horde 1–60 e Alliance 1–60, se entrambe convertite.
-6. Digita /polestar packs. In Options → Community guides attiva il pacchetto e scegli Suggest guides from → RestedXP Speedrun della fazione del personaggio, per usarla come percorso suggerito. Fonte ufficiale: https://github.com/fitzforge/polestar/blob/next/docs/GUIDE_PACKS.md
-
-Struttura corretta, se entrambi i pacchetti sono stati compilati:
-
-    _forever_/
-      Interface/
-        AddOns/
-          Polestar/
-          RXPGuides/
-          PolestarPack_rxp-completo-160-horde/
-          PolestarPack_rxp-completo-160-alliance/
-          PolestarPack_..._Human/   (solo se nello ZIP)
-
-Le cartelle aggiuntive per le razze, ad esempio _Gnome o _Human, sono componenti tecnici dei pacchetti e vanno copiate insieme agli altri file.
-
-### Diagnostica rapida
-
-- File RXPGuides.lua assente: importa in RestedXP, fai Reload, chiudi WoW e verifica la SavedVariables dell'account corretto. Non usare Purge dopo l'importazione.
-- Chrome blocca la cartella del gioco: usa la modalità file.
-- Cartella RXPGuides non accettata: verifica che contenga Guides/GuideList-forever.xml.
-- ZIP scaricato ma nessuna guida visibile: controlla i percorsi e i pacchetti attivi con /polestar packs.
-- Guide 1–20 mancanti: includi la cartella originale RXPGuides nella conversione.
-- Guide avanzate mancanti: controlla l'importazione RestedXP e i dettagli tecnici della conversione.
-
-Il risultato predefinito è un pacchetto Speedrun per ciascuna fazione, con i capitoli collegati. Dungeon e Survival sono opzionali. I pacchetti non sono garantiti completi fino al livello 60 se mancano i capitoli sorgenti o se il compilatore ne esclude alcuni.
-
+Il risultato predefinito è **una Speedrun 1–60 per Horde e una per Alliance**, nei limiti dei capitoli realmente presenti e convertibili. Dungeon e Survival sono facoltativi. I file delle guide vengono elaborati localmente nel browser.
 
 ## Risorse esterne: Inariaa e Forever Free RXP
 
