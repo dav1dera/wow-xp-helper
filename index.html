@@ -222,7 +222,6 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 <details class="card more"><summary>Impostazioni avanzate — facoltative</summary><p>Di default vengono create solo le Speedrun Horde e Alliance. Dungeon e Survival sono opzionali.</p><div class="checkboxes"><label><input type="checkbox" id="horde" checked> Horde</label><label><input type="checkbox" id="alliance" checked> Alliance</label><label><input type="checkbox" id="main" checked> Speedrun</label><label><input type="checkbox" id="dungeon"> Dungeon</label><label><input type="checkbox" id="survival"> Survival</label></div><div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32"></div><div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60" maxlength="64"></div></div></details>
 </main>
 <footer>Wow XP Helper elabora le guide nel browser, senza caricare i tuoi file sui propri server. <a href="https://wowup.io/" target="_blank" rel="noopener noreferrer">WowUp</a> · <a href="https://github.com/fitzforge/polestar" target="_blank" rel="noopener noreferrer">Polestar</a> · <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice GitHub</a>. Converti soltanto guide che hai diritto di utilizzare.</footer>
-</body>
 <script>"use strict";
 
 const $=id=>document.getElementById(id);const decoder=new TextDecoder('utf-8',{fatal:true});
@@ -579,6 +578,41 @@ $('manual').addEventListener('click',()=>{
 $('retry').addEventListener('click',()=>{if(lastReady)go(lastReady);});
 $('redownload').addEventListener('click',()=>{if(lastZip)saveZip(lastZip.data,lastZip.filename);});
 $('cancelCompile').addEventListener('click',stopCurrentCompile);
+function selectedWowRoot(){
+ return $('wowPath').value.trim().replaceAll('/','\\').replace(/\\+$/,'');
+}
+function localPaths(){
+ const root=selectedWowRoot();
+ return {
+  account:root+'\\WTF\\Account',
+  rxp:root+'\\Interface\\AddOns\\RXPGuides',
+  addons:root+'\\Interface\\AddOns'
+ };
+}
+function renderWowPaths(){
+ const paths=localPaths();
+ $('accountPath').textContent=paths.account;
+ $('rxpPath').textContent=paths.rxp;
+ $('addonsPath').textContent=paths.addons;
+ $('pathCopyStatus').textContent=$('wowPath').value.trim()?'':'Inserisci prima il percorso della cartella _forever_.';
+ for(const id of ['copyAccountPath','copyRxpPath','copyAddonsPath'])$(id).disabled=!selectedWowRoot();
+}
+async function copyPathPart(part){
+ const value=localPaths()[part];
+ if(!value||!selectedWowRoot())return;
+ try{
+  await navigator.clipboard.writeText(value);
+  $('pathCopyStatus').textContent='✓ Percorso copiato. Apri «Scegli file» o «Scegli cartella», premi Ctrl+L, incolla con Ctrl+V e premi Invio.';
+ }catch(e){
+  $('pathCopyStatus').textContent='Se Chrome non permette di copiare, seleziona il percorso mostrato sopra e copialo manualmente con Ctrl+C.';
+ }
+}
+$('wowPath').addEventListener('input',renderWowPaths);
+$('copyAccountPath').addEventListener('click',()=>copyPathPart('account'));
+$('copyRxpPath').addEventListener('click',()=>copyPathPart('rxp'));
+$('copyAddonsPath').addEventListener('click',()=>copyPathPart('addons'));
+renderWowPaths();
+
 function installationChecklist(){
  const ok=$('installedFolders').checked&&$('checkedInGame').checked;
  $('installChecklistStatus').textContent=ok?'✓ Installazione verificata: i pacchetti sono nella cartella giusta e Polestar mostra le guide.':
@@ -588,4 +622,6 @@ function installationChecklist(){
 $('installedFolders').addEventListener('change',installationChecklist);
 $('checkedInGame').addEventListener('change',installationChecklist);
 installationChecklist();
-</script></html>
+</script>
+</body>
+</html>
