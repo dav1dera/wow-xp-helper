@@ -4,17 +4,17 @@
 
 ### [Apri WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)
 
-## Come si usa
+## Come si usa: tre passaggi, senza istruzioni nascoste
 
-1. **Hai già le guide RestedXP aggiornate?** Puoi saltare il primo passaggio della pagina. Verifica la versione delle guide per la tua lingua. Le risorse esterne sono elencate nella pagina in quest'ordine: [Inariaa RXP Decrypter](https://inariaa.github.io/rxp_decrypter/) e [Forever Free RXP](https://forever-free-rxp.online/en/) come alternativa. Usa soltanto guide per le quali disponi dei necessari diritti. **Prima di sostituire guide già importate**, in WoW usa RestedXP → Import Guide → **Purge**, conferma e premi **Reload**; poi incolla il nuovo codice, premi **Import** e nuovamente **Reload**. *Attenzione: Purge elimina tutte le guide importate.*
-2. **Chiudi completamente WoW** in modo che la cache delle guide venga salvata.
-3. Premi **Scegli WoW e crea le guide**. Seleziona la cartella \`World of Warcraft\` oppure \`_forever_\`, e autorizza l'accesso ai file nel browser.
-4. Il tool recupera le guide presenti sul PC, le converte, compila il pacchetto con il motore di Polestar, scarica uno ZIP e prova a installare i nuovi addon con il tuo consenso.
-5. Riavvia WoW e apri **Polestar → Community guides**.
+La schermata principale è suddivisa in **tre schede numerate**. Le istruzioni fondamentali sono sempre visibili e ciascun pulsante si trova direttamente nel passaggio a cui appartiene.
 
-**Se Chrome segnala “Can't open this folder ... contains system files”:** è un blocco di sicurezza del browser. Nella schermata principale usa **Chrome blocca la cartella? Usa il metodo compatibile**: scegli il file `WTF/Account/<account>/SavedVariables/RXPGuides.lua` e poi la cartella `Interface/AddOns/RXPGuides`, infine premi **Crea pacchetto Polestar**. Lo ZIP ottenuto va estratto manualmente in `Interface/AddOns` perché questa modalità non concede accesso in scrittura alla cartella del gioco. Non disattivare le protezioni di Chrome.
+1. **Prepara le guide RestedXP.** Se le hai già importate e sono aggiornate, premi **SÌ, LE HO GIÀ → VAI AL PASSAGGIO 2**. Altrimenti segui le istruzioni A, B e C: ottieni un codice dalle fonti a cui hai diritto di accesso, esegui **Purge** soltanto se devi sostituire guide vecchie e hai già il nuovo codice, infine **Import → Reload**. Conferma con la prima casella.
+2. **Converti.** Chiudi WoW con **Exit Game** e seleziona la seconda casella. Il **metodo consigliato** ha i due selettori file sempre visibili: scegli `RXPGuides.lua` da `_forever_/WTF/Account/<account>/SavedVariables/` e, per includere le guide iniziali 1–20, la cartella `RXPGuides` da `_forever_/Interface/AddOns/`. Premi **CREA LE GUIDE PER POLESTAR**. Se preferisci, il secondo metodo prova a leggere tutta la cartella `_forever_`, ma Chrome può bloccarla perché contiene file protetti.
+3. **Installa.** Quando è pronto, apri lo ZIP scaricato, estrai tutte le cartelle `PolestarPack_*` in `_forever_/Interface/AddOns/`, riavvia WoW e apri **Polestar → Community guides**. La pagina mostra il riepilogo e scorre direttamente alle istruzioni di installazione.
 
-**Requisiti:** Chrome o Edge aggiornato su Windows, RestedXP e Polestar già installati nel gioco. Il browser deve supportare la selezione delle cartelle locali. Se la modalità automatica non trova i file, il pannello **Impostazioni avanzate** include un caricamento manuale. Le guide convertite possono differire dall'originale e alcune possono essere escluse dal compilatore.
+Le azioni di conversione sono disabilitate finché l'utente non conferma che **le guide sono presenti** e che **WoW è chiuso**. I dettagli tecnici e i filtri avanzati rimangono secondari.
+
+**Requisiti:** Chrome o Edge aggiornato su Windows, RestedXP e Polestar già installati. Se manca `RXPGuides.lua`, importa le guide in RestedXP, fai Reload e chiudi completamente il gioco. La conversione resta possibile senza la cartella iniziale, ma in quel caso i primi livelli potrebbero mancare.
 
 Le impostazioni iniziali includono **solo Speedrun**, con due pacchetti Community distinti: **RestedXP Speedrun Horde 1–60** e **RestedXP Speedrun Alliance 1–60**, uno per fazione e senza suddivisioni per livello. **Dungeon e Survival sono facoltativi** nel pannello avanzato e potrebbero generare altri pacchetti. **La copertura effettiva 1–60 non è garantita**: dipende dalle guide realmente presenti nella cache e da quelle accettate dal compilatore.
 
