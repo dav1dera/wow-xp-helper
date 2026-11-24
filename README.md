@@ -6,7 +6,7 @@
 
 ## Come si usa
 
-1. **Hai già le guide RestedXP aggiornate?** Puoi saltare il primo passaggio della pagina. Confronta la versione delle guide che stai utilizzando con la più recente disponibile per la tua lingua sul [generatore esterno](https://forever-free-rxp.online/en/). Se mancano o sono vecchie, genera un nuovo codice per il tuo BattleTag. **Prima di sostituire guide già importate**, in WoW usa RestedXP → Import Guide → **Purge**, conferma e premi **Reload**; poi incolla il nuovo codice, premi **Import** e nuovamente **Reload**. *Attenzione: Purge elimina tutte le guide importate.*
+1. **Hai già le guide RestedXP aggiornate?** Puoi saltare il primo passaggio della pagina. Verifica la versione delle guide per la tua lingua. Le risorse esterne sono elencate nella pagina in quest'ordine: [Inariaa RXP Decrypter](https://inariaa.github.io/rxp_decrypter/) e [Forever Free RXP](https://forever-free-rxp.online/en/) come alternativa. Usa soltanto guide per le quali disponi dei necessari diritti. **Prima di sostituire guide già importate**, in WoW usa RestedXP → Import Guide → **Purge**, conferma e premi **Reload**; poi incolla il nuovo codice, premi **Import** e nuovamente **Reload**. *Attenzione: Purge elimina tutte le guide importate.*
 2. **Chiudi completamente WoW** in modo che la cache delle guide venga salvata.
 3. Premi **Scegli WoW e crea le guide**. Seleziona la cartella \`World of Warcraft\` oppure \`_forever_\`, e autorizza l'accesso ai file nel browser.
 4. Il tool recupera le guide presenti sul PC, le converte, compila il pacchetto con il motore di Polestar, scarica uno ZIP e prova a installare i nuovi addon con il tuo consenso.
@@ -18,11 +18,11 @@
 
 Le impostazioni iniziali includono Horde, Alliance, Speedrun e Dungeon; non devi scegliere nulla per il caso più comune. **La copertura 1–60 non è garantita**: dipende dalle guide effettivamente presenti nell'installazione dell'utente.
 
-## Collegamento a Forever Free RXP
+## Risorse esterne: Inariaa e Forever Free RXP
 
-Il sito esterno è collegato come aiuto per gli utenti che non hanno ancora importato le proprie guide. Inserimento del BattleTag, creazione del codice e importazione in RestedXP rimangono operazioni manuali sul sito esterno e nel gioco. WoW XP Helper non replica il generatore, non intercetta le sue comunicazioni e non condivide alcun archivio di guide.
+Inariaa è la prima risorsa esterna elencata nell'interfaccia; Forever Free RXP è la seconda. Sono siti indipendenti e facoltativi. WoW XP Helper non esegue i generatori, non intercetta le loro comunicazioni e non condivide alcun archivio di guide. Le guide ufficiali già importate possono essere utilizzate direttamente.
 
-Il servizio esterno dichiara di basarsi sul [Gist di imSp4rky](https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1). Quello script non include l'archivio cifrato usato per generare codici nuovi.
+Forever Free RXP dichiara di basarsi sul [Gist di imSp4rky](https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1). Quello script non include l'archivio cifrato usato per generare codici nuovi.
 
 ## Privacy, licenze e pubblicazione
 
