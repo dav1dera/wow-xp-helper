@@ -126,7 +126,7 @@ button.textlink:hover{color:#d7e9ff;background:none}
 <body><main>
 <header>
 <div class="brand"><span class="logo">XP</span><span>WoW XP Helper</span><small>RestedXP → Polestar</small></div>
-<h1>La Speedrun 1–60 <span>in un unico pacchetto Polestar.</span></h1>
+<h1>Due Speedrun complete: <span>Horde 1–60 e Alliance 1–60.</span></h1>
 <p class="lead">Niente comandi o convertitori da installare: scegli la cartella di World of Warcraft e il resto viene preparato automaticamente.</p>
 </header>
 <section class="card" aria-label="Preparazione guide RestedXP">
@@ -149,7 +149,7 @@ button.textlink:hover{color:#d7e9ff;background:none}
  </details>
 </section>
 <section class="card action" aria-label="Conversione OneClick">
- <div class="title"><span class="num">2</span><div><h2>Chiudi WoW e premi il pulsante</h2><p>Seleziona la cartella <code>World of Warcraft</code> oppure <code>_forever_</code>. Le guide Speedrun Horde e Alliance vengono integrate in <strong>un solo pacchetto Community</strong>, senza spezzarle per livello.</p></div></div>
+ <div class="title"><span class="num">2</span><div><h2>Chiudi WoW e premi il pulsante</h2><p>Seleziona la cartella <code>World of Warcraft</code> oppure <code>_forever_</code>. Verranno creati <strong>due pacchetti Community distinti</strong>: uno Horde 1–60 e uno Alliance 1–60, senza dividerli in spezzoni per livello.</p></div></div>
  <button class="oneclick" id="auto" type="button">Scegli WoW e crea le guide</button>
  <button class="secondary" id="retry" type="button" hidden>Riprova</button>
  <button class="secondary" id="cancelCompile" type="button" hidden>Annulla compilazione</button>
@@ -175,13 +175,13 @@ button.textlink:hover{color:#d7e9ff;background:none}
  <div class="title"><span class="num">✓</span><div><h2>Le guide per Polestar sono pronte</h2><p>Riavvia WoW e apri <strong>Polestar → Community guides</strong> per scegliere il percorso.</p></div></div>
  <div id="metrics" class="metrics"></div>
  <div class="hint good" id="installResult"></div>
- <p class="smallprint">La Speedrun Horde + Alliance viene compilata come <strong>un solo pacchetto</strong>, con i passaggi tra livelli conservati. Nello ZIP possono comparire piccole cartelle aggiuntive per razze specifiche (come <code>_Human</code> o <code>_Gnome</code>): sono componenti dello stesso pacchetto, non guide separate. Estrai tutto in AddOns. I livelli disponibili dipendono dalle guide effettivamente importate.</p>
+ <p class="smallprint">Le Speedrun Horde e Alliance vengono compilate in <strong>un pacchetto per fazione</strong>, con tutti i passaggi tra livelli conservati. Nello ZIP possono comparire piccole cartelle aggiuntive per razze specifiche (come <code>_Human</code> o <code>_Gnome</code>): sono componenti dello stesso pacchetto, non guide separate. Estrai tutto in AddOns. I livelli disponibili dipendono dalle guide effettivamente importate.</p>
  <button class="secondary" type="button" id="redownload">Scarica di nuovo il pacchetto ZIP</button>
 </section>
 <details class="advanced">
  <summary>Impostazioni avanzate e problemi di riconoscimento</summary>
  <div class="inner">
- <p>Di default viene creata <strong>una sola Speedrun Horde + Alliance 1–60</strong>, con i passaggi tra livelli collegati. Dungeon e Survival sono opzionali e, se selezionate, possono richiedere altri pacchetti.</p>
+ <p>Di default vengono create <strong>due Speedrun complete</strong>: una Horde 1–60 e una Alliance 1–60, entrambe con i passaggi tra livelli collegati. Dungeon e Survival sono opzionali e, se selezionate, possono richiedere altri pacchetti.</p>
  <div class="checkboxes"><label><input type="checkbox" id="horde" checked>Horde</label><label><input type="checkbox" id="alliance" checked>Alliance</label><label><input type="checkbox" id="main" checked>Speedrun</label><label><input type="checkbox" id="dungeon">Dungeon (facoltative)</label><label><input type="checkbox" id="survival">Survival</label></div>
  <div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32" autocomplete="off" spellcheck="false"></div><div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60" maxlength="64"></div></div>
  <p class="smallprint">Se Chrome rifiuta l'accesso alla cartella del gioco, trovi il <strong>metodo compatibile</strong> subito sotto il pulsante principale.</p>
@@ -257,7 +257,7 @@ function choices(){
  if(!routes.length)throw Error('Seleziona almeno una modalità: Speedrun, Dungeon o Survival.');
  if(!$('horde').checked&&!$('alliance').checked)throw Error('Seleziona almeno Horde o Alliance.');
  const id=$('pack').value.trim();if(!/^[a-z0-9][a-z0-9-]{1,31}$/.test(id)||['guides','forever','lookup','draft','polestar','imported'].includes(id))throw Error('Pack ID non valido. Usa 2–32 lettere minuscole, numeri e trattini.');
- return {routes, id,title:$('title').value.trim()||'RestedXP OneClick'};
+ return {routes, factions:['horde','alliance'].filter(x=>$(x).checked),id,title:$('title').value.trim()||'RestedXP OneClick'};
 }
 async function directoryOrNull(parent,name){try{return await parent.getDirectoryHandle(name);}catch(e){if(e.name==='NotFoundError')return null;throw e;}}
 async function fileOrNull(parent,name){try{return await parent.getFileHandle(name);}catch(e){if(e.name==='NotFoundError')return null;throw e;}}
@@ -405,7 +405,7 @@ function convert(virt,opts,includeEntries){
   worker.postMessage({
    type:'compile',
    files:[...virt.entries()],
-   options:{id:opts.id,title:opts.title,routes:opts.routes},
+   options:{id:opts.id,title:opts.title,routes:opts.routes,factions:opts.factions},
    includeEntries:!!includeEntries
   });
  });
