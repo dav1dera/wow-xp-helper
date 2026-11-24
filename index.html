@@ -173,7 +173,7 @@ button.textlink:hover{color:#d7e9ff;background:none}
  <div class="title"><span class="num">✓</span><div><h2>Le guide per Polestar sono pronte</h2><p>Riavvia WoW e apri <strong>Polestar → Community guides</strong> per scegliere il percorso.</p></div></div>
  <div id="metrics" class="metrics"></div>
  <div class="hint good" id="installResult"></div>
- <p class="smallprint">I livelli disponibili dipendono dalle guide realmente presenti nella tua installazione; alcuni percorsi potrebbero mancare o essere esclusi dalla conversione.</p>
+ <p class="smallprint">Quando le guide sono numerose, l'helper genera più pacchetti piccoli dentro <strong>un unico ZIP</strong>. Estrai <strong>tutte</strong> le cartelle PolestarPack_* in AddOns. Per passare da un pacchetto al successivo potrebbe essere necessario scegliere manualmente la guida corretta. I livelli disponibili dipendono dalle guide presenti nella tua installazione.</p>
  <button class="secondary" type="button" id="redownload">Scarica di nuovo il pacchetto ZIP</button>
 </section>
 <details class="advanced">
@@ -372,8 +372,8 @@ function convert(virt,opts,includeEntries){
    if(data?.type==='log'){say(data.text);return;}
    if(data?.type==='phase'){
     status(data.text);
-    if(/Caricamento/i.test(data.text))setProgress(70);
-    if(/Creazione del pacchetto/i.test(data.text))setProgress(88);
+    if(Number.isFinite(data.progress))setProgress(data.progress);
+    else if(/Caricamento/i.test(data.text))setProgress(70);
     return;
    }
    if(data?.type==='error'){
@@ -389,6 +389,8 @@ function convert(virt,opts,includeEntries){
      entries:data.entries,
      guideCount:data.guideCount,
      droppedCount:data.droppedCount,
+     packCount:data.packCount,
+     detachedLinks:data.detachedLinks,
      warnings:data.warnings
     });
    }
@@ -427,7 +429,7 @@ async function installInAddons(addons,entries){
  }catch(e){return 'ZIP scaricato, ma non sono riuscito a installarlo automaticamente ('+e.message+'). Estrai lo ZIP manualmente in AddOns.';}
 }
 function resultPanel(pack,stats,msg){
- const values=[['Guide convertite',pack.guideCount],['Guide dalla cache',stats.cache],['Guide originali (file)',stats.base],['Guide scartate',pack.droppedCount]];
+ const values=[['Guide convertite',pack.guideCount],['Guide dalla cache',stats.cache],['Guide originali (file)',stats.base],['Pacchetti creati',pack.packCount],['Guide scartate',pack.droppedCount]];
  $('metrics').replaceChildren();for(const [label,n] of values){const el=document.createElement('div');el.className='metric';const bold=document.createElement('b');bold.textContent=n;const sm=document.createElement('span');sm.textContent=label;el.append(bold,sm);$('metrics').append(el);}
  $('installResult').textContent=msg;
  $('result').hidden=false;
@@ -459,6 +461,8 @@ async function go(source){
   const installMessage=await installInAddons(original.addons,pack.entries);
   setProgress(100);status('Conversione completata: '+pack.guideCount+' guide compilate.','good');
   say('PRONTO: '+pack.filename+'; '+installMessage);
+  if(pack.packCount>1)say('Pacchetti generati: '+pack.packCount+' (trovi la guida di installazione nello ZIP).');
+  if(pack.detachedLinks>0)say('Nota: '+pack.detachedLinks+' passaggi tra guide di pacchetti separati richiedono eventualmente una selezione manuale.');
   resultPanel(pack,prepared.summary,installMessage);
  }catch(e){status('Errore: '+(e?.message||String(e)),'error');say('ERRORE: '+(e?.stack||String(e)));$('retry').hidden=!lastReady;}
  finally{working=false;$('auto').disabled=false;$('manual').disabled=false;}
