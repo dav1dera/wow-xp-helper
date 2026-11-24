@@ -150,6 +150,7 @@ button.textlink:hover{color:#d7e9ff;background:none}
  <div class="title"><span class="num">2</span><div><h2>Chiudi WoW e premi il pulsante</h2><p>Seleziona la cartella <code>World of Warcraft</code> oppure <code>_forever_</code>. Creeremo le guide Horde e Alliance disponibili, comprese le Speedrun, e prepareremo Polestar.</p></div></div>
  <button class="oneclick" id="auto" type="button">Scegli WoW e crea le guide</button>
  <button class="secondary" id="retry" type="button" hidden>Riprova</button>
+ <button class="secondary" id="cancelCompile" type="button" hidden>Annulla compilazione</button>
  <p class="smallprint">Seleziona preferibilmente <code>_forever_</code>. Se Chrome dice <strong>“Can't open this folder”</strong>, non modificare le protezioni del browser: usa il metodo compatibile qui sotto.</p>
  <button class="textlink" id="compatToggle" type="button" aria-expanded="false" aria-controls="compat">Chrome blocca la cartella? Usa il metodo compatibile</button>
  <div class="hint" id="compat" hidden>
@@ -334,40 +335,76 @@ function prepareSources(recovered, original, opts){
  virt.set('rxpguides/rxpguides.toc',original.toc||'## Interface: 11507\n## Version: 1.0.0\n');
  return {virt,summary};
 }
-async function modules(){
- status('Caricamento motore di conversione Polestar…');
- try{
- const [engine,addon,wasm]=await Promise.all([
-  import(BASE+'src/build.mjs'),import(BASE+'src/addon.mjs'),import(BASE+'forge/polestar_convert_wasm.js')]);
- await wasm.default({module_or_path:BASE+'forge/polestar_convert_wasm_bg.wasm'});
- return {engine,addon,wasm};
- }catch(e){throw Error('Motore Polestar non disponibile sul sito ('+e.message+'). Il deploy potrebbe non essere completo o il browser potrebbe bloccare gli script.');}
+// The compiler runs in its own worker so Chrome stays responsive during long builds.
+let activeCompilerWorker=null, rejectCompilerJob=null;
+function stopCurrentCompile(){
+ if(!activeCompilerWorker)return;
+ const worker=activeCompilerWorker, reject=rejectCompilerJob;
+ activeCompilerWorker=null;rejectCompilerJob=null;
+ worker.terminate();
+ $('cancelCompile').hidden=true;
+ if(reject)reject(new Error('Compilazione annullata. Nessun file di WoW è stato modificato.'));
 }
-async function convert(virt,opts){
- const {engine,addon,wasm}=await modules();
- status('Conversione e compilazione in corso. Non chiudere la pagina.');
+function convert(virt,opts,includeEntries){
+ status('Preparazione compilazione Polestar…');
  setProgress(68);
- const root=BASE+'polestar-data/';
- const resp=await fetch(root+'manifest.json');if(!resp.ok)throw Error('Dati di gioco non disponibili: HTTP '+resp.status);
- const manifest=await resp.json(),exists=new Set(manifest.files),cache=new Map();
- const readData=async path=>{
-  if(!exists.has(path))return null;
-  if(!cache.has(path))cache.set(path,fetch(root+path).then(async r=>{if(!r.ok)throw Error('Dato Polestar non disponibile: '+path+' (HTTP '+r.status+')');return await r.text();}));
-  return cache.get(path);
- };
- const result=await engine.buildAddons({
-  read:async path=>virt.get(path.toLowerCase())??null,
-  paths:[...virt.keys()],readData,manifest,Compiler:wasm.Compiler,
-  pack:{id:opts.id,title:opts.title,author:'RXP OneClick'},
-  opts:{sources:['rxp'],routes:opts.routes},
-  locales:[],say:s=>say(s)
+ return new Promise((resolve,reject)=>{
+  let worker;
+  try{
+   worker=new Worker(new URL('compile-worker.mjs',document.baseURI),{type:'module'});
+  }catch(error){
+   reject(new Error('Impossibile avviare la compilazione separata: '+error.message));
+   return;
+  }
+  let finished=false;
+  const finish=(callback,value)=>{
+   if(finished)return;
+   finished=true;
+   if(activeCompilerWorker===worker){activeCompilerWorker=null;rejectCompilerJob=null;}
+   $('cancelCompile').hidden=true;
+   worker.terminate();
+   callback(value);
+  };
+  activeCompilerWorker=worker;
+  rejectCompilerJob=error=>finish(reject,error);
+  $('cancelCompile').hidden=false;
+  worker.onmessage=({data})=>{
+   if(data?.type==='log'){say(data.text);return;}
+   if(data?.type==='phase'){
+    status(data.text);
+    if(/Caricamento/i.test(data.text))setProgress(70);
+    if(/Creazione del pacchetto/i.test(data.text))setProgress(88);
+    return;
+   }
+   if(data?.type==='error'){
+    if(data.stack)say(data.stack);
+    finish(reject,new Error(data.text||'Errore sconosciuto del compilatore'));
+    return;
+   }
+   if(data?.type==='done'){
+    finish(resolve,{
+     data:new Uint8Array(data.buffer),
+     filename:data.filename,
+     folder:data.folder,
+     entries:data.entries,
+     guideCount:data.guideCount,
+     droppedCount:data.droppedCount,
+     warnings:data.warnings
+    });
+   }
+  };
+  worker.onerror=(error)=>{
+   error.preventDefault?.();
+   finish(reject,new Error('Errore durante la compilazione Polestar: '+(error.message||'Worker non disponibile')));
+  };
+  worker.onmessageerror=()=>finish(reject,new Error('Errore di comunicazione con il compilatore'));
+  worker.postMessage({
+   type:'compile',
+   files:[...virt.entries()],
+   options:{id:opts.id,title:opts.title,routes:opts.routes},
+   includeEntries:!!includeEntries
+  });
  });
- if(result.errors){say('Errori compilatore: '+result.errors.length);for(const e of result.errors.slice(0,25))say('  '+e.file+' '+e.line+': '+e.message);throw Error('Il compilatore non riesce a creare il pacchetto. Controlla il log.');}
- if(!result.runs.rxp||!result.runs.rxp.guides.length)throw Error('Conversione terminata senza guide valide. Controlla i file sorgente.');
- if(result.dropped?.length){say('Guide scartate dal compilatore: '+result.dropped.length);for(const d of result.dropped.slice(0,25))say('  '+d.slug+': '+d.errors?.[0]?.message);}
- const data=addon.addonZip(result.folder,result.files);
- const filename='PolestarPack_'+opts.id+'.zip';
- return {data,filename,folder:result.folder,entries:addon.addonEntries(result.folder,result.files),run:result.runs.rxp,dropped:result.dropped||[],warnings:result.warnings||0};
 }
 function saveZip(buffer,name){const blob=new Blob([buffer],{type:'application/zip'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),120000);}
 async function installInAddons(addons,entries){
@@ -390,7 +427,7 @@ async function installInAddons(addons,entries){
  }catch(e){return 'ZIP scaricato, ma non sono riuscito a installarlo automaticamente ('+e.message+'). Estrai lo ZIP manualmente in AddOns.';}
 }
 function resultPanel(pack,stats,msg){
- const values=[['Guide convertite',pack.run.guides.length],['Guide dalla cache',stats.cache],['Guide originali (file)',stats.base],['Guide scartate',pack.dropped.length]];
+ const values=[['Guide convertite',pack.guideCount],['Guide dalla cache',stats.cache],['Guide originali (file)',stats.base],['Guide scartate',pack.droppedCount]];
  $('metrics').replaceChildren();for(const [label,n] of values){const el=document.createElement('div');el.className='metric';const bold=document.createElement('b');bold.textContent=n;const sm=document.createElement('span');sm.textContent=label;el.append(bold,sm);$('metrics').append(el);}
  $('installResult').textContent=msg;
  $('result').hidden=false;
@@ -417,10 +454,10 @@ async function go(source){
   const prepared=prepareSources(recovered,original,opts);
   if(prepared.summary.cache===0&&prepared.summary.base===0)throw Error('Non ho trovato guide convertibili.');
   setProgress(62);say('Sorgente unica preparata: '+prepared.summary.cache+' guide cache + '+prepared.summary.base+' file dell’addon.');
-  const pack=await convert(prepared.virt,opts);lastZip=pack;
+  const pack=await convert(prepared.virt,opts,!!original.addons);lastZip=pack;
   setProgress(94);saveZip(pack.data,pack.filename);
   const installMessage=await installInAddons(original.addons,pack.entries);
-  setProgress(100);status('Conversione completata: '+pack.run.guides.length+' guide compilate.','good');
+  setProgress(100);status('Conversione completata: '+pack.guideCount+' guide compilate.','good');
   say('PRONTO: '+pack.filename+'; '+installMessage);
   resultPanel(pack,prepared.summary,installMessage);
  }catch(e){status('Errore: '+(e?.message||String(e)),'error');say('ERRORE: '+(e?.stack||String(e)));$('retry').hidden=!lastReady;}
@@ -472,4 +509,5 @@ $('manual').addEventListener('click',()=>{
 });
 $('retry').addEventListener('click',()=>{if(lastReady)go(lastReady);});
 $('redownload').addEventListener('click',()=>{if(lastZip)saveZip(lastZip.data,lastZip.filename);});
+$('cancelCompile').addEventListener('click',stopCurrentCompile);
 </script></body></html>
