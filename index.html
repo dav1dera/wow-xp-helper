@@ -115,182 +115,114 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 @media(max-width:580px){.requirements{margin:0 12px 15px;padding:16px}.ministep{grid-template-columns:39px 1fr}.folder-example pre{font-size:11px}}
 
 .input-invalid{color:#ffbbbf!important;font-weight:800;background:#4b2831;border:1px solid #b66575;border-radius:8px;padding:11px}
+
+/* Short guided setup */
+.stepnav{grid-template-columns:repeat(4,minmax(0,1fr))}
+.setup-line{padding:14px 0;border-top:1px solid #344962}
+.setup-line:first-of-type{border-top:0;padding-top:0}
+.setup-line.last{padding-bottom:0}
+.setup-line p{margin:5px 0 9px}
+.stephead{margin-bottom:16px}
+.card{margin-bottom:15px;padding:21px 24px}
+.stephead h2{font-size:22px}
+.small{font-size:13px;color:#aec1dc}
+.filepick{padding:12px 14px;margin:9px 0}
+.filepick label{display:block;font-size:13px;font-weight:700;color:#b9d4f4}
+.method{padding:15px 18px;margin:12px 0}
+.method p{margin:6px 0}
+.method .field{margin:5px 0}
+.path-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:9px 0}
+.path-actions code{font-size:12px;flex:1;min-width:170px;overflow-wrap:anywhere}
+.copy-btn{background:#28446b;border:1px solid #6e96cc;color:#eff7ff;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:850;white-space:nowrap}
+.copy-btn:hover{background:#38639a}
+.compact{margin:10px 0;padding:10px 13px}
+.compact summary{font-size:14px}
+.checkline{margin:12px 0;padding:12px 14px}
+.skipbox{margin:0 0 13px;padding:13px}
+.skipbox p{margin:4px 0 10px}
+.setup-line .links{margin:8px 0}
+.checklist{margin-top:15px}
+@media(max-width:580px){.stepnav a{font-size:11px;padding:9px 3px}.card{padding:18px 15px}.path-actions{align-items:stretch}.path-actions code{min-width:0;width:100%}.copy-btn{width:100%}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><span class="logo"><img src="data:image/webp;base64,UklGRmQEAABXRUJQVlA4IFgEAABQHgCdASpwAHAAPmEoj0UkIqEWjGbkQAYEoAuzPo09yx7w3Xg7UQvcNgSuPqxpsIjJeq06XShV7ltuzqkDI7r1EQ6x4yH/XYGEmJfh/ALGbR6Cp/ubbhQUOdh/vvvjDVYL1QOwHeQ6HznEcmg7on24SJkM5jBYDOpaW7VU+T808CKlsntDSk6Vgm2LmYwO/X5XvAp4CI3Zd/nOHDbqRC/qjeY8iMYzM4Es3IKd5TOba+a4scbaGvBSR/g8gJrBxnlDfUmpZnKyrHS1j0pP4TNyo8gs64xEtj1vGXk9nhS+IYb9791Go+Fn6y4Qy7eueiktrX2+sF4jVwqzIAD+/sy+WZeFWxVoZmCLEL86uWpbieWVMBJLPWD5pp9BNN7bw20cipCe1T9MszXsFQSPVRTqTvTSDkpewmbKSElysv7q+hZTfpIi9CrZy55DWrx/v2pODfXwkmP92A/eLnkfCecXH0pVUoDqD/lYvxkretcc5TEgBEIsSCC/GWu7103PDaqjg51XAzU0N3uMD6SlfD2agQ/AeBwa+QCuytRpj1ipVqZWHMsE2/yyYsx5L6RYiPzk8nrc9/oVOe3YUb5cQoxjB0mLFiZPZv0tnLLC+obsK4v53ADYx0nwO+plumFScQbI6w7en1KNF21oALuIOTUI7PRXspmnYGPVOP/V/wRZ53s6bbgWx8FE19NNvfOAjkpvMdjs7lqsDFzLk7NzIAFBuYMNT4V4Hia664aZm9pp8r/Z3un4vsh6u10/DUVoNhBCkudCMWxw7iPMhDA08Y3w+zYNy3ZUMPBLkV84w6NqgvdjbEok4mcY4aH1G2Ey4scI+goRKPCaZVEOGU7uENh+zOJbhpRXYWpU2GcS47MXgLgrf79I4MN1FZGxXMimZwggdkgduPnuOVE1CEFEyjNS/afWmIgAp8To/VyXEfftBnoo/VXRVs3wvIwR0ePh68jyLwfLT8jSypgmT1OrWHnLRTIiwYxd33IDLDoY/O0enM1v/bfTk7rgeDJHa7ngaIZUu+5D83JNQ0yOyT0TUDJaRKxSXttkqVkSEyjRmKpu+/2PrGz0hYJ79TYvK8BOtZ3eXU3PL33ok9iFZyA+ZLhmDYUMKfZbO+ZETLFoNVf6hw+jKkMADi2MyKvpXyayAPYnmyQaCvAQnJzlQkQlJCBqvbHXi65hNmf/VVCRwgd5OBkG8tgysmp35ropzzP4S0k6NXsd8IwTCwbxU6RTCedLfMVw3YQoHJ7KzcsOKfGyQIVQSVCus/3e04XvK/TWmA293csODgHJuAlOvqBI9ZK2v8iE/iFZ6tBskxwdhxurblCQONc5dqMRpQv4qrrLNy+sjINmndBz5SW213eLOU7p2N+ReSxmYDtbEzt7VNxYMppHMDvn3yBjRKUcx6M+m/ZIteOvXOAGIHcXbdaMVp4j544dd2lXwC0CULb3V8AYLWMsd/QKzGDeUaEXF615RVuFgI/xqZ3AAA==" alt="Logo WoW XP Helper" width="64" height="64" decoding="async"></span><span>WoW XP Helper</span><span class="signature" aria-label="by Katra Mundo">by Katra Mundo</span></div>
+<div class="brand"><span class="logo"><img src="data:image/webp;base64,UklGRmQEAABXRUJQVlA4IFgEAABQHgCdASpwAHAAPmEoj0UkIqEWjGbkQAYEoAuzPo09yx7w3Xg7UQvcNgSuPqxpsIjJeq06XShV7ltuzqkDI7r1EQ6x4yH/XYGEmJfh/ALGbR6Cp/ubbhQUOdh/vvvjDVYL1QOwHeQ6HznEcmg7on24SJkM5jBYDOpaW7VU+T808CKlsntDSk6Vgm2LmYwO/X5XvAp4CI3Zd/nOHDbqRC/qjeY8iMYzM4Es3IKd5TOba+a4scbaGvBSR/g8gJrBxnlDfUmpZnKyrHS1j0pP4TNyo8gs64xEtj1vGXk9nhS+IYb9791Go+Fn6y4Qy7eueiktrX2+sF4jVwqzIAD+/sy+WZeFWxVoZmCLEL86uWpbieWVMBJLPWD5pp9BNN7bw20cipCe1T9MszXsFQSPVRTqTvTSDkpewmbKSElysv7q+hZTfpIi9CrZy55DWrx/v2pODfXwkmP92A/eLnkfCecXH0pVUoDqD/lYvxkretcc5TEgBEIsSCC/GWu7103PDaqjg51XAzU0N3uMD6SlfD2agQ/AeBwa+QCuytRpj1ipVqZWHMsE2/yyYsx5L6RYiPzk8nrc9/oVOe3YUb5cQoxjB0mLFiZPZv0tnLLC+obsK4v53ADYx0nwO+plumFScQbI6w7en1KNF21oALuIOTUI7PRXspmnYGPVOP/V/wRZ53s6bbgWx8FE19NNvfOAjkpvMdjs7lqsDFzLk7NzIAFBuYMNT4V4Hia664aZm9pp8r/Z3un4vsh6u10/DUVoNhBCkudCMWxw7iPMhDA08Y3w+zYNy3ZUMPBLkV84w6NqgvdjbEok4mcY4aH1G2Ey4scI+goRKPCaZVEOGU7uENh+zOJbhpRXYWpU2GcS47MXgLgrf79I4MN1FZGxXMimZwggdkgduPnuOVE1CEFEyjNS/afWmIgAp8To/VyXEfftBnoo/VXRVs3wvIwR0ePh68jyLwfLT8jSypgmT1OrWHnLRTIiwYxd33IDLDoY/O0enM1v/bfTk7rgeDJHa7ngaIZUu+5D83JNQ0yOyT0TUDJaRKxSXttkqVkSEyjRmKpu+/2PrGz0hYJ79TYvK8BOtZ3eXU3PL33ok9iFZyA+ZLhmDYUMKfZbO+ZETLFoNVf6hw+jKkMADi2MyKvpXyayAPYnmyQaCvAQnJzlQkQlJCBqvbHXi65hNmf/VVCRwgd5OBkG8tgysmp35ropzzP4S0k6NXsd8IwTCwbxU6RTCedLfMVw3YQoHJ7KzcsOKfGyQIVQSVCus/3e04XvK/TWmA293csODgHJuAlOvqBI9ZK2v8iE/iFZ6tBskxwdhxurblCQONc5dqMRpQv4qrrLNy+sjINmndBz5SW213eLOU7p2N+ReSxmYDtbEzt7VNxYMppHMDvn3yBjRKUcx6M+m/ZIteOvXOAGIHcXbdaMVp4j544dd2lXwC0CULb3V8AYLWMsd/QKzGDeUaEXF615RVuFgI/xqZ3AAA==" alt="Logo WoW XP Helper" width="64" height="64" decoding="async"></span><span>WoW XP Helper</span><span class="signature" aria-label="by Katra Mundo">by Katra Mundo</span></div>
  <p class="eyebrow">WoW Forever · RestedXP → Polestar</p>
- <h1>Dalle guide RestedXP a Polestar <em>funzionante.</em></h1>
- <p class="lead">Segui questa guida dall'alto verso il basso: ti mostriamo <strong>cosa aprire, dove cliccare, quali cartelle spostare e come verificare il risultato</strong>. Nessun passaggio importante è nascosto.</p>
- <nav class="stepnav" aria-label="Passaggi della guida">
-  <a href="#step1"><b>1</b> Prepara guide</a><a href="#step2"><b>2</b> Converti</a><a href="#step3"><b>3</b> Installa</a>
+ <h1>Le tue guide 1–60 <em>dentro Polestar.</em></h1>
+ <p class="lead">Quattro passaggi semplici, dall'installazione degli addon alla guida pronta in gioco.</p>
+ <nav class="stepnav" aria-label="Vai ai passaggi">
+  <a href="#step0"><b>1</b> Addon</a>
+  <a href="#step1"><b>2</b> Guide</a>
+  <a href="#step2"><b>3</b> Converti</a>
+  <a href="#step3"><b>4</b> Gioca</a>
  </nav>
 </header>
 <main>
-<section class="requirements" aria-label="Controlla i requisiti prima di iniziare">
- <h2>Prima di iniziare: controlla questi 3 requisiti</h2>
- <div class="requirement"><span class="requirement-icon">1</span><div><strong>Windows con Chrome o Edge aggiornato</strong><p>Non usare il browser dello smartphone: deve poter leggere i file sul PC dove è installato WoW Forever.</p></div></div>
- <div class="requirement"><span class="requirement-icon">2</span><div><strong>World of Warcraft Forever installato</strong><p>Devi conoscere la cartella <code>_forever_</code>. Per trovarla apri Esplora file (<kbd>Win</kbd> + <kbd>E</kbd>) e cerca la cartella del gioco sul tuo disco.</p></div></div>
- <div class="requirement"><span class="requirement-icon">3</span><div><strong>Addon RestedXP e Polestar presenti</strong><p>Controlla dentro <code>_forever_\Interface\AddOns\</code> che siano presenti <code>RXPGuides</code> e <code>Polestar</code>. Se manca Polestar, consulta il <a href="https://github.com/fitzforge/polestar" target="_blank" rel="noopener noreferrer">progetto ufficiale Polestar ↗</a>.</p></div></div>
- <div class="reminder"><strong>Regola fondamentale:</strong> non eliminare <code>RXPGuides</code>, <code>Polestar</code> o le cartelle <code>WTF</code> e <code>Interface</code>. La pulizia dei vecchi pacchetti è spiegata nel passaggio 3.</div>
+<section class="card" id="step0" aria-labelledby="heading0">
+ <div class="stephead"><div class="stepnum">1</div><div><h2 id="heading0">Installa WowUp e i due addon</h2><p>Da fare una sola volta. Se li hai già, passa al punto 2.</p></div></div>
+ <div class="setup-line"><strong>A. Installa WowUp</strong><p>È il gestore consigliato per installare e aggiornare gli addon. Aprilo e seleziona il client <strong>WoW Forever</strong> (cartella <code>_forever_</code>).</p><a class="extern" href="https://wowup.io/" target="_blank" rel="noopener noreferrer">SCARICA WOWUP ↗</a></div>
+ <div class="setup-line"><strong>B. Installa RestedXP Guides e Polestar Guides</strong><p>In WowUp vai su <strong>Get Addons</strong>, scegli il client Forever, cerca <strong>RestedXP Guides</strong> e <strong>Polestar Guides</strong> e installali. Se Polestar non appare nella ricerca, prova <strong>Install from URL</strong> con il suo repository GitHub.</p><div class="links"><a class="extern" href="https://www.curseforge.com/wow/addons/restedxp-guide" target="_blank" rel="noopener noreferrer">RESTEDXP ↗</a><a class="extern" href="https://github.com/fitzforge/polestar" target="_blank" rel="noopener noreferrer">POLESTAR ↗</a></div></div>
+ <p class="small">Verifica che siano installati nella versione <strong>Forever</strong>, non Retail. WowUp supporta anche l'installazione da URL. Non è necessario usare un secondo addon manager.</p>
 </section>
+
 <section class="card" id="step1" aria-labelledby="heading1">
- <div class="stephead"><div class="stepnum">1</div><div><h2 id="heading1">Prepara le guide RestedXP</h2><p>Assicurati che le guide siano presenti e aggiornate nel gioco.</p></div></div>
- <div class="skipbox">
-  <h3>Hai già le guide RestedXP aggiornate?</h3>
-  <p>Non devi reimportarle. Puoi andare direttamente al passaggio 2.</p>
-  <button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → VAI AL PASSAGGIO 2</button>
- </div>
- <h3>Se le guide mancano o sono vecchie: esegui 1A → 1B → 1C → 1D</h3>
- <div class="ministep"><span class="miniindex">1A</span><div>
-  <strong>Ottieni un codice di importazione aggiornato</strong>
-  <p>Puoi usare le guide a cui hai diritto di accesso. Inariaa e Forever Free RXP sono siti esterni: il BattleTag si inserisce eventualmente lì, non nell'helper.</p>
-  <div class="links"><a class="extern" href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">APRI INARIAA ↗</a>
-  <a class="extern" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">APRI FOREVER FREE RXP ↗</a></div>
-  <p class="small">Controlla la versione delle guide; la data di aggiornamento del sito non garantisce che le guide siano nuove.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">1B</span><div>
-  <strong>Se stai sostituendo guide vecchie, esegui Purge</strong>
-  <p>In WoW apri <strong>RestedXP → Import Guide → Purge → conferma → Reload</strong>.</p>
-  <div class="warning"><strong>ATTENZIONE:</strong> Purge cancella tutte le guide importate. Usalo solo se le stai sostituendo e hai già il nuovo codice pronto. Non serve se le guide sono già aggiornate.</div>
- </div></div>
- <div class="ministep"><span class="miniindex">1C</span><div>
-  <strong>Importa e verifica le guide in RestedXP</strong>
-  <p>Apri <strong>Import Guide</strong>, incolla il codice, premi <strong>Import</strong> e aspetta che termini. Poi esegui <strong>Reload</strong> e controlla che le guide compaiano nel menu RestedXP.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">1D</span><div>
-  <strong>Controlla la copertura delle guide prima di convertire</strong>
-  <p>Apri l'elenco RestedXP: controlla che ci siano le guide iniziali e quelle avanzate, almeno fino ai livelli che desideri usare. Per generare una Speedrun <strong>1–60 completa</strong> servono effettivamente i relativi capitoli: il tool non crea guide mancanti.</p>
-  <p class="small">Se possiedi guide già aggiornate, non serve eseguire 1A–1C: usa direttamente il pulsante verde e continua.</p>
- </div></div>
- <label class="checkline" for="guideReady"><input type="checkbox" id="guideReady"><span>CONFERMO: le guide RestedXP sono presenti e aggiornate.</span></label>
+ <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading1">Importa le tue guide in RestedXP</h2><p>RestedXP serve per importarle; poi giocherai con Polestar.</p></div></div>
+ <div class="skipbox"><strong>Le guide sono già importate e aggiornate?</strong><p>Non rifare Import e non fare Purge.</p><button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → CONTINUA</button></div>
+ <div class="setup-line"><strong>Se devi importarle:</strong><p>Avvia WoW, apri <strong>RestedXP → Import Guide</strong>, incolla il codice delle guide a cui hai accesso e premi <strong>Import</strong>. Fai <code>/reload</code> e controlla che compaiano anche i capitoli avanzati. <strong>Chiudi completamente WoW con Exit Game</strong> per salvare i file.</p></div>
+ <details class="compact"><summary>Dove recupero un codice? E quando devo fare Purge?</summary><p>Usa le guide che hai acquistato o che sei autorizzato a utilizzare. Risorse esterne facoltative: <a href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">Inariaa</a> e <a href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">Forever Free RXP</a>. <strong>Purge elimina tutte le guide importate:</strong> usalo solo quando devi sostituirle e hai già il nuovo codice, poi importa e fai Reload.</p></details>
+ <label class="checkline" for="guideReady"><input type="checkbox" id="guideReady"><span>Le guide RestedXP sono presenti e aggiornate.</span></label>
 </section>
+
 <section class="card conversion" id="step2" aria-labelledby="heading2">
- <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading2">Converti le guide in Polestar</h2><p>Una Speedrun Horde 1–60 e una Alliance 1–60, ciascuna completa e senza spezzoni per livello.</p></div></div>
- <div class="ministep"><span class="miniindex">2A</span><div>
-  <strong>Chiudi completamente WoW per salvare le guide sul disco</strong>
-  <p>Dopo l'Import e il Reload, scegli <strong>Exit Game</strong>. Non lasciare WoW aperto in background durante la conversione. <strong>Non rifare Purge e non riavviare lo script di pulizia dopo l’importazione</strong>: elimineresti proprio la cache necessaria. Il file di salvataggio sarà in <code>_forever_\WTF\Account\NOME_ACCOUNT\SavedVariables\RXPGuides.lua</code>.</p>
- </div></div>
- <label class="checkline" for="wowClosed"><input type="checkbox" id="wowClosed"><span>CONFERMO: ho chiuso completamente WoW con <strong>Exit Game</strong>.</span></label>
- <div class="hint" id="preflightMessage" role="status" aria-live="polite">Prima di iniziare, spunta le due conferme nei passaggi 1 e 2.</div>
+ <div class="stephead"><div class="stepnum">3</div><div><h2 id="heading2">Convertile per Polestar</h2><p>Una Speedrun Horde 1–60 e una Alliance 1–60, senza spezzoni per livello.</p></div></div>
+ <label class="checkline" for="wowClosed"><input type="checkbox" id="wowClosed"><span>Ho chiuso completamente WoW con <strong>Exit Game</strong>.</span></label>
+ <div id="preflightMessage" class="hint" role="status" aria-live="polite">Conferma prima che le guide siano presenti e che WoW sia chiuso.</div>
  <div class="method recommended" id="compat">
-  <div class="methodhead"><h3>2B · Metodo consigliato: scegli i file</h3><span class="pill">NON RICHIEDE ACCESSO ALL'INTERO GIOCO</span></div>
-  <p>È il metodo più affidabile quando Chrome blocca la cartella di WoW. <strong>Non spostare i file del gioco:</strong> devi soltanto selezionarli nella finestra di Windows.</p>
-  <div class="path-guide"><strong>Come trovare i file in Windows</strong><p>Apri Esplora file (<kbd>Win</kbd> + <kbd>E</kbd>), entra nella cartella <code>_forever_</code> e segui i nomi delle cartelle indicati sotto. <strong>NOME_ACCOUNT</strong> indica una cartella del tuo account, non una parola da cercare letteralmente.</p></div>
-  <label class="filepick" for="cache"><strong>2B.1 · Seleziona RXPGuides.lua</strong>
-   <span class="where">Percorso: <code>_forever_\WTF\Account\NOME_ACCOUNT\SavedVariables\RXPGuides.lua</code></span>
-   <span class="where">Clicca «Scegli file», apri queste cartelle e seleziona il <strong>file</strong> (non la cartella SavedVariables).</span>
-   <input type="file" id="cache" accept=".lua">
-  </label>
-  <label class="filepick" for="folder"><strong>2B.2 · Seleziona la cartella RXPGuides</strong>
-   <span class="where">Percorso: <code>_forever_\Interface\AddOns\RXPGuides\</code></span>
-   <span class="where">Clicca «Scegli file» / «Seleziona cartella», evidenzia la cartella <strong>RXPGuides</strong> e conferma l'accesso. Serve a includere i primi livelli: è consigliata ma facoltativa.</span>
-   <input type="file" id="folder" webkitdirectory directory multiple>
-  </label>
-  <p class="small" id="compatState" aria-live="polite">Non hai ancora scelto i file. Per una Speedrun 1–60 completa, seleziona entrambi gli elementi se disponibili.</p>
-  <div class="path-guide"><strong>2B.3 · Avvia la conversione</strong><p>Quando il primo file risulta selezionato e le due conferme sopra sono spuntate, premi il pulsante blu. Non chiudere la scheda mentre il sito mostra la compilazione. Alla fine scaricherai uno ZIP.</p></div>
-  <button class="primary" id="manual" type="button" disabled>CREA LE GUIDE PER POLESTAR</button>
-  <p class="small">Non trovi <code>RXPGuides.lua</code>? Torna al passaggio 1: importa le guide, fai Reload e chiudi WoW. Puoi convertire senza la cartella RXPGuides, ma i primi livelli potrebbero mancare.</p>
+  <div class="methodhead"><h3>Seleziona i file delle guide</h3><span class="pill">METODO CONSIGLIATO</span></div>
+  <p>Per comodità utilizziamo il <strong>percorso standard di Windows</strong>. Copialo e incollalo nella barra degli indirizzi della finestra che si apre cliccando «Scegli file» (<kbd>Ctrl</kbd> + <kbd>L</kbd>, poi <kbd>Ctrl</kbd> + <kbd>V</kbd>, <kbd>Invio</kbd>).</p>
+  <label class="fieldlbl" for="wowPath">Cartella standard di WoW Forever</label>
+  <input id="wowPath" class="field" type="text" value="C:\Program Files (x86)\World of Warcraft\_forever_" spellcheck="false" autocomplete="off">
+  <p class="small">Hai installato WoW in un'altra posizione? <strong>Modifica soltanto questa riga</strong>: i percorsi sottostanti si aggiorneranno automaticamente. Per sicurezza, Chrome richiede sempre di scegliere i file.</p>
+  <div class="filepick">
+   <strong>1. Carica RXPGuides.lua</strong>
+   <span class="where">Apri la cartella dell'account, poi <code>SavedVariables</code>, e seleziona <code>RXPGuides.lua</code>.</span>
+   <div class="path-actions"><code id="accountPath"></code><button id="copyAccountPath" class="copy-btn" type="button">COPIA PERCORSO</button></div>
+   <label for="cache">File delle guide salvate:</label><input type="file" id="cache" accept=".lua">
+  </div>
+  <div class="filepick">
+   <strong>2. Carica la cartella RXPGuides</strong>
+   <span class="where">Include le guide iniziali (consigliato). È facoltativa se ti servono solo i capitoli importati.</span>
+   <div class="path-actions"><code id="rxpPath"></code><button id="copyRxpPath" class="copy-btn" type="button">COPIA PERCORSO</button></div>
+   <label for="folder">Cartella addon RestedXP:</label><input type="file" id="folder" webkitdirectory directory multiple>
+  </div>
+  <p id="pathCopyStatus" class="small" aria-live="polite"></p>
+  <p id="compatState" class="small" aria-live="polite">Seleziona RXPGuides.lua. La cartella RXPGuides è consigliata, ma non obbligatoria.</p>
+  <button id="manual" class="primary" type="button" disabled>CREA LE GUIDE PER POLESTAR</button>
  </div>
- <p class="or">OPPURE</p>
- <div class="method">
-  <div class="methodhead"><h3>2C · Metodo automatico: scegli la cartella WoW</h3><span class="pill">ALTERNATIVA</span></div>
-  <p>Seleziona la cartella <code>World of Warcraft\_forever_</code>. Il sito cerca i file da solo e prova a installare i pacchetti. Se Chrome mostra <strong>Can't open this folder</strong>, usa il metodo consigliato qui sopra.</p>
-  <button class="secondary" id="auto" type="button" disabled>SCEGLI CARTELLA WOW E AVVIA</button>
- </div>
- <button class="secondary" id="retry" type="button" hidden>RIPROVA</button>
- <button class="secondary" id="cancelCompile" type="button" hidden>ANNULLA COMPILAZIONE</button>
- <div class="progress" id="progress" hidden aria-label="Avanzamento"><div id="progressBar"></div></div>
+ <details class="compact"><summary>Alternativa: scegli l'intera cartella WoW (può essere bloccata da Chrome)</summary><p>Il tool cerca i file da solo e tenta l'installazione. Se Chrome dice «Can't open this folder», usa il metodo file sopra: non disattivare le protezioni.</p><button class="secondary" id="auto" type="button" disabled>SCEGLI CARTELLA WOW E AVVIA</button></details>
+ <button id="retry" class="secondary" type="button" hidden>RIPROVA</button>
+ <button id="cancelCompile" class="secondary" type="button" hidden>ANNULLA COMPILAZIONE</button>
+ <div id="progress" class="progress" hidden aria-label="Avanzamento"><div id="progressBar"></div></div>
  <div id="status" role="status" aria-live="polite" hidden></div>
- <details id="technicalLog"><summary>VEDI DETTAGLI TECNICI — utile soltanto se compare un errore</summary><pre id="log" class="log" hidden></pre></details>
+ <details id="technicalLog" class="compact"><summary>Dettagli tecnici (apri solo se compare un errore)</summary><pre id="log" class="log" hidden></pre></details>
 </section>
+
 <section class="card" id="step3" aria-labelledby="heading3">
- <div class="stephead"><div class="stepnum">3</div><div><h2 id="heading3">Installa e verifica le guide in WoW</h2><p>Segui tutti i passaggi dal 3A al 3G. È qui che bisogna spostare le cartelle correttamente.</p></div></div>
- <div class="reminder"><strong>Non installare subito lo ZIP sopra i vecchi pacchetti:</strong> prima esegui il passaggio 3B per evitare i doppioni. Le cartelle originali <code>Polestar</code> e <code>RXPGuides</code> non vanno toccate.</div>
- <div class="ministep"><span class="miniindex">3A</span><div>
-   <strong>Trova la cartella AddOns del gioco</strong>
-   <p>Apri Esplora file di Windows (<kbd>Win</kbd> + <kbd>E</kbd>). Entra nella cartella di installazione di WoW, poi segui questo percorso:</p>
-   <div class="path-guide"><code>World of Warcraft\_forever_\Interface\AddOns\</code><p>Se il gioco è installato in un'altra posizione, cambia solo la parte iniziale. La parte finale <code>_forever_\Interface\AddOns</code> è quella importante.</p></div>
- </div></div>
- <div class="ministep"><span class="miniindex">3B</span><div>
-   <strong>Sposta i vecchi pacchetti generati da WoW XP Helper in un backup</strong>
-   <p>In <code>AddOns</code> cerca le cartelle <strong>PolestarPack_*</strong> che hai creato durante le prove precedenti. Per esempio:</p>
-   <div class="folder-example"><span class="folder-heading">ESEMPI DI VECCHI PACCHETTI DA SPOSTARE</span><pre>PolestarPack_rxp-completo-160-1-1
-PolestarPack_rxp-completo-160-1-2
-PolestarPack_rxp-completo-160-2-1
-PolestarPack_rxp-completo-160-2-2
-... eventuali altri pacchetti creati prima</pre></div>
-   <p><strong>Come spostarli:</strong> crea sul Desktop una cartella chiamata <code>Backup_PolestarPack</code>. Seleziona solo i vecchi pacchetti dell'helper, premi <kbd>Ctrl</kbd> + <kbd>X</kbd>, apri la cartella di backup e premi <kbd>Ctrl</kbd> + <kbd>V</kbd>.</p>
-   <div class="warning"><strong>NON SPOSTARE:</strong> <code>Polestar</code>, <code>RXPGuides</code>, <code>Polestar_Options</code> o altri addon che non provengono dalle tue precedenti conversioni. <strong>Non spostare tutti i PolestarPack_*</strong> alla cieca: alcuni potrebbero appartenere ad altri autori. Se non sei sicuro, lasciali dove sono e controlla il loro nome.</div>
- </div></div>
- <div class="ministep"><span class="miniindex">3C</span><div>
-   <strong>Apri lo ZIP appena scaricato</strong>
-   <p>Apri la cartella <strong>Download</strong> di Windows e trova <code>RestedXP_Speedrun_Horde_Alliance_1-60.zip</code> (o il nome visualizzato dal sito).</p>
-   <p>Fai clic destro sul file ZIP → <strong>Estrai tutto…</strong>. Apri la cartella estratta e individua le cartelle che iniziano per <code>PolestarPack_</code>.</p>
-   <p>Se usi 7-Zip o WinRAR, scegli comunque un'estrazione che permetta di vedere le cartelle <code>PolestarPack_*</code> direttamente, non un file ZIP dentro un altro ZIP.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">3D</span><div>
-   <strong>Copia le nuove cartelle dentro AddOns, al livello giusto</strong>
-   <p>Nella cartella estratta, <strong>seleziona TUTTE le cartelle PolestarPack_*</strong>, premi <kbd>Ctrl</kbd> + <kbd>C</kbd>, torna in <code>_forever_\Interface\AddOns\</code> e premi <kbd>Ctrl</kbd> + <kbd>V</kbd>.</p>
-   <div class="folder-example"><span class="folder-heading">ESEMPIO DELLA STRUTTURA CORRETTA DOPO LA COPIA</span><pre>_forever_
-└── Interface
-    └── AddOns
-        ├── Polestar
-        ├── RXPGuides
-        ├── PolestarPack_rxp-completo-160-horde
-        ├── PolestarPack_rxp-completo-160-alliance
-        └── PolestarPack_..._Human / _Gnome (se presenti)</pre></div>
-   <div class="warning"><strong>NON DEVE ESSERCI:</strong> <code>AddOns\RestedXP_Speedrun_Horde_Alliance_1-60\PolestarPack_...</code> né <code>AddOns\PolestarPack_...\PolestarPack_...</code>. Le cartelle <code>PolestarPack_*</code> devono stare <strong>direttamente</strong> dentro AddOns.</div>
-   <p class="small">Le cartelle con suffisso <code>_Human</code>, <code>_Gnome</code> o simili sono componenti aggiuntivi per alcune razze: se sono nello ZIP, copiale insieme a quelle principali. Non sono Speedrun duplicate.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">3E</span><div>
-   <strong>Avvia WoW Forever e verifica che gli addon siano attivi</strong>
-   <p>Avvia il gioco. Se all'elenco personaggi è disponibile il pulsante <strong>AddOns</strong>, aprilo e controlla che Polestar e i nuovi <code>PolestarPack_*</code> siano abilitati. Se l'installazione manuale è stata eseguita con WoW aperto, <strong>chiudi e riavvia completamente il gioco</strong>.</p>
-   <p>In gioco digita <code>/polestar guides</code> nella chat: si aprirà il menu guide di Polestar. Apri <strong>Community guides</strong>.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">3F</span><div>
-   <strong>Controlla il risultato finale</strong>
-   <p>Verifica di trovare <strong>RestedXP Speedrun Horde 1–60</strong> e <strong>RestedXP Speedrun Alliance 1–60</strong>, se hai incluso entrambe le fazioni, e apri la guida adatta al tuo personaggio.</p>
-   <p>Controlla che siano elencati i capitoli disponibili oltre il livello 20 e che la guida mostri i suoi passi. Se mancano i primi livelli, ripeti il metodo file includendo anche la cartella originale <code>RXPGuides</code>; se mancano le guide avanzate, controlla l'importazione RestedXP del passaggio 1.</p>
- </div></div>
- <div class="ministep"><span class="miniindex">3G</span><div>
-   <strong>Attiva la Speedrun come percorso suggerito da Polestar</strong>
-   <p>Per fare in modo che Polestar suggerisca queste guide durante il livellamento, in chat digita <code>/polestar packs</code>. Nella schermata <strong>Options → Community guides</strong> controlla che il pacchetto della tua fazione sia <strong>attivo</strong>.</p>
-   <p>Alla voce <strong>Suggest guides from</strong> scegli <strong>RestedXP Speedrun Horde 1–60</strong> oppure <strong>RestedXP Speedrun Alliance 1–60</strong>, in base al personaggio. Senza questa impostazione puoi comunque aprire manualmente le guide Community, ma Polestar potrebbe continuare a suggerire quelle originali.</p>
-   <p class="small">Riferimento: <a href="https://github.com/fitzforge/polestar/blob/next/docs/GUIDE_PACKS.md" target="_blank" rel="noopener noreferrer">documentazione ufficiale di Polestar — Community guides</a>.</p>
- </div></div>
- <div class="checklist" aria-label="Controllo finale dell'installazione">
-   <strong>Spunta soltanto quando hai completato davvero i controlli:</strong>
-   <label for="installedFolders"><input type="checkbox" id="installedFolders"> Ho copiato i nuovi pacchetti direttamente nella cartella AddOns.</label>
-   <label for="checkedInGame"><input type="checkbox" id="checkedInGame"> Ho aperto Community guides e vedo le guide nel gioco.</label>
-   <p id="installChecklistStatus" aria-live="polite" class="small">Completa entrambi i controlli per verificare l'installazione.</p>
+ <div class="stephead"><div class="stepnum">4</div><div><h2 id="heading3">Installa, usa Polestar e disattiva RestedXP</h2><p>L'ultimo passaggio per avere le guide funzionanti senza due addon attivi.</p></div></div>
+ <div class="setup-line"><strong>A. Installa lo ZIP in AddOns</strong><p>Quando la conversione termina, apri il file ZIP scaricato. Se avevi generato pacchetti con la vecchia versione dell'helper, sposta fuori da AddOns i vecchi <code>PolestarPack_rxp-completo-160-*</code> in una cartella di backup. <strong>Non toccare Polestar né RXPGuides.</strong> Poi estrai tutte le nuove cartelle <code>PolestarPack_*</code> direttamente in:</p>
+  <div class="path-actions"><code id="addonsPath"></code><button id="copyAddonsPath" class="copy-btn" type="button">COPIA PERCORSO</button></div>
+  <p class="small">Non lasciare cartelle intermedie: deve risultare <code>AddOns\PolestarPack_...\</code>, non <code>AddOns\ZIP\PolestarPack_...\</code>. Copia anche le cartelle tecniche <code>_Human</code>, <code>_Gnome</code> ecc., quando presenti.</p>
  </div>
- <div class="results" id="result" hidden>
-  <h3>ZIP GENERATO — ORA COMPLETA IL PASSAGGIO 3</h3><p>Il file è stato scaricato: controlla i punti dal 3A al 3G. Il download da solo non installa i pacchetti quando usi il metodo file.</p>
-  <div class="metrics" id="metrics"></div><p id="installResult"></p>
-  <button class="secondary" id="redownload" type="button">SCARICA DI NUOVO LO ZIP</button>
- </div>
- <div class="reference-links"><strong>Riferimenti utili per verificare l'installazione</strong>
-   <a href="https://github.com/fitzforge/polestar/blob/next/docs/GUIDE_PACKS.md" target="_blank" rel="noopener noreferrer">Guida ufficiale Polestar: installare un Community addon ↗</a>
-   <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice e istruzioni di WoW XP Helper ↗</a>
- </div>
+ <div class="setup-line"><strong>B. Avvia Polestar</strong><p>Riavvia WoW, digita <code>/polestar packs</code>, attiva i pacchetti Community e scegli <strong>Suggest guides from → RestedXP Speedrun</strong> per la fazione del personaggio. Con <code>/polestar guides</code> apri la guida e controlla i capitoli.</p></div>
+ <div class="setup-line last"><strong>C. Disabilita RestedXP, lascia attivo Polestar</strong><p>Dalla schermata di selezione personaggio apri <strong>AddOns</strong> e disattiva <strong>RestedXP Guides (RXPGuides)</strong>. <strong>Non disinstallarlo</strong>: ti servirà solo quando vorrai aggiornare o reimportare le guide, poi potrai disabilitarlo di nuovo.</p></div>
+ <div id="result" class="results" hidden><h3>ZIP CREATO</h3><p>Ora completa i tre punti qui sopra. Il download non installa automaticamente il pacchetto se hai usato il metodo file.</p><div id="metrics" class="metrics"></div><p id="installResult"></p><button class="secondary" id="redownload" type="button">SCARICA DI NUOVO LO ZIP</button></div>
+ <div class="checklist"><strong>Verifica finale</strong><label for="installedFolders"><input type="checkbox" id="installedFolders"> Le nuove cartelle PolestarPack sono dentro AddOns.</label><label for="checkedInGame"><input type="checkbox" id="checkedInGame"> Vedo la guida in Polestar e RestedXP è disabilitato.</label><p id="installChecklistStatus" aria-live="polite" class="small">Spunta le due verifiche quando hai finito.</p></div>
 </section>
-<details class="card more">
- <summary>IMPOSTAZIONI AVANZATE — facoltative</summary>
- <p>Di default vengono create solo le due Speedrun 1–60. Dungeon e Survival si attivano soltanto se le selezioni.</p>
- <div class="checkboxes">
-  <label><input type="checkbox" id="horde" checked> Horde</label>
-  <label><input type="checkbox" id="alliance" checked> Alliance</label>
-  <label><input type="checkbox" id="main" checked> Speedrun</label>
-  <label><input type="checkbox" id="dungeon"> Dungeon (facoltative)</label>
-  <label><input type="checkbox" id="survival"> Survival (facoltative)</label>
- </div>
- <div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32"></div>
- <div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60" maxlength="64"></div></div>
-</details>
+<details class="card more"><summary>Impostazioni avanzate — facoltative</summary><p>Di default vengono create solo le Speedrun Horde e Alliance. Dungeon e Survival sono opzionali.</p><div class="checkboxes"><label><input type="checkbox" id="horde" checked> Horde</label><label><input type="checkbox" id="alliance" checked> Alliance</label><label><input type="checkbox" id="main" checked> Speedrun</label><label><input type="checkbox" id="dungeon"> Dungeon</label><label><input type="checkbox" id="survival"> Survival</label></div><div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32"></div><div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60" maxlength="64"></div></div></details>
 </main>
-<footer>Le guide vengono elaborate localmente nel tuo browser, senza caricarle sui server del progetto. <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice su GitHub</a> · Convertitore <a href="https://github.com/aronjanosch/polestar-convert" target="_blank" rel="noopener noreferrer">polestar-convert</a>. I generatori esterni rimangono indipendenti; utilizza soltanto guide che hai diritto di usare.</footer>
+<footer>Wow XP Helper elabora le guide nel browser, senza caricare i tuoi file sui propri server. <a href="https://wowup.io/" target="_blank" rel="noopener noreferrer">WowUp</a> · <a href="https://github.com/fitzforge/polestar" target="_blank" rel="noopener noreferrer">Polestar</a> · <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice GitHub</a>. Converti soltanto guide che hai diritto di utilizzare.</footer>
+</body>
 <script>"use strict";
 
 const $=id=>document.getElementById(id);const decoder=new TextDecoder('utf-8',{fatal:true});
@@ -656,4 +588,4 @@ function installationChecklist(){
 $('installedFolders').addEventListener('change',installationChecklist);
 $('checkedInGame').addEventListener('change',installationChecklist);
 installationChecklist();
-</script></body></html>
+</script></html>
