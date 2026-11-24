@@ -19,6 +19,14 @@ Web app per **World of Warcraft Forever**, pensata per condividere una conversio
 
 Le guide disponibili per ciascuna fazione e i livelli coperti dipendono dai file effettivamente presenti: **non è garantita la copertura 1–60 se mancano delle guide**. Il compilatore può scartare guide incompatibili e le segnala nel log.
 
+### Provenienza del generatore online e limiti dell'integrazione
+
+Il sito esterno [Forever Free RXP](https://forever-free-rxp.online/en/) dichiara di basarsi sul Gist pubblico [`decrypt_guide.py` di imSp4rky](https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1).
+
+Lo script legge un file di importazione RestedXP cifrato, associato a un BattleTag, e può convertirlo in un addon `RXPDecryptedGuides` contenente guide Lua. Il codice pubblico **non contiene alcun pacchetto di guide cifrate** e non offre da solo un servizio di generazione di codici per un nuovo account. Il sito esterno dichiara di usare una propria sorgente di guide: per questo il solo Gist non è sufficiente a replicarlo.
+
+WoW XP Helper **non integra il decrypt/re-encrypt degli import associati a BattleTag**, non acquisisce sorgenti premium di terzi e non distribuisce guide. È un convertitore locale delle guide che ogni utente è autorizzato a utilizzare e che risultano disponibili nella propria installazione.
+
 ### Privacy e licenze
 
 - La conversione avviene nel browser; **nessun file RXP viene inviato al server di questo progetto**. Il motore compilato e i dati di gioco sono distribuiti dal sito GitHub Pages in fase di pubblicazione.
