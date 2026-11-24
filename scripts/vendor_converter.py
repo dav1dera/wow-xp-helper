@@ -40,7 +40,7 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    for name in ("index.html", ".nojekyll", "LICENSE"):
+    for name in ("index.html", "compile-worker.mjs", ".nojekyll", "LICENSE"):
         shutil.copyfile(ROOT / name, OUT / name)
 
     archive = zipfile.ZipFile(io.BytesIO(fetch(SOURCE)))
