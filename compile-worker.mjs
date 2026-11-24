@@ -26,7 +26,7 @@ function groupName(group){
   const type={main:"Speedrun",dungeon:"Dungeon",survival:"Survival"}[route];
   return side+" - "+type+(group.count>1?" "+group.index+"/"+group.count:"");
 }
-function guideText(g,sourceId,packId,members,stats){
+export function guideText(g,sourceId,packId,members,stats){
   const old="guide "+sourceId+"/"+g.slug+"\n";
   if(!g.text.startsWith(old))throw Error("Guida RXP senza intestazione attesa: "+g.slug);
   return g.text.replace(old,"guide "+packId+"/"+g.slug+"\n").replace(/^next ([^\r\n]+)\r?$/gm,(_line,raw)=>{
@@ -38,6 +38,15 @@ function guideText(g,sourceId,packId,members,stats){
     }
     return keep.length?"next "+keep.join(", "):"";
   });
+}
+export function buildGroups(guides){
+  // Main remains ONE pack for both factions and all level brackets.
+  const main=guides.filter(g=>g.route==="main");
+  const other=guides.filter(g=>g.route!=="main");
+  return [
+    ...(main.length?[{key:"unified-main",index:1,count:1,guides:main,code:0,unified:true}]:[]),
+    ...segments(other)
+  ];
 }
 async function compile({files,options,includeEntries}){
   tell("phase",{text:"Caricamento convertitore e dati Polestar…",progress:67});
@@ -75,13 +84,10 @@ async function compile({files,options,includeEntries}){
   // The main Horde + Alliance speedrun MUST be one pack, with a common pack id.
   // Only optional Dungeon/Survival routes are segmented into smaller packs.
   // Compiling every main guide together preserves cross-level `next` links.
-  const main=run.guides.filter(g=>g.route==="main");
-  const other=run.guides.filter(g=>g.route!=="main");
-  const parts=[];
-  if(main.length)parts.push({key:"unified-main",index:1,count:1,guides:main,code:0,unified:true});
-  parts.push(...segments(other));
-  tell("log",{text:"Guide riconosciute: "+run.guides.length+"; Speedrun unificata: "+main.length+" guide in UN SOLO pacchetto. Altri pacchetti opzionali: "+(parts.length-(main.length?1:0))+"."});
-  if(!main.length)tell("log",{text:"Attenzione: nessuna guida Speedrun disponibile nei file selezionati."});
+  const parts=buildGroups(run.guides);
+  const mainCount=parts.find(p=>p.unified)?.guides.length||0;
+  tell("log",{text:"Guide riconosciute: "+run.guides.length+"; Speedrun unificata: "+mainCount+" guide in UN SOLO pacchetto. Altri pacchetti opzionali: "+(parts.length-(mainCount?1:0))+"."});
+  if(!mainCount)tell("log",{text:"Attenzione: nessuna guida Speedrun disponibile nei file selezionati."});
   const coreTexts={};
   for(const n of dm.COMPILER_NAMES){
     const t=await readData("data/forever/"+n+".json");
