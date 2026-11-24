@@ -24,6 +24,22 @@ jobs:
           python-version: '3.12'
       - name: Bundle the Polestar converter and game data
         run: python scripts/vendor_converter.py
+      - name: Check bundled browser scripts
+        run: |
+          test -s _site/compile-worker.mjs
+          test -s _site/converter/forge/polestar_convert_wasm_bg.wasm
+          node --check _site/compile-worker.mjs
+          python - <<'PY'
+          from pathlib import Path
+          html = Path('_site/index.html').read_text(encoding='utf-8')
+          start = '<script>"use strict";'
+          assert start in html and '</script>' in html
+          script = html.split(start,1)[1].split('</script>',1)[0]
+          assert "new Worker(" in script and "cancelCompile" in script
+          Path('_site/_inline_check.js').write_text('"use strict";' + script,encoding='utf-8')
+          PY
+          node --check _site/_inline_check.js
+          rm _site/_inline_check.js
       - uses: actions/configure-pages@v5
         with:
           enablement: true
