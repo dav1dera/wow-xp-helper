@@ -1,11 +1,35 @@
 # WoW XP Helper — RestedXP → Polestar OneClick
 
-Web app for WoW Forever: recover locally available RestedXP guides and convert them to Polestar. The tool contains no guide content and does not unlock paid guides.
+Web app per **World of Warcraft Forever**, pensata per condividere una conversione delle guide RestedXP già presenti sul proprio PC in un pacchetto Polestar, senza CMD, Python o un secondo sito.
 
-The user selects the WoW installation folder in Chrome/Edge. The app reads local RestedXP saved variables and addon source files, compiles using the open-source polestar-convert engine staged at deployment, downloads a PolestarPack ZIP and can install it into AddOns with user permission.
+## Apri l'app
 
-To deploy: GitHub Settings → Pages → Source: GitHub Actions; then Actions → Publish WoW XP Helper → Run workflow.
+**[Avvia WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)**
 
-Expected Pages URL: https://dav1dera.github.io/wow-xp-helper/
+> Il link funziona dopo che GitHub Pages è stato abilitato in **Settings → Pages → Source: GitHub Actions** e il workflow Deploy WoW XP Helper è terminato correttamente.
 
-Local source files and BattleTag are not uploaded by the app. Conversion success depends on the available files and upstream engine compatibility.
+### Procedura
+
+1. Se non hai ancora importato le tue guide in RestedXP, usa il collegamento all'eventuale servizio esterno dalla pagina: il BattleTag e l'import in WoW restano passaggi manuali.
+2. Chiudi completamente WoW per salvare la cache delle guide.
+3. Apri il sito con **Chrome o Edge aggiornato** e premi **Seleziona WoW e avvia tutto**.
+4. Seleziona la cartella `World of Warcraft\_forever_` e autorizza l'accesso del browser. Le impostazioni predefinite includono **Horde + Alliance, Speedrun/Main e Dungeon**.
+5. L'app cerca `WTF/Account/.../SavedVariables/RXPGuides.lua` e `Interface/AddOns/RXPGuides`, recupera le guide leggibili, esegue il compilatore Polestar e scarica uno ZIP `PolestarPack_*.zip`.
+6. Se il browser permette la scrittura, conferma l'installazione diretta; altrimenti estrai il pacchetto ZIP in `Interface/AddOns`. Riavvia WoW e usa **Polestar → Community guides**.
+
+Le guide disponibili per ciascuna fazione e i livelli coperti dipendono dai file effettivamente presenti: **non è garantita la copertura 1–60 se mancano delle guide**. Il compilatore può scartare guide incompatibili e le segnala nel log.
+
+### Privacy e licenze
+
+- La conversione avviene nel browser; **nessun file RXP viene inviato al server di questo progetto**. Il motore compilato e i dati di gioco sono distribuiti dal sito GitHub Pages in fase di pubblicazione.
+- Questo repository **non contiene guide RestedXP, codici BattleTag né cache personali**.
+- Il sito esterno [Forever Free RXP](https://forever-free-rxp.online/en/) è soltanto collegato, non incorporato, replicato o automatizzato. Il progetto non è affiliato con quel sito.
+- Converti soltanto guide che hai diritto di usare; non ridistribuire guide di terzi senza autorizzazione.
+- La UI di questo repository è MIT; **polestar-convert** di [aronjanosch](https://github.com/aronjanosch/polestar-convert) è MIT; il compilatore e i dati Polestar sono soggetti alle proprie licenze GPL-3.0 e a quelle dei dati. Gli asset di conversione sono recuperati durante il deploy da fonti pubbliche e non sono inclusi nel repository.
+- L'app richiede Internet per il primo caricamento e l'accesso locale autorizzato dall'utente. In questo momento la conversione e l'installazione finali **non sono state testate end-to-end sul tuo client Windows**.
+
+### Sviluppo e deploy
+
+Il workflow `.github/workflows/pages.yml` prepara il sito usando `scripts/vendor_converter.py`: recupera il codice del converter e il compilatore WebAssembly con i relativi dati di gioco, senza alcun contenuto di guide RestedXP. Fa il deploy su GitHub Pages.
+
+Il pulsante della pagina consente un solo flusso dopo la selezione della cartella WoW, ma il browser richiede autorizzazione esplicita per leggere/scrivere i file e per sostituire un pacchetto già installato. Questo limite di sicurezza non può essere eliminato dal sito.
