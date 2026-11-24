@@ -16,7 +16,7 @@
 
 **Requisiti:** Chrome o Edge aggiornato su Windows, RestedXP e Polestar già installati nel gioco. Il browser deve supportare la selezione delle cartelle locali. Se la modalità automatica non trova i file, il pannello **Impostazioni avanzate** include un caricamento manuale. Le guide convertite possono differire dall'originale e alcune possono essere escluse dal compilatore.
 
-Le impostazioni iniziali includono **solo Speedrun (Horde + Alliance)**: il convertitore crea **un solo pacchetto Community RestedXP Speedrun 1–60**, senza dividerlo per fazione o gruppi di livello. **Dungeon e Survival sono facoltativi** nel pannello avanzato e potrebbero generare altri pacchetti. **La copertura effettiva 1–60 non è garantita**: dipende dalle guide realmente presenti nella cache e da quelle accettate dal compilatore.
+Le impostazioni iniziali includono **solo Speedrun**, con due pacchetti Community distinti: **RestedXP Speedrun Horde 1–60** e **RestedXP Speedrun Alliance 1–60**, uno per fazione e senza suddivisioni per livello. **Dungeon e Survival sono facoltativi** nel pannello avanzato e potrebbero generare altri pacchetti. **La copertura effettiva 1–60 non è garantita**: dipende dalle guide realmente presenti nella cache e da quelle accettate dal compilatore.
 
 ## Risorse esterne: Inariaa e Forever Free RXP
 
@@ -24,15 +24,15 @@ Inariaa è la prima risorsa esterna elencata nell'interfaccia; Forever Free RXP 
 
 Forever Free RXP dichiara di basarsi sul [Gist di imSp4rky](https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1). Quello script non include l'archivio cifrato usato per generare codici nuovi.
 
-## Privacy, licenze e pubblicazione
-
 ## Aggiornamento dalla versione divisa in 14 cartelle
 
 Se hai già provato la vecchia compilazione, **sposta temporaneamente fuori da `Interface/AddOns` le vecchie cartelle `PolestarPack_AllianceSpeedrun*`, `PolestarPack_HordeSpeedrun*` e le vecchie cartelle di Dungeon generate dalla prova**, per evitare duplicati in Polestar. Non toccare gli addon originali `Polestar` e `RXPGuides`.
 
-Il nuovo ZIP di default contiene un solo pack Speedrun Horde + Alliance, con collegamenti tra le guide. Può contenere **cartelle addon aggiuntive per razze specifiche** (per esempio `_Human`, `_Gnome`): sono componenti tecnici dello stesso pack, **non pack separati nella schermata Community**; vanno estratti e installati insieme al pack principale.
+Il nuovo ZIP contiene **due pacchetti Speedrun separati per fazione** (uno Horde e uno Alliance), ognuno con le proprie tappe collegate da livello 1 a 60, ove disponibili. Può contenere **cartelle addon aggiuntive per razze specifiche** (per esempio `_Human`, `_Gnome`): sono componenti tecnici dello stesso pack, **non pack separati nella schermata Community**; vanno estratti e installati insieme al pack principale.
 
-**Nota sulle prestazioni:** compilare una Speedrun intera richiede più memoria e può impiegare più tempo dei gruppi da 32. Il lavoro avviene in un Web Worker così la pagina resta utilizzabile e offre **Annulla compilazione**. È ancora necessario un test end-to-end con una cache completa dell'utente: il successo di GitHub Actions convalida la pubblicazione, non la compilazione delle sue guide.
+**Nota sulle prestazioni:** compilare tutte le guide 1–60 di ciascuna fazione in un unico pacchetto richiede più memoria e può impiegare più tempo dei gruppi da 32. Il lavoro avviene in un Web Worker così la pagina resta utilizzabile e offre **Annulla compilazione**. È ancora necessario un test end-to-end con una cache completa dell'utente: il successo di GitHub Actions convalida la pubblicazione, non la compilazione delle sue guide.
+
+## Privacy, licenze e pubblicazione
 
 I file locali vengono elaborati dal browser. **La cache RestedXP e i dati dell'account non vengono caricati da questo progetto.** Il codice del converter e i dati di gioco sono ospitati su GitHub Pages. Quando scegli la cartella WoW, Chrome/Edge deve chiederti il permesso di lettura e scrittura previsto dalle sue protezioni; il tool chiede conferma prima di sostituire una cartella PolestarPack preesistente.
 
