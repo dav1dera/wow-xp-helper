@@ -169,7 +169,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
  <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading2">Converti le guide in Polestar</h2><p>Una Speedrun Horde 1–60 e una Alliance 1–60, ciascuna completa e senza spezzoni per livello.</p></div></div>
  <div class="ministep"><span class="miniindex">2A</span><div>
   <strong>Chiudi completamente WoW per salvare le guide sul disco</strong>
-  <p>Dopo l'Import e il Reload, scegli <strong>Exit Game</strong>. Non lasciare WoW aperto in background durante la conversione. Il file di salvataggio sarà in <code>_forever_\WTF\Account\NOME_ACCOUNT\SavedVariables\RXPGuides.lua</code>.</p>
+  <p>Dopo l'Import e il Reload, scegli <strong>Exit Game</strong>. Non lasciare WoW aperto in background durante la conversione. <strong>Non rifare Purge e non riavviare lo script di pulizia dopo l’importazione</strong>: elimineresti proprio la cache necessaria. Il file di salvataggio sarà in <code>_forever_\WTF\Account\NOME_ACCOUNT\SavedVariables\RXPGuides.lua</code>.</p>
  </div></div>
  <label class="checkline" for="wowClosed"><input type="checkbox" id="wowClosed"><span>CONFERMO: ho chiuso completamente WoW con <strong>Exit Game</strong>.</span></label>
  <div class="hint" id="preflightMessage" role="status" aria-live="polite">Prima di iniziare, spunta le due conferme nei passaggi 1 e 2.</div>
@@ -261,8 +261,8 @@ PolestarPack_rxp-completo-160-2-2
  </div></div>
  <div class="checklist" aria-label="Controllo finale dell'installazione">
    <strong>Spunta soltanto quando hai completato davvero i controlli:</strong>
-   <label><input type="checkbox" id="installedFolders"> Ho copiato i nuovi pacchetti direttamente nella cartella AddOns.</label>
-   <label><input type="checkbox" id="checkedInGame"> Ho aperto Community guides e vedo le guide nel gioco.</label>
+   <label for="installedFolders"><input type="checkbox" id="installedFolders"> Ho copiato i nuovi pacchetti direttamente nella cartella AddOns.</label>
+   <label for="checkedInGame"><input type="checkbox" id="checkedInGame"> Ho aperto Community guides e vedo le guide nel gioco.</label>
    <p id="installChecklistStatus" aria-live="polite" class="small">Completa entrambi i controlli per verificare l'installazione.</p>
  </div>
  <div class="results" id="result" hidden>
