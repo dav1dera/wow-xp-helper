@@ -143,6 +143,18 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 .setup-line .links{margin:8px 0}
 .checklist{margin-top:15px}
 @media(max-width:580px){.stepnav a{font-size:11px;padding:9px 3px}.card{padding:18px 15px}.path-actions{align-items:stretch}.path-actions code{min-width:0;width:100%}.copy-btn{width:100%}}
+
+/* Source recency is explicit, verifiable and separate from site deployments */
+.source-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.source-option{background:#13273f;border:1px solid #3e618b;border-radius:11px;padding:10px 12px;min-width:0;position:relative}
+.source-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.source-top a{font-size:13px;min-height:39px;padding:9px 12px}
+.source-freshness{background:#203b5c;border:1px solid #5074a1;border-radius:9px;color:#d9eaff;font-size:12px;font-weight:800;padding:8px 10px;text-align:left}
+.source-freshness:hover,.source-freshness:focus-visible{background:#2c4c75}
+.source-tooltip{display:none;position:absolute;z-index:3;left:6px;right:6px;top:calc(100% + 5px);padding:12px;background:#243954;border:1px solid #7895bb;color:#e7efff;font-size:13px;line-height:1.48;border-radius:9px;box-shadow:0 10px 25px #03091488}
+.source-option:hover .source-tooltip,.source-option:focus-within .source-tooltip{display:block}
+.source-comparison{font-size:13px!important;color:#b8cbe3}
+@media(max-width:650px){.source-choices{grid-template-columns:1fr}.source-tooltip{position:relative;left:auto;right:auto;top:auto;margin-top:8px}.source-option:hover .source-tooltip{display:none}.source-option:focus-within .source-tooltip{display:block}}
 </style>
 </head>
 <body>
@@ -169,8 +181,21 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 <section class="card" id="step1" aria-labelledby="heading1">
  <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading1">Importa le tue guide in RestedXP</h2><p>RestedXP serve per importarle; poi giocherai con Polestar.</p></div></div>
  <div class="skipbox"><strong>Le guide sono già importate e aggiornate?</strong><p>Non rifare Import e non fare Purge.</p><button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → CONTINUA</button></div>
- <div class="setup-line"><strong>Se devi importarle:</strong><p>Avvia WoW, apri <strong>RestedXP → Import Guide</strong>, incolla il codice delle guide a cui hai accesso e premi <strong>Import</strong>. Fai <code>/reload</code> e controlla che compaiano anche i capitoli avanzati. <strong>Chiudi completamente WoW con Exit Game</strong> per salvare i file.</p></div>
- <details class="compact"><summary>Dove recupero un codice? E quando devo fare Purge?</summary><p>Usa le guide che hai acquistato o che sei autorizzato a utilizzare. Risorse esterne facoltative: <a href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">Inariaa</a> e <a href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">Forever Free RXP</a>. <strong>Purge elimina tutte le guide importate:</strong> usalo solo quando devi sostituirle e hai già il nuovo codice, poi importa e fai Reload.</p></details>
+ <div class="setup-line"><strong>Se devi importarle, scegli una fonte:</strong>
+  <div class="source-choices" aria-label="Confronta aggiornamenti delle fonti RestedXP">
+   <div class="source-option">
+    <div class="source-top"><a class="extern" href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">INARIAA ↗</a><button class="source-freshness" id="inariaaFreshness" type="button" aria-describedby="inariaaDetails">Verifica data… <span aria-hidden="true">ⓘ</span></button></div>
+    <div class="source-tooltip" id="inariaaDetails" role="note">Verifica della data di modifica del file guide.txt inglese su GitHub.</div>
+   </div>
+   <div class="source-option">
+    <div class="source-top"><a class="extern" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">FOREVER FREE RXP ↗</a><button class="source-freshness" id="foreverFreshness" type="button" aria-describedby="foreverDetails">Verifica data… <span aria-hidden="true">ⓘ</span></button></div>
+    <div class="source-tooltip" id="foreverDetails" role="note">Versione e data delle guide: verifica in corso.</div>
+   </div>
+  </div>
+  <p class="source-comparison" id="sourceComparison" aria-live="polite">Le date delle guide vengono verificate separatamente dalle date di aggiornamento dei siti.</p>
+  <p>Apri il generatore scelto e ottieni il codice. In WoW vai su <strong>RestedXP → Import Guide</strong>, incollalo, premi <strong>Import</strong> e fai <code>/reload</code>. Poi <strong>Exit Game</strong> per salvare i file.</p>
+ </div>
+ <details class="compact"><summary>Quando serve il comando Purge?</summary><p><strong>Purge elimina tutte le guide importate:</strong> usalo solo se vuoi sostituirle e hai già il codice aggiornato pronto. Se hai già le guide corrette, non eseguirlo. La data mostrata accanto a una fonte non prova da sola che le guide siano più complete o compatibili.</p></details>
  <label class="checkline" for="guideReady"><input type="checkbox" id="guideReady"><span>Le guide RestedXP sono presenti e aggiornate.</span></label>
 </section>
 
@@ -622,6 +647,48 @@ function installationChecklist(){
 $('installedFolders').addEventListener('change',installationChecklist);
 $('checkedInGame').addEventListener('change',installationChecklist);
 installationChecklist();
+
+/* A guide file change is NOT the same as a website update. */
+function guideDate(iso){
+ if(!iso||!Number.isFinite(Date.parse(iso)))return null;
+ return new Intl.DateTimeFormat('it-IT',{day:'2-digit',month:'short',year:'numeric',timeZone:'Europe/Rome'}).format(new Date(iso));
+}
+function showSourceState(labelId,detailId,item){
+ const badge=$(labelId), detail=$(detailId);
+ if(item?.guideUpdatedAt){
+  const date=guideDate(item.guideUpdatedAt);
+  badge.firstChild.textContent=date?'Guide EN: '+date+' ':'Data non disponibile ';
+  detail.textContent=(item.notes||'')+' Origine: commit del file guide.txt, non ultimo aggiornamento del sito. Data: '+(date||'non verificabile')+'.';
+ }else if(item?.version){
+  badge.firstChild.textContent='Versione '+item.version+' · data n/d ';
+  detail.textContent='Il sito espone la versione '+item.version+', ma non una data verificabile di aggiornamento delle guide. Non è possibile determinare se siano più recenti delle guide Inariaa. '+(item.notes||'');
+ }else{
+  badge.firstChild.textContent='Data non verificata ';
+  detail.textContent=item?.notes||'Non è disponibile una data di pubblicazione delle guide verificabile.';
+ }
+}
+async function refreshGuideSources(){
+ try{
+  const r=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
+  if(!r.ok)throw Error('HTTP '+r.status);
+  const data=await r.json();
+  showSourceState('inariaaFreshness','inariaaDetails',data.inariaa);
+  showSourceState('foreverFreshness','foreverDetails',data.forever);
+  const a=data.inariaa?.guideUpdatedAt,b=data.forever?.guideUpdatedAt;
+  if(a&&b){
+   $('sourceComparison').textContent=a===b?'Le due fonti dichiarano aggiornamenti alla stessa data.':
+     (a>b?'Inariaa':'Forever Free RXP')+' dichiara la data di aggiornamento più recente. Controlla comunque che le versioni siano compatibili.';
+  }else{
+   $('sourceComparison').textContent='Confronto non disponibile: almeno una fonte non pubblica una data verificabile delle guide. La data di aggiornamento del sito non basta.';
+  }
+ }catch(e){
+  showSourceState('inariaaFreshness','inariaaDetails',null);
+  showSourceState('foreverFreshness','foreverDetails',null);
+  $('sourceComparison').textContent='Impossibile verificare ora le date. Apri le due fonti e controlla la versione delle guide prima di scegliere.';
+ }
+}
+refreshGuideSources();
+
 </script>
 </body>
 </html>
