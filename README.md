@@ -16,6 +16,16 @@ Apri **[WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)**. La pagina m
 
 Il risultato predefinito è **una Speedrun 1–60 per Horde e una per Alliance**, nei limiti dei capitoli realmente presenti e convertibili. Dungeon e Survival sono facoltativi. I file delle guide vengono elaborati localmente nel browser.
 
+## Come vengono mostrate le date accanto a Inariaa e Forever Free RXP
+
+Nel secondo passaggio, accanto ai due link sono presenti etichette consultabili con mouse, tastiera o tocco. I dati vengono aggiornati automaticamente dal workflow GitHub Pages **ogni giorno** e quando viene pubblicata una nuova versione del sito.
+
+- **Inariaa:** si mostra la data dell'ultimo commit del file sorgente inglese `guide.txt` nel [repository Inariaa/rxp_decrypter](https://github.com/Inariaa/rxp_decrypter/commits/main/guide.txt). Non si usa la data del codice HTML: può cambiare anche senza guide nuove. Una modifica al file non prova che tutti i capitoli siano cambiati.
+- **Forever Free RXP:** si cerca la versione delle guide mostrata dalla pagina pubblica. Se non viene pubblicata una **data verificabile delle guide**, compare *data n/d*; le intestazioni HTTP e la data di modifica del sito non vengono usate per inventarla.
+- **Confronto:** il sito nomina una fonte più recente **solo se entrambe** hanno date di aggiornamento delle guide effettivamente verificabili. Altrimenti dichiara che non è possibile confrontarle automaticamente, pur lasciando visibili le informazioni disponibili.
+
+Il JSON utilizzato dalla pagina è pubblicato in `guide-sources.json`. Lo genera `scripts/build_guide_sources.py`, senza accedere a file personali, BattleTag o account.
+
 ## Risorse esterne: Inariaa e Forever Free RXP
 
 Inariaa è la prima risorsa esterna elencata nell'interfaccia; Forever Free RXP è la seconda. Sono siti indipendenti e facoltativi. WoW XP Helper non esegue i generatori, non intercetta le loro comunicazioni e non condivide alcun archivio di guide. Le guide ufficiali già importate possono essere utilizzate direttamente.
