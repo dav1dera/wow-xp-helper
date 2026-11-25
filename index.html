@@ -285,7 +285,43 @@ async function inflateGuide(bytes){
 }
 function parseLevel(name){const m=(name||'').match(/^(\d+)\s*[-–]\s*(\d+)\b/);return m?{lo:+m[1],hi:+m[2]}:null;}
 async function recoverFromSavedVariables(file){
-  const raw=new Uint8Array(await file.arrayBuffer());const text=decodeByteString(raw);
+  const raw=new Uint8Array(await file.arrayBuffer());
+  // Prefer the upstream reader: it understands real RXPDB profiles, packed imports
+  // and the Lua table layouts used by recent RestedXP releases.
+  try{
+    const [{savedGuides},{Report}]=await Promise.all([
+      import(BASE+'src/rxp/saved.mjs'),import(BASE+'src/ir.mjs')
+    ]);
+    const report=new Report();
+    const extracted=await savedGuides([raw],report);
+    const imported=[],errors=[];
+    const prefix='RXPGuides.RegisterGuide([[';
+    for(const [idx,entry] of extracted.entries()){
+      const text=entry.text;
+      if(typeof text!=='string'||!text.startsWith(prefix)||!text.endsWith('\n]])')){
+        errors.push('Voce '+(idx+1)+': struttura non riconosciuta');
+        continue;
+      }
+      const body=text.slice(prefix.length,-4);
+      const group=(body.match(/^#group\\s+(.+)$/m)||[])[1]?.trim()||'';
+      const name=(body.match(/^#name\\s+(.+)$/m)||[])[1]?.trim()||'';
+      if(!group||!name||!/^step\\b/m.test(body)||body.includes(']]')){
+        errors.push('Voce '+(idx+1)+': intestazione o contenuto guida non valido');
+        continue;
+      }
+      const enabled=(body.match(/^#enabledFor\\s+(.+)$/mi)||[])[1]||'';
+      imported.push({group,name,enabled,faction:getFaction(enabled,group),type:getType(group),body});
+    }
+    if(imported.length){
+      const refused=report.counts.get('imported guide not decodable (left out)')||0;
+      say('Nuovo lettore SavedVariables: '+imported.length+' guide importate lette, '+refused+' voci non decodificabili.');
+      return {guides:imported,errors,scanned:extracted.length+refused};
+    }
+    say('Lettore SavedVariables aggiornato: nessuna guida importata riconosciuta; provo il metodo di compatibilità.');
+  }catch(e){
+    say('Lettore SavedVariables aggiornato non applicabile ('+(e?.message||String(e))+'); provo il metodo di compatibilità.');
+  }
+  const text=decodeByteString(raw);
   if(!/RXPDB\s*=/.test(text))throw Error('Il file selezionato non contiene RXPDB. Scegli RXPGuides.lua dalla cartella SavedVariables.');
   const begin=text.indexOf('RXPDB ='); const end=text.indexOf('RXPSettings =',Math.max(begin,0));
   const db=text.slice(Math.max(0,begin),end>begin?end:undefined);
