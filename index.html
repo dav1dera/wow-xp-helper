@@ -214,14 +214,6 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
     <p class="source-hint">Data del sito su GitHub, non delle guide</p>
     <div class="source-tooltip" id="averyDetails" role="note">Controllo della fonte in corso.</div>
    </article>
-   <article class="source-option" data-source="cheswick">
-    <div class="source-top">
-     <a class="extern" href="https://restedxp.cheswick.dev/" target="_blank" rel="noopener noreferrer">RESTEDXP CHESWICK ↗</a>
-     <button class="source-freshness" id="cheswickFreshness" type="button" aria-controls="cheswickDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di RESTEDXP CHESWICK">Verifica… <span aria-hidden="true">ⓘ</span></button>
-    </div>
-    <p class="source-hint">Revisione della guida pubblicata</p>
-    <div class="source-tooltip" id="cheswickDetails" role="note">Controllo della fonte in corso.</div>
-   </article>
    <article class="source-option" data-source="kostya">
     <div class="source-top">
      <a class="extern" href="https://rxp.kostya.sexy/" target="_blank" rel="noopener noreferrer">FOREVER RXP ↗</a>
@@ -726,7 +718,7 @@ installationChecklist();
 /* A site change, a published version and a verified guide-file change are different facts. */
 const GUIDE_SOURCES=[
  ['inariaa','Inariaa'],['forever','Forever Free RXP'],
- ['avery','Avery'],['cheswick','Cheswick'],['kostya','Forever RXP']
+ ['avery','Avery'],['kostya','Forever RXP']
 ];
 function guideDate(iso,withTime=false){
  if(!iso||!Number.isFinite(Date.parse(iso)))return null;
