@@ -16,6 +16,19 @@ Apri **[WoW XP Helper](https://dav1dera.github.io/wow-xp-helper/)**. La pagina m
 
 Il risultato predefinito è **una Speedrun 1–60 per Horde e una per Alliance**, nei limiti dei capitoli realmente presenti e convertibili. Dungeon e Survival sono facoltativi. I file delle guide vengono elaborati localmente nel browser.
 
+## Polestar 0.4.3 (25 novembre 2026): compatibilità e aggiornamento
+
+**Le guide Community `PolestarPack_*` prodotte da WoW XP Helper restano supportate:** la 0.4.3 modifica soprattutto il layout dell'addon Polestar, non richiede di cancellare o riconvertire automaticamente i pacchetti delle guide. Il formato Community supporta ancora i pacchetti generati dal compiler ufficiale. Il convertitore incluso nel build recupera a ogni deploy le ultime sorgenti e i dati di `polestar-convert`; il worker passa anche l'elenco dei percorsi sorgente come richiesto dalla versione attuale della libreria.
+
+- **Aggiornamento con gestore addon:** aggiorna `Polestar Guides` tramite il gestore che lo supporta (la release ufficiale suggerisce **CurseForge**). Non effettuare pulizie manuali se il gestore si occupa dell'aggiornamento.
+- **Aggiornamento manuale:** esci da WoW, fai un backup e sostituisci le vecchie cartelle dell'addon **Polestar** con quelle di `Polestar-0.4.3.zip` nella cartella `_forever_\Interface\AddOns`. **Non eliminare `PolestarPack_*` né le SavedVariables.** La release passa da 45 a **22 cartelle**; vecchi componenti autonomi come `Polestar_Experimental`, `Polestar_Looks`, `Polestar_SkinAPI`, `Polestar_TabStyles`, `Polestar_Layout_Atlas` e i pacchetti razza separati sono ora accorpati.
+- **Primo avvio dopo l'update:** chiudi e riavvia il gioco completamente. **`/reload` non carica le nuove cartelle addon**.
+- **Guide installate:** usa `/polestar packs` → *Options → Community guides*, attiva la tua Speedrun Horde/Alliance e scegli *Suggest guides from*. Con `/polestar guides` verifica il risultato. Se il pacchetto segnala errori, apri la sua riga e usa *Show* o *Copy report*.
+
+Fonti: [release Polestar 0.4.3](https://github.com/fitzforge/polestar/releases/tag/v0.4.3), [documentazione Community guides](https://github.com/fitzforge/polestar/blob/v0.4.3/docs/GUIDE_PACKS.md) e [formato dei Community addon](https://github.com/fitzforge/polestar/blob/v0.4.3/docs/PACK_FORMAT.md).
+
+La compilazione e i controlli CI non sostituiscono una prova nel client WoW Forever con una cache `RXPGuides.lua` reale e Polestar 0.4.3.
+
 ## Come vengono mostrate le date accanto a Inariaa e Forever Free RXP
 
 Nel secondo passaggio, accanto ai due link sono presenti etichette consultabili con mouse, tastiera o tocco. I dati vengono aggiornati automaticamente dal workflow GitHub Pages **ogni giorno** e quando viene pubblicata una nuova versione del sito.
