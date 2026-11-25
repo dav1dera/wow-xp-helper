@@ -89,7 +89,7 @@ async function compile({files,options,includeEntries}){
   const data=await dm.loadData(readData);
   const names=await nm.loadNames(readData,data,manifest.levelXp);
   const runs=await cm.convertAddons(p=>Promise.resolve(virt.get(p.toLowerCase())??null),data,names,{
-    packId:options.id,sources:["rxp"],routes:options.routes,
+    packId:options.id,sources:["rxp"],routes:options.routes,paths:[...virt.keys()],
     progress:src=>tell("log",{text:"Conversione "+src})
   });
   const run=runs.rxp;
@@ -154,7 +154,10 @@ async function compile({files,options,includeEntries}){
     "WoW XP Helper - Speedrun Horde e Alliance 1-60 per Polestar",
     "Chiudi WoW ed estrai TUTTE le cartelle PolestarPack_* in:",
     "World of Warcraft\\_forever_\\Interface\\AddOns",
-    "Riavvia WoW. Apri Polestar > Community guides.",
+    "Polestar 0.4.3 o piu recente: i pacchetti PolestarPack_* restano addon Community separati.",
+    "Aggiornando Polestar manualmente, sostituisci soltanto le sue vecchie cartelle Polestar* e NON eliminare PolestarPack_*.",
+    "Riavvia COMPLETAMENTE WoW: /reload non carica nuove cartelle addon.",
+    "Apri /polestar packs > Options > Community guides e imposta Suggest guides from.",
     "",
     "Guide compilate: "+stats.compiled,
     "Guide scartate: "+stats.dropped,
@@ -164,7 +167,7 @@ async function compile({files,options,includeEntries}){
     "Le eventuali cartelle con suffisso _Human / _Gnome ecc. sono componenti dello stesso pacchetto Polestar: vanno installate insieme.",
     "Ogni fazione ha una sola guida Community per i livelli 1-60; i capitoli interni sono collegati.",
     "Solo le guide Dungeon / Survival (se selezionate) possono usare altri pacchetti.",
-    "Se hai i vecchi pacchetti AllianceSpeedrun/HordeSpeedrun divisi, rimuovili da AddOns prima di avviare WoW.",
+    "Se hai i vecchi pack RestedXP creati da questo helper (PolestarPack_AllianceSpeedrun / HordeSpeedrun divisi), spostali in un backup prima di avviare WoW.",
     "Collegamenti tra percorsi opzionali separati: "+stats.interpack
   ].join("\r\n");
   all["LEGGIMI_INSTALLAZIONE.txt"]=guideMessage;
