@@ -53,6 +53,9 @@ for term in ("WowUp", "Get Addons", "Install from URL", "RestedXP Guides", "Pole
 assert source.index('id="step0"') < source.index('id="step1"') < source.index('id="step2"') < source.index('id="step3"')
 assert source.index('id="compat"') < source.index('id="manual"')
 assert source.index('id="cache"') < source.index('id="manual"')
+for phrase in ("Polestar 0.4.3", "22 cartelle", "PolestarPack_*", "non basta", "Copy report", "/polestar packs"):
+    assert phrase in source, f"Missing Polestar 0.4.3 migration guidance: {phrase}"
+assert 'id="polestar043"' in source, "Missing Polestar 0.4.3 release note"
 assert source.count('<div class="stepnum">') == 4
 for item in ("inariaaFreshness", "foreverFreshness", "inariaaDetails", "foreverDetails", "sourceComparison"):
     assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
