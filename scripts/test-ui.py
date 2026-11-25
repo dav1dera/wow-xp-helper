@@ -57,9 +57,15 @@ for phrase in ("Polestar 0.4.3", "22 cartelle", "PolestarPack_*", "non basta", "
     assert phrase in source, f"Missing Polestar 0.4.3 migration guidance: {phrase}"
 assert 'id="polestar043"' in source, "Missing Polestar 0.4.3 release note"
 assert source.count('<div class="stepnum">') == 4
-for item in ("inariaaFreshness", "foreverFreshness", "inariaaDetails", "foreverDetails", "sourceComparison"):
+for item in ("inariaaFreshness", "foreverFreshness", "averyFreshness", "cheswickFreshness", "kostyaFreshness", "inariaaDetails", "foreverDetails", "averyDetails", "cheswickDetails", "kostyaDetails", "sourceComparison"):
     assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
 assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
+for link in ("https://averyp-git.github.io/rested-exp-free/", "https://restedxp.cheswick.dev/", "https://rxp.kostya.sexy/"):
+    assert link in ui.links, f"Missing additional RestedXP source: {link}"
+assert source.count('class="source-option"') == 5, "The guide sources must have five cards"
+for phrase in ("siteUpdatedAt", "guideUpdatedAt", "declaredGuideDate", "source-hint", "is-open"):
+    assert phrase in source, f"Missing freshness provenance or popover behavior: {phrase}"
+
 assert "src/rxp/saved.mjs" in source, "Updated RestedXP cache reader is not used"
 assert 'non pubblica una data verificabile' in source, "Source date uncertainty warning missing"
 for crawler in ("robots", "googlebot", "bingbot"):
