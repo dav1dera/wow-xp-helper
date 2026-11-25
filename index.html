@@ -193,7 +193,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
  <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading1">Importa le tue guide in RestedXP</h2><p>RestedXP serve per importarle; poi giocherai con Polestar.</p></div></div>
  <div class="skipbox"><strong>Le guide sono già importate e aggiornate?</strong><p>Non rifare Import e non fare Purge.</p><button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → CONTINUA</button></div>
  <div class="setup-line"><strong>Se devi importarle, scegli una fonte:</strong>
-  <p class="source-intro">Scegli un generatore di codici per WoW Forever. Le etichette distinguono gli aggiornamenti <strong>delle guide</strong>, le versioni dichiarate e quelli <strong>del sito</strong>.</p>
+  <p class="source-intro">Scegli un generatore di codici per WoW Forever. Le etichette distinguono gli aggiornamenti <strong>delle guide</strong>, le versioni dichiarate e quelli <strong>del sito</strong>. Il controllo delle fonti avviene automaticamente ogni ora; la pagina ricontrolla ogni 10 minuti quando è aperta.</p>
   <div class="source-choices" aria-label="Generatori di guide RestedXP e aggiornamenti">
    <article class="source-option" data-source="inariaa">
     <div class="source-top">
@@ -735,15 +735,15 @@ function showSourceState(id,item){
  const badge=$(id+'Freshness'),detail=$(id+'Details');
  let title='Data n/d',explanation='La fonte non pubblica una data verificabile delle guide.';
  if(item?.guideUpdatedAt){
-   const date=guideDate(item.guideUpdatedAt);
+   const date=guideDate(item.guideUpdatedAt,true);
    title=date?'Guide: '+date:'Data n/d';
-   explanation='Data del file delle guide verificata su GitHub: '+(date||'non disponibile')+'.';
+   explanation='Data e ora del commit del file delle guide verificata su GitHub: '+(date||'non disponibile')+'.';
  }else if(item?.declaredGuideDate){
    const date=guideDate(item.declaredGuideDate);
    title=(item.version?'v'+item.version+' · ':'')+'Dich.: '+(date||'n/d');
    explanation='Aggiornamento delle guide dichiarato sul sito, non verificato su un file indipendente.';
  }else if(item?.siteUpdatedAt){
-   const date=guideDate(item.siteUpdatedAt);
+   const date=guideDate(item.siteUpdatedAt,true);
    title='Sito: '+(date||'n/d');
    explanation='Data di modifica del sito/repository: NON equivale alla data del contenuto delle guide.';
  }else if(item?.version){
@@ -752,6 +752,10 @@ function showSourceState(id,item){
  }else if(item?.kind==='unavailable'){
    title='Non verificata';
    explanation='Impossibile verificare ora gli aggiornamenti di questa fonte.';
+ }
+ if(item?._stale){
+   title='Ultimo dato · '+title;
+   explanation='Fonte non verificabile durante l’ultimo controllo: è mostrato il valore precedente salvato in questo browser. '+explanation;
  }
  badge.firstChild.textContent=title+' ';
  detail.textContent=explanation+(item?.notes?' '+item.notes:'');
@@ -770,58 +774,88 @@ $('sourceToastClose').addEventListener('click',()=>{
  sourceToastTimer=null;
 });
 function sourceSignature(item){
- if(!item)return null;
+ if(!item||item.kind==='unavailable')return null;
  if(item.guideUpdatedAt)return {kind:'guide',value:item.guideUpdatedAt};
  if(item.declaredGuideDate)return {kind:'declared',value:item.declaredGuideDate+'|'+(item.version||'')};
  if(item.version)return {kind:'version',value:String(item.version)};
  if(item.siteUpdatedAt)return {kind:'site',value:item.siteUpdatedAt};
  return null;
 }
-function announceSourceUpdates(sources){
+function withLastKnownSources(sources){
+ const storageKey='wowxphelper:guide-source-last-known:v1';
+ let saved={};
+ try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(_){}
+ const next={...saved},merged={};
+ for(const [id] of GUIDE_SOURCES){
+   const item=sources[id];
+   if(item&&item.kind!=='unavailable'){
+     merged[id]=item;
+     next[id]=item;
+   }else if(saved[id]&&saved[id].kind!=='unavailable'){
+     merged[id]={...saved[id],_stale:true};
+   }else{
+     merged[id]=item||{kind:'unavailable'};
+   }
+ }
+ try{localStorage.setItem(storageKey,JSON.stringify(next));}catch(_){}
+ return merged;
+}
+function announceSourceUpdates(sources,showRoutineToast=false){
  const storageKey='wowxphelper:guide-source-snapshot:v1';
  let previous={};
  try{previous=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(_){}
- const next={},changed={guide:[],declared:[],version:[],site:[]};
+ const next={...previous},changed={guide:[],declared:[],version:[],site:[]};
  for(const [id,name] of GUIDE_SOURCES){
    const now=sourceSignature(sources[id]);
    if(!now)continue;
    next[id]=now;
    const before=previous[id];
-   if(before?.kind===now.kind&&before.value&&before.value!==now.value)changed[now.kind].push(name);
+   if(before&&(before.kind!==now.kind||before.value!==now.value))changed[now.kind].push(name);
  }
  try{localStorage.setItem(storageKey,JSON.stringify(next));}catch(_){}
  if(changed.guide.length){
-   sourceToast('Dati delle guide aggiornati su GitHub: '+changed.guide.join(', ')+'. Verifica le date prima di importare.');
+   sourceToast('File delle guide modificato su GitHub: '+changed.guide.join(', ')+'. Controlla i nuovi contenuti prima di importare.');
  }else if(changed.declared.length||changed.version.length){
    sourceToast('Versione o data dichiarata cambiata: '+[...changed.declared,...changed.version].join(', ')+'. Non ancora verificata sul file delle guide.');
  }else if(changed.site.length){
    sourceToast('Sito aggiornato: '+changed.site.join(', ')+'. Questo non prova che le guide siano nuove.');
- }else{
+ }else if(showRoutineToast){
    const available=GUIDE_SOURCES.filter(([id])=>sources[id]&&sources[id].kind!=='unavailable').length;
    sourceToast('Verifica fonti: '+available+'/'+GUIDE_SOURCES.length+' con dati disponibili. Tocca le date per i dettagli.');
  }
 }
+let sourceCheckInitialized=false,sourceRefreshPending=false;
 async function refreshGuideSources(){
+ if(sourceRefreshPending)return;
+ sourceRefreshPending=true;
  try{
    const response=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
    if(!response.ok)throw Error('HTTP '+response.status);
    const data=await response.json();
-   const sources=data.sources||data;
+   const received=data.sources||data;
+   const sources=withLastKnownSources(received);
    for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
-   announceSourceUpdates(sources);
-   const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt);
+   announceSourceUpdates(received,!sourceCheckInitialized);
+   sourceCheckInitialized=true;
+   const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt&&!sources[id]?._stale);
    const checked=guideDate(data.checkedAt,true);
    const prefix=checked?'Ultima verifica automatica: '+checked+'. ':'';
+   const stale=GUIDE_SOURCES.filter(([id])=>sources[id]?._stale).length;
+   const staleNote=stale?' '+stale+' fonte/i mostrano l’ultimo dato noto perché il controllo attuale non è riuscito.':'';
    if(verified.length>=2){
       const latest=verified.sort((a,b)=>sources[b[0]].guideUpdatedAt.localeCompare(sources[a[0]].guideUpdatedAt))[0];
-      $('sourceComparison').textContent=prefix+'Fra le fonti con date dei file verificate, la più recente è '+latest[1]+'. Le altre non sono confrontabili senza data delle guide.';
+      $('sourceComparison').textContent=prefix+'Fra le fonti con date dei file verificate, la più recente è '+latest[1]+'. Le altre non sono confrontabili senza data delle guide.'+staleNote;
    }else{
-      $('sourceComparison').textContent=prefix+'Non è possibile stabilire con certezza quale fonte sia più aggiornata: almeno una non pubblica una data verificabile delle guide. Una versione o una data del sito non basta.';
+      $('sourceComparison').textContent=prefix+'Non è possibile stabilire con certezza quale fonte sia più aggiornata: almeno una non pubblica una data verificabile delle guide. Una versione o una data del sito non basta.'+staleNote;
    }
  }catch(error){
-   for(const [id] of GUIDE_SOURCES)showSourceState(id,null);
-   $('sourceComparison').textContent='Impossibile verificare ora le date. Controlla la versione direttamente sui siti prima di scegliere.';
-   sourceToast('Controllo aggiornamenti non riuscito. Puoi comunque aprire i siti delle fonti.');
+   const sources=withLastKnownSources({});
+   for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
+   $('sourceComparison').textContent='Verifica temporaneamente non raggiungibile. Sono mostrati gli ultimi dati disponibili nel browser, se presenti; nessuna data è stata confermata ora.';
+   if(!sourceCheckInitialized)sourceToast('Controllo aggiornamenti non riuscito. Puoi comunque aprire i siti delle fonti.');
+   sourceCheckInitialized=true;
+ }finally{
+   sourceRefreshPending=false;
  }
 }
 for(const [id] of GUIDE_SOURCES){
@@ -844,6 +878,8 @@ document.addEventListener('keydown',event=>{
  });
 });
 refreshGuideSources();
+setInterval(()=>{if(!document.hidden)refreshGuideSources();},10*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshGuideSources();});
 
 </script>
 </body>
