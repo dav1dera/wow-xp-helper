@@ -58,5 +58,8 @@ for item in ("inariaaFreshness", "foreverFreshness", "inariaaDetails", "foreverD
     assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
 assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
 assert 'non pubblica una data verificabile' in source, "Source date uncertainty warning missing"
+for crawler in ("robots", "googlebot", "bingbot"):
+    tag = f'<meta name="{crawler}" content="noindex, nofollow, noarchive, noimageindex">'
+    assert tag in source.split("</head>", 1)[0], f"Missing noindex meta for {crawler}"
 assert source.count("</body>") == 1 and source.count("</html>") == 1, "Invalid end document"
 print("Beginner UI smoke checks passed:",len(ui.ids),"IDs")
