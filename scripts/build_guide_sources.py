@@ -19,7 +19,6 @@ SOURCE_URLS={
     "inariaa":"https://inariaa.github.io/rxp_decrypter/",
     "forever":"https://forever-free-rxp.online/en/",
     "avery":"https://averyp-git.github.io/rested-exp-free/",
-    "cheswick":"https://restedxp.cheswick.dev/",
     "kostya":"https://rxp.kostya.sexy/",
 }
 
@@ -71,32 +70,27 @@ def avery():
         sourceUrl="https://github.com/averyp-git/rested-exp-free/commits/main/index.html",
         notes="Ultima modifica del sito/repository Avery. Non equivale a una data verificata delle guide.")
 
-def cheswick():
-    page=fetch(SOURCE_URLS["cheswick"])
-    # 'Guide v23' is a site-specific guide package revision, not RXP 4.11.x.
-    version=extract_version(page,r"\bGuide\s+v\s*(\d{1,5})\b")
-    return meta("cheswick",kind="published-guide-revision",
-        version=("v"+version if version else None),
-        notes="Revisione della guida pubblicata dal sito; nessuna data del contenuto verificata.")
-
 def kostya():
     page=fetch(SOURCE_URLS["kostya"])
     version=extract_version(page,r"\bv(4\.11\.\d{1,4})\b")
     # Read a date only when explicitly displayed next to an RXP guide version.
     # This is a claim of the site, not an independently verified guide-file timestamp.
     text=html.unescape(page)
-    match=re.search(r"(20\d\d)[./-](\d\d)[./-](\d\d)[^\n<>]{0,150}v4\.11\.\d{1,4}\b",text)
+    plain=re.sub(r"<[^>]+>"," ",text)
+    plain=re.sub(r"\s+"," ",plain)
+    # The site uses e.g. '20.11.2026 · v4.11.37' (day.month.year).
+    match=re.search(r"(?<!\d)(\d{2})[./-](\d{2})[./-](20\d{2}).{0,220}?\bv4\.11\.\d{1,4}\b",plain)
     claimed=None
     if match:
         try:
-            claimed=dt.date(int(match.group(1)),int(match.group(2)),int(match.group(3))).isoformat()
+            claimed=dt.date(int(match.group(3)),int(match.group(2)),int(match.group(1))).isoformat()
         except ValueError:
             pass
     return meta("kostya",kind="site-declared-guide-date",
         version=version,declaredGuideDate=claimed,
         notes="Versione e data eventualmente dichiarate da Forever RXP; non confermate su un file guide indipendente.")
 
-TASKS={"inariaa":inariaa,"forever":forever,"avery":avery,"cheswick":cheswick,"kostya":kostya}
+TASKS={"inariaa":inariaa,"forever":forever,"avery":avery,"kostya":kostya}
 
 def main():
     checked_at=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
