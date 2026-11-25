@@ -62,7 +62,9 @@ for item in ("inariaaFreshness", "foreverFreshness", "averyFreshness", "kostyaFr
 assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
 for item in ("sourceToast", "sourceToastMessage", "sourceToastClose"):
     assert item in ui.ids, f"Missing source update toast: {item}"
-assert "announceSourceUpdates(sources)" in source, "Guide update toast must be connected to the source fetch"
+assert "announceSourceUpdates(received,!sourceCheckInitialized)" in source, "Guide update toast must use newly fetched data"
+assert "setInterval(()=>{if(!document.hidden)refreshGuideSources();},10*60*1000)" in source, "Open pages must refresh automatically"
+assert "withLastKnownSources" in source, "Temporary errors must preserve previously confirmed dates"
 for link in ("https://averyp-git.github.io/rested-exp-free/", "https://rxp.kostya.sexy/"):
     assert link in ui.links, f"Missing additional RestedXP source: {link}"
 assert source.count('class="source-option"') == 4, "The guide sources must have four verified cards"
