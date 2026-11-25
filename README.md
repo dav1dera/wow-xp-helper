@@ -40,6 +40,8 @@ Il passaggio 2 presenta una griglia compatta di **quattro generatori esterni di 
 | Avery Rested Exp | [rested-exp-free](https://averyp-git.github.io/rested-exp-free/) | Ultima modifica del `index.html` del [repository Avery](https://github.com/averyp-git/rested-exp-free): riguarda il sito, **non prova** una nuova versione delle guide |
 | Forever RXP | [rxp.kostya.sexy](https://rxp.kostya.sexy/) | Versione RestedXP ed eventuale **data dichiarata dal sito**, esplicitamente distinta da una data verificata sul file sorgente |
 
+Una **notifica toast** compare dopo la verifica delle fonti. Ai controlli successivi segnala se è cambiata la data verificata del file delle guide, una versione dichiarata o soltanto il sito, senza confonderle. Lo stato precedente è salvato soltanto nel browser; puoi chiudere il toast con il pulsante dedicato.
+
 La pagina non indica automaticamente un vincitore se le date delle **guide** non sono confrontabili. Il processo in `scripts/build_guide_sources.py` verifica le fonti durante i deploy e ogni giorno tramite GitHub Actions, scrive `guide-sources.json`, e include l'ora dell'ultimo controllo. Se un sito non risponde, il relativo tooltip indica **non verificata** anziché inventare date.
 
 I generatori sono indipendenti da WoW XP Helper, non necessariamente affidabili o completi; alcuni richiedono un BattleTag. Il progetto non inoltra i tuoi dati a queste fonti, non esegue i generatori al tuo posto e non distribuisce archivi di guide.
