@@ -60,6 +60,9 @@ assert source.count('<div class="stepnum">') == 4
 for item in ("inariaaFreshness", "foreverFreshness", "averyFreshness", "kostyaFreshness", "inariaaDetails", "foreverDetails", "averyDetails", "kostyaDetails", "sourceComparison"):
     assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
 assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
+for item in ("sourceToast", "sourceToastMessage", "sourceToastClose"):
+    assert item in ui.ids, f"Missing source update toast: {item}"
+assert "announceSourceUpdates(sources)" in source, "Guide update toast must be connected to the source fetch"
 for link in ("https://averyp-git.github.io/rested-exp-free/", "https://rxp.kostya.sexy/"):
     assert link in ui.links, f"Missing additional RestedXP source: {link}"
 assert source.count('class="source-option"') == 4, "The guide sources must have four verified cards"
