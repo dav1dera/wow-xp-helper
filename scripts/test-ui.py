@@ -60,6 +60,7 @@ assert source.count('<div class="stepnum">') == 4
 for item in ("inariaaFreshness", "foreverFreshness", "inariaaDetails", "foreverDetails", "sourceComparison"):
     assert item in ui.ids, f"Missing guide source freshness indicator: {item}"
 assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
+assert "src/rxp/saved.mjs" in source, "Updated RestedXP cache reader is not used"
 assert 'non pubblica una data verificabile' in source, "Source date uncertainty warning missing"
 for crawler in ("robots", "googlebot", "bingbot"):
     tag = f'<meta name="{crawler}" content="noindex, nofollow, noarchive, noimageindex">'
