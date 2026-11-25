@@ -147,17 +147,19 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 .checklist{margin-top:15px}
 @media(max-width:580px){.stepnav a{font-size:11px;padding:9px 3px}.card{padding:18px 15px}.path-actions{align-items:stretch}.path-actions code{min-width:0;width:100%}.copy-btn{width:100%}}
 
-/* Source recency is explicit, verifiable and separate from site deployments */
-.source-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
-.source-option{background:#13273f;border:1px solid #3e618b;border-radius:11px;padding:10px 12px;min-width:0;position:relative}
-.source-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.source-top a{font-size:13px;min-height:39px;padding:9px 12px}
-.source-freshness{background:#203b5c;border:1px solid #5074a1;border-radius:9px;color:#d9eaff;font-size:12px;font-weight:800;padding:8px 10px;text-align:left}
+/* Multi-source import guide directory: scalable, keyboard-accessible status popovers */
+.source-intro{font-size:13px;color:#c5d7ed;margin:8px 0 11px}
+.source-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 12px}
+.source-option{background:#13273f;border:1px solid #3e618b;border-radius:11px;padding:12px;min-width:0;position:relative}
+.source-top{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.source-top a{font-size:12px;min-height:35px;padding:9px 11px}
+.source-freshness{background:#203b5c;border:1px solid #5074a1;border-radius:9px;color:#d9eaff;font-size:12px;font-weight:800;padding:8px 10px;text-align:left;max-width:100%}
 .source-freshness:hover,.source-freshness:focus-visible{background:#2c4c75}
-.source-tooltip{display:none;position:absolute;z-index:3;left:6px;right:6px;top:calc(100% + 5px);padding:12px;background:#243954;border:1px solid #7895bb;color:#e7efff;font-size:13px;line-height:1.48;border-radius:9px;box-shadow:0 10px 25px #03091488}
-.source-option:hover .source-tooltip,.source-option:focus-within .source-tooltip{display:block}
-.source-comparison{font-size:13px!important;color:#b8cbe3}
-@media(max-width:650px){.source-choices{grid-template-columns:1fr}.source-tooltip{position:relative;left:auto;right:auto;top:auto;margin-top:8px}.source-option:hover .source-tooltip{display:none}.source-option:focus-within .source-tooltip{display:block}}
+.source-hint{font-size:12px!important;color:#a4b9d4;margin:7px 0 0!important;line-height:1.35}
+.source-tooltip{display:none;position:absolute;z-index:5;left:6px;right:6px;top:calc(100% + 5px);padding:12px;background:#243954;border:1px solid #7895bb;color:#e7efff;font-size:13px;line-height:1.48;border-radius:9px;box-shadow:0 10px 25px #03091488}
+.source-option:hover .source-tooltip,.source-option:focus-within .source-tooltip,.source-option.is-open .source-tooltip{display:block}
+.source-comparison{font-size:12px!important;color:#b8cbe3}
+@media(max-width:650px){.source-choices{grid-template-columns:1fr}.source-tooltip{position:relative;left:auto;right:auto;top:auto;margin-top:8px}.source-option:hover .source-tooltip{display:none}.source-option:focus-within .source-tooltip,.source-option.is-open .source-tooltip{display:block}}
 </style>
 </head>
 <body>
@@ -186,17 +188,50 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
  <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading1">Importa le tue guide in RestedXP</h2><p>RestedXP serve per importarle; poi giocherai con Polestar.</p></div></div>
  <div class="skipbox"><strong>Le guide sono già importate e aggiornate?</strong><p>Non rifare Import e non fare Purge.</p><button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → CONTINUA</button></div>
  <div class="setup-line"><strong>Se devi importarle, scegli una fonte:</strong>
-  <div class="source-choices" aria-label="Confronta aggiornamenti delle fonti RestedXP">
-   <div class="source-option">
-    <div class="source-top"><a class="extern" href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">INARIAA ↗</a><button class="source-freshness" id="inariaaFreshness" type="button" aria-describedby="inariaaDetails">Verifica data… <span aria-hidden="true">ⓘ</span></button></div>
-    <div class="source-tooltip" id="inariaaDetails" role="note">Verifica della data di modifica del file guide.txt inglese su GitHub.</div>
-   </div>
-   <div class="source-option">
-    <div class="source-top"><a class="extern" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">FOREVER FREE RXP ↗</a><button class="source-freshness" id="foreverFreshness" type="button" aria-describedby="foreverDetails">Verifica data… <span aria-hidden="true">ⓘ</span></button></div>
-    <div class="source-tooltip" id="foreverDetails" role="note">Versione e data delle guide: verifica in corso.</div>
-   </div>
+  <p class="source-intro">Scegli un generatore di codici per WoW Forever. Le etichette distinguono gli aggiornamenti <strong>delle guide</strong>, le versioni dichiarate e quelli <strong>del sito</strong>.</p>
+  <div class="source-choices" aria-label="Generatori di guide RestedXP e aggiornamenti">
+   <article class="source-option" data-source="inariaa">
+    <div class="source-top">
+     <a class="extern" href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">INARIAA ↗</a>
+     <button class="source-freshness" id="inariaaFreshness" type="button" aria-controls="inariaaDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di INARIAA">Verifica… <span aria-hidden="true">ⓘ</span></button>
+    </div>
+    <p class="source-hint">Data del file guide.txt su GitHub</p>
+    <div class="source-tooltip" id="inariaaDetails" role="note">Controllo della fonte in corso.</div>
+   </article>
+   <article class="source-option" data-source="forever">
+    <div class="source-top">
+     <a class="extern" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">FOREVER FREE RXP ↗</a>
+     <button class="source-freshness" id="foreverFreshness" type="button" aria-controls="foreverDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di FOREVER FREE RXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
+    </div>
+    <p class="source-hint">Versione mostrata dal sito</p>
+    <div class="source-tooltip" id="foreverDetails" role="note">Controllo della fonte in corso.</div>
+   </article>
+   <article class="source-option" data-source="avery">
+    <div class="source-top">
+     <a class="extern" href="https://averyp-git.github.io/rested-exp-free/" target="_blank" rel="noopener noreferrer">AVERY RESTED EXP ↗</a>
+     <button class="source-freshness" id="averyFreshness" type="button" aria-controls="averyDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di AVERY RESTED EXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
+    </div>
+    <p class="source-hint">Data del sito su GitHub, non delle guide</p>
+    <div class="source-tooltip" id="averyDetails" role="note">Controllo della fonte in corso.</div>
+   </article>
+   <article class="source-option" data-source="cheswick">
+    <div class="source-top">
+     <a class="extern" href="https://restedxp.cheswick.dev/" target="_blank" rel="noopener noreferrer">RESTEDXP CHESWICK ↗</a>
+     <button class="source-freshness" id="cheswickFreshness" type="button" aria-controls="cheswickDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di RESTEDXP CHESWICK">Verifica… <span aria-hidden="true">ⓘ</span></button>
+    </div>
+    <p class="source-hint">Revisione della guida pubblicata</p>
+    <div class="source-tooltip" id="cheswickDetails" role="note">Controllo della fonte in corso.</div>
+   </article>
+   <article class="source-option" data-source="kostya">
+    <div class="source-top">
+     <a class="extern" href="https://rxp.kostya.sexy/" target="_blank" rel="noopener noreferrer">FOREVER RXP ↗</a>
+     <button class="source-freshness" id="kostyaFreshness" type="button" aria-controls="kostyaDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di FOREVER RXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
+    </div>
+    <p class="source-hint">Versione e data dichiarate dal sito</p>
+    <div class="source-tooltip" id="kostyaDetails" role="note">Controllo della fonte in corso.</div>
+   </article>
   </div>
-  <p class="source-comparison" id="sourceComparison" aria-live="polite">Le date delle guide vengono verificate separatamente dalle date di aggiornamento dei siti.</p>
+  <p class="source-comparison" id="sourceComparison" aria-live="polite">Verifica delle fonti in corso. Le date dei siti non garantiscono guide più recenti.</p>
   <p>Apri il generatore scelto e ottieni il codice. In WoW vai su <strong>RestedXP → Import Guide</strong>, incollalo, premi <strong>Import</strong> e fai <code>/reload</code>. Poi <strong>Exit Game</strong> per salvare i file.</p>
  </div>
  <details class="compact"><summary>Quando serve il comando Purge?</summary><p><strong>Purge elimina tutte le guide importate:</strong> usalo solo se vuoi sostituirle e hai già il codice aggiornato pronto. Se hai già le guide corrette, non eseguirlo. La data mostrata accanto a una fonte non prova da sola che le guide siano più complete o compatibili.</p></details>
@@ -688,45 +723,81 @@ $('installedFolders').addEventListener('change',installationChecklist);
 $('checkedInGame').addEventListener('change',installationChecklist);
 installationChecklist();
 
-/* A guide file change is NOT the same as a website update. */
-function guideDate(iso){
+/* A site change, a published version and a verified guide-file change are different facts. */
+const GUIDE_SOURCES=[
+ ['inariaa','Inariaa'],['forever','Forever Free RXP'],
+ ['avery','Avery'],['cheswick','Cheswick'],['kostya','Forever RXP']
+];
+function guideDate(iso,withTime=false){
  if(!iso||!Number.isFinite(Date.parse(iso)))return null;
- return new Intl.DateTimeFormat('it-IT',{day:'2-digit',month:'short',year:'numeric',timeZone:'Europe/Rome'}).format(new Date(iso));
+ return new Intl.DateTimeFormat('it-IT',{day:'2-digit',month:'short',year:'numeric',
+   ...(withTime?{hour:'2-digit',minute:'2-digit'}:{}),timeZone:'Europe/Rome'}).format(new Date(iso));
 }
-function showSourceState(labelId,detailId,item){
- const badge=$(labelId), detail=$(detailId);
+function showSourceState(id,item){
+ const badge=$(id+'Freshness'),detail=$(id+'Details');
+ let title='Data n/d',explanation='La fonte non pubblica una data verificabile delle guide.';
  if(item?.guideUpdatedAt){
-  const date=guideDate(item.guideUpdatedAt);
-  badge.firstChild.textContent=date?'Guide EN: '+date+' ':'Data non disponibile ';
-  detail.textContent=(item.notes||'')+' Origine: commit del file guide.txt, non ultimo aggiornamento del sito. Data: '+(date||'non verificabile')+'.';
+   const date=guideDate(item.guideUpdatedAt);
+   title=date?'Guide: '+date:'Data n/d';
+   explanation='Data del file delle guide verificata su GitHub: '+(date||'non disponibile')+'.';
+ }else if(item?.declaredGuideDate){
+   const date=guideDate(item.declaredGuideDate);
+   title=(item.version?'v'+item.version+' · ':'')+'Dich.: '+(date||'n/d');
+   explanation='Aggiornamento delle guide dichiarato sul sito, non verificato su un file indipendente.';
+ }else if(item?.siteUpdatedAt){
+   const date=guideDate(item.siteUpdatedAt);
+   title='Sito: '+(date||'n/d');
+   explanation='Data di modifica del sito/repository: NON equivale alla data del contenuto delle guide.';
  }else if(item?.version){
-  badge.firstChild.textContent='Versione '+item.version+' · data n/d ';
-  detail.textContent='Il sito espone la versione '+item.version+', ma non una data verificabile di aggiornamento delle guide. Non è possibile determinare se siano più recenti delle guide Inariaa. '+(item.notes||'');
- }else{
-  badge.firstChild.textContent='Data non verificata ';
-  detail.textContent=item?.notes||'Non è disponibile una data di pubblicazione delle guide verificabile.';
+   title=(String(item.version).startsWith('v')?'':'v')+item.version+' · data n/d';
+   explanation='Versione riportata dalla fonte; la data di modifica delle guide non è verificabile.';
+ }else if(item?.kind==='unavailable'){
+   title='Non verificata';
+   explanation='Impossibile verificare ora gli aggiornamenti di questa fonte.';
  }
+ badge.firstChild.textContent=title+' ';
+ detail.textContent=explanation+(item?.notes?' '+item.notes:'');
 }
 async function refreshGuideSources(){
  try{
-  const r=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
-  if(!r.ok)throw Error('HTTP '+r.status);
-  const data=await r.json();
-  showSourceState('inariaaFreshness','inariaaDetails',data.inariaa);
-  showSourceState('foreverFreshness','foreverDetails',data.forever);
-  const a=data.inariaa?.guideUpdatedAt,b=data.forever?.guideUpdatedAt;
-  if(a&&b){
-   $('sourceComparison').textContent=a===b?'Le due fonti dichiarano aggiornamenti alla stessa data.':
-     (a>b?'Inariaa':'Forever Free RXP')+' dichiara la data di aggiornamento più recente. Controlla comunque che le versioni siano compatibili.';
-  }else{
-   $('sourceComparison').textContent='Confronto non disponibile: almeno una fonte non pubblica una data verificabile delle guide. La data di aggiornamento del sito non basta.';
-  }
- }catch(e){
-  showSourceState('inariaaFreshness','inariaaDetails',null);
-  showSourceState('foreverFreshness','foreverDetails',null);
-  $('sourceComparison').textContent='Impossibile verificare ora le date. Apri le due fonti e controlla la versione delle guide prima di scegliere.';
+   const response=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
+   if(!response.ok)throw Error('HTTP '+response.status);
+   const data=await response.json();
+   const sources=data.sources||data;
+   for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
+   const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt);
+   const checked=guideDate(data.checkedAt,true);
+   const prefix=checked?'Ultima verifica automatica: '+checked+'. ':'';
+   if(verified.length>=2){
+      const latest=verified.sort((a,b)=>sources[b[0]].guideUpdatedAt.localeCompare(sources[a[0]].guideUpdatedAt))[0];
+      $('sourceComparison').textContent=prefix+'Fra le fonti con date dei file verificate, la più recente è '+latest[1]+'. Le altre non sono confrontabili senza data delle guide.';
+   }else{
+      $('sourceComparison').textContent=prefix+'Non è possibile stabilire con certezza quale fonte sia più aggiornata: almeno una non pubblica una data verificabile delle guide. Una versione o una data del sito non basta.';
+   }
+ }catch(error){
+   for(const [id] of GUIDE_SOURCES)showSourceState(id,null);
+   $('sourceComparison').textContent='Impossibile verificare ora le date. Controlla la versione direttamente sui siti prima di scegliere.';
  }
 }
+for(const [id] of GUIDE_SOURCES){
+  const button=$(id+'Freshness');
+  button.addEventListener('click',()=>{
+   const el=button.closest('.source-option');
+   const opening=!el.classList.contains('is-open');
+   document.querySelectorAll('.source-option.is-open').forEach(row=>{
+     row.classList.remove('is-open');
+     row.querySelector('.source-freshness')?.setAttribute('aria-expanded','false');
+   });
+   el.classList.toggle('is-open',opening);
+   button.setAttribute('aria-expanded',String(opening));
+  });
+}
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape')document.querySelectorAll('.source-option.is-open').forEach(row=>{
+  row.classList.remove('is-open');
+  row.querySelector('.source-freshness')?.setAttribute('aria-expanded','false');
+ });
+});
 refreshGuideSources();
 
 </script>
