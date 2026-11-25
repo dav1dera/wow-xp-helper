@@ -4,8 +4,8 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Refresh external guide-data metadata each morning (UTC).
-    - cron: '17 6 * * *'
+    # Check external RestedXP guide metadata every hour (UTC); GitHub schedules may run late.
+    - cron: '17 * * * *'
 permissions:
   contents: read
   pages: write
