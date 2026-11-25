@@ -29,21 +29,23 @@ Fonti: [release Polestar 0.4.3](https://github.com/fitzforge/polestar/releases/t
 
 La compilazione e i controlli CI non sostituiscono una prova nel client WoW Forever con una cache `RXPGuides.lua` reale e Polestar 0.4.3.
 
-## Come vengono mostrate le date accanto a Inariaa e Forever Free RXP
+## Fonti alternative RestedXP e notifiche sugli aggiornamenti
 
-Nel secondo passaggio, accanto ai due link sono presenti etichette consultabili con mouse, tastiera o tocco. I dati vengono aggiornati automaticamente dal workflow GitHub Pages **ogni giorno** e quando viene pubblicata una nuova versione del sito.
+Il passaggio 2 presenta una griglia compatta di **cinque generatori esterni di codici di importazione**, ognuno con un link diretto e un'etichetta consultabile con mouse, tastiera o tocco:
 
-- **Inariaa:** si mostra la data dell'ultimo commit del file sorgente inglese `guide.txt` nel [repository Inariaa/rxp_decrypter](https://github.com/Inariaa/rxp_decrypter/commits/main/guide.txt). Non si usa la data del codice HTML: può cambiare anche senza guide nuove. Una modifica al file non prova che tutti i capitoli siano cambiati.
-- **Forever Free RXP:** si cerca la versione delle guide mostrata dalla pagina pubblica. Se non viene pubblicata una **data verificabile delle guide**, compare *data n/d*; le intestazioni HTTP e la data di modifica del sito non vengono usate per inventarla.
-- **Confronto:** il sito nomina una fonte più recente **solo se entrambe** hanno date di aggiornamento delle guide effettivamente verificabili. Altrimenti dichiara che non è possibile confrontarle automaticamente, pur lasciando visibili le informazioni disponibili.
+| Fonte | Sito | Che cosa si può verificare |
+| --- | --- | --- |
+| Inariaa | [rxp_decrypter](https://inariaa.github.io/rxp_decrypter/) | Data del commit GitHub del file inglese `guide.txt`, distinta da aggiornamenti generici del sito |
+| Forever Free RXP | [forever-free-rxp.online](https://forever-free-rxp.online/en/) | Versione RestedXP pubblicata; data esatta dei file non indipendentemente verificabile |
+| Avery Rested Exp | [rested-exp-free](https://averyp-git.github.io/rested-exp-free/) | Ultima modifica del `index.html` del [repository Avery](https://github.com/averyp-git/rested-exp-free): riguarda il sito, **non prova** una nuova versione delle guide |
+| RestedXP Cheswick | [restedxp.cheswick.dev](https://restedxp.cheswick.dev/) | Revisione `Guide vNN` mostrata dal sito, se disponibile; nessuna data certa del contenuto |
+| Forever RXP | [rxp.kostya.sexy](https://rxp.kostya.sexy/) | Versione RestedXP ed eventuale **data dichiarata dal sito**, esplicitamente distinta da una data verificata sul file sorgente |
 
-Il JSON utilizzato dalla pagina è pubblicato in `guide-sources.json`. Lo genera `scripts/build_guide_sources.py`, senza accedere a file personali, BattleTag o account.
+La pagina non indica automaticamente un vincitore se le date delle **guide** non sono confrontabili. Il processo in `scripts/build_guide_sources.py` verifica le fonti durante i deploy e ogni giorno tramite GitHub Actions, scrive `guide-sources.json`, e include l'ora dell'ultimo controllo. Se un sito non risponde, il relativo tooltip indica **non verificata** anziché inventare date.
 
-## Risorse esterne: Inariaa e Forever Free RXP
+I generatori sono indipendenti da WoW XP Helper, non necessariamente affidabili o completi; alcuni richiedono un BattleTag. Il progetto non inoltra i tuoi dati a queste fonti, non esegue i generatori al tuo posto e non distribuisce archivi di guide.
 
-Inariaa è la prima risorsa esterna elencata nell'interfaccia; Forever Free RXP è la seconda. Sono siti indipendenti e facoltativi. WoW XP Helper non esegue i generatori, non intercetta le loro comunicazioni e non condivide alcun archivio di guide. Le guide ufficiali già importate possono essere utilizzate direttamente.
-
-Forever Free RXP dichiara di basarsi sul [Gist di imSp4rky](https://gist.github.com/imSp4rky/17759ae4bd9a78fdc898c901c2436be1). Quello script non include l'archivio cifrato usato per generare codici nuovi.
+Sono state trovate anche altre pagine, tra cui **RXP Reforge** (richiede un access code) e **Bulo** (principalmente un tool per adattare file esistenti a un altro BattleTag). Non vengono messe tra i generatori diretti per non appesantire la procedura con strumenti di scopo diverso o con accesso limitato.
 
 ## Aggiornamento dalla versione divisa in 14 cartelle
 
