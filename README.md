@@ -31,21 +31,20 @@ La compilazione e i controlli CI non sostituiscono una prova nel client WoW Fore
 
 ## Fonti alternative RestedXP e notifiche sugli aggiornamenti
 
-Il passaggio 2 presenta una griglia compatta di **cinque generatori esterni di codici di importazione**, ognuno con un link diretto e un'etichetta consultabile con mouse, tastiera o tocco:
+Il passaggio 2 presenta una griglia compatta di **quattro generatori esterni di codici di importazione**, ognuno con un link diretto e un'etichetta consultabile con mouse, tastiera o tocco:
 
 | Fonte | Sito | Che cosa si può verificare |
 | --- | --- | --- |
 | Inariaa | [rxp_decrypter](https://inariaa.github.io/rxp_decrypter/) | Data del commit GitHub del file inglese `guide.txt`, distinta da aggiornamenti generici del sito |
 | Forever Free RXP | [forever-free-rxp.online](https://forever-free-rxp.online/en/) | Versione RestedXP pubblicata; data esatta dei file non indipendentemente verificabile |
 | Avery Rested Exp | [rested-exp-free](https://averyp-git.github.io/rested-exp-free/) | Ultima modifica del `index.html` del [repository Avery](https://github.com/averyp-git/rested-exp-free): riguarda il sito, **non prova** una nuova versione delle guide |
-| RestedXP Cheswick | [restedxp.cheswick.dev](https://restedxp.cheswick.dev/) | Revisione `Guide vNN` mostrata dal sito, se disponibile; nessuna data certa del contenuto |
 | Forever RXP | [rxp.kostya.sexy](https://rxp.kostya.sexy/) | Versione RestedXP ed eventuale **data dichiarata dal sito**, esplicitamente distinta da una data verificata sul file sorgente |
 
 La pagina non indica automaticamente un vincitore se le date delle **guide** non sono confrontabili. Il processo in `scripts/build_guide_sources.py` verifica le fonti durante i deploy e ogni giorno tramite GitHub Actions, scrive `guide-sources.json`, e include l'ora dell'ultimo controllo. Se un sito non risponde, il relativo tooltip indica **non verificata** anziché inventare date.
 
 I generatori sono indipendenti da WoW XP Helper, non necessariamente affidabili o completi; alcuni richiedono un BattleTag. Il progetto non inoltra i tuoi dati a queste fonti, non esegue i generatori al tuo posto e non distribuisce archivi di guide.
 
-Sono state trovate anche altre pagine, tra cui **RXP Reforge** (richiede un access code) e **Bulo** (principalmente un tool per adattare file esistenti a un altro BattleTag). Non vengono messe tra i generatori diretti per non appesantire la procedura con strumenti di scopo diverso o con accesso limitato.
+**RestedXP Cheswick** è stato trovato durante la ricerca ma non inserito nella selezione: durante la verifica automatica il dominio non risultava risolvibile. Sono state trovate anche altre pagine, tra cui **RXP Reforge** (richiede un access code) e **Bulo** (principalmente un tool per adattare file esistenti a un altro BattleTag). Non vengono messe tra i generatori diretti per non appesantire la procedura con strumenti di scopo diverso o con accesso limitato.
 
 ## Aggiornamento dalla versione divisa in 14 cartelle
 
