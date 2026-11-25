@@ -159,6 +159,11 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 .source-tooltip{display:none;position:absolute;z-index:5;left:6px;right:6px;top:calc(100% + 5px);padding:12px;background:#243954;border:1px solid #7895bb;color:#e7efff;font-size:13px;line-height:1.48;border-radius:9px;box-shadow:0 10px 25px #03091488}
 .source-option:hover .source-tooltip,.source-option:focus-within .source-tooltip,.source-option.is-open .source-tooltip{display:block}
 .source-comparison{font-size:12px!important;color:#b8cbe3}
+.source-toast{position:fixed;z-index:60;right:18px;bottom:18px;max-width:min(460px,calc(100vw - 36px));display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #80a8de;border-radius:12px;background:#17324f;color:#f0f7ff;box-shadow:0 14px 32px #030914ae;font-size:13px;line-height:1.45}
+.source-toast[hidden]{display:none}
+.source-toast button{flex:none;display:grid;place-items:center;width:29px;height:29px;border:1px solid #6587b2;border-radius:8px;background:#2d4b6c;color:#fff;font-size:19px}
+.source-toast button:hover{background:#42668f}
+@media(max-width:580px){.source-toast{right:10px;bottom:10px;max-width:calc(100vw - 20px)}}
 @media(max-width:650px){.source-choices{grid-template-columns:1fr}.source-tooltip{position:relative;left:auto;right:auto;top:auto;margin-top:8px}.source-option:hover .source-tooltip{display:none}.source-option:focus-within .source-tooltip,.source-option.is-open .source-tooltip{display:block}}
 </style>
 </head>
@@ -278,6 +283,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
 <details class="card more"><summary>Impostazioni avanzate — facoltative</summary><p>Di default vengono create solo le Speedrun Horde e Alliance. Dungeon e Survival sono opzionali.</p><div class="checkboxes"><label><input type="checkbox" id="horde" checked> Horde</label><label><input type="checkbox" id="alliance" checked> Alliance</label><label><input type="checkbox" id="main" checked> Speedrun</label><label><input type="checkbox" id="dungeon"> Dungeon</label><label><input type="checkbox" id="survival"> Survival</label></div><div class="row"><div><label class="fieldlbl" for="pack">ID pacchetto</label><input class="field" id="pack" value="rxp-completo-160" maxlength="32"></div><div><label class="fieldlbl" for="title">Nome in Polestar</label><input class="field" id="title" value="RestedXP Speedrun 1-60" maxlength="64"></div></div></details>
 </main>
 <footer>Wow XP Helper elabora le guide nel browser, senza caricare i tuoi file sui propri server. <a href="https://wowup.io/" target="_blank" rel="noopener noreferrer">WowUp</a> · <a href="https://github.com/fitzforge/polestar" target="_blank" rel="noopener noreferrer">Polestar</a> · <a href="https://github.com/dav1dera/wow-xp-helper" target="_blank" rel="noopener noreferrer">Codice GitHub</a>. Converti soltanto guide che hai diritto di utilizzare.</footer>
+<div class="source-toast" id="sourceToast" role="status" aria-live="polite" hidden><span id="sourceToastMessage"></span><button id="sourceToastClose" type="button" aria-label="Chiudi notifica aggiornamenti">×</button></div>
 <script>"use strict";
 
 const $=id=>document.getElementById(id);const decoder=new TextDecoder('utf-8',{fatal:true});
@@ -750,6 +756,51 @@ function showSourceState(id,item){
  badge.firstChild.textContent=title+' ';
  detail.textContent=explanation+(item?.notes?' '+item.notes:'');
 }
+let sourceToastTimer=null;
+function sourceToast(message){
+ const el=$('sourceToast');
+ $('sourceToastMessage').textContent=message;
+ el.hidden=false;
+ if(sourceToastTimer!==null)clearTimeout(sourceToastTimer);
+ sourceToastTimer=setTimeout(()=>{el.hidden=true;sourceToastTimer=null;},9000);
+}
+$('sourceToastClose').addEventListener('click',()=>{
+ $('sourceToast').hidden=true;
+ if(sourceToastTimer!==null)clearTimeout(sourceToastTimer);
+ sourceToastTimer=null;
+});
+function sourceSignature(item){
+ if(!item)return null;
+ if(item.guideUpdatedAt)return {kind:'guide',value:item.guideUpdatedAt};
+ if(item.declaredGuideDate)return {kind:'declared',value:item.declaredGuideDate+'|'+(item.version||'')};
+ if(item.version)return {kind:'version',value:String(item.version)};
+ if(item.siteUpdatedAt)return {kind:'site',value:item.siteUpdatedAt};
+ return null;
+}
+function announceSourceUpdates(sources){
+ const storageKey='wowxphelper:guide-source-snapshot:v1';
+ let previous={};
+ try{previous=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(_){}
+ const next={},changed={guide:[],declared:[],version:[],site:[]};
+ for(const [id,name] of GUIDE_SOURCES){
+   const now=sourceSignature(sources[id]);
+   if(!now)continue;
+   next[id]=now;
+   const before=previous[id];
+   if(before?.kind===now.kind&&before.value&&before.value!==now.value)changed[now.kind].push(name);
+ }
+ try{localStorage.setItem(storageKey,JSON.stringify(next));}catch(_){}
+ if(changed.guide.length){
+   sourceToast('Dati delle guide aggiornati su GitHub: '+changed.guide.join(', ')+'. Verifica le date prima di importare.');
+ }else if(changed.declared.length||changed.version.length){
+   sourceToast('Versione o data dichiarata cambiata: '+[...changed.declared,...changed.version].join(', ')+'. Non ancora verificata sul file delle guide.');
+ }else if(changed.site.length){
+   sourceToast('Sito aggiornato: '+changed.site.join(', ')+'. Questo non prova che le guide siano nuove.');
+ }else{
+   const available=GUIDE_SOURCES.filter(([id])=>sources[id]&&sources[id].kind!=='unavailable').length;
+   sourceToast('Verifica fonti: '+available+'/'+GUIDE_SOURCES.length+' con dati disponibili. Tocca le date per i dettagli.');
+ }
+}
 async function refreshGuideSources(){
  try{
    const response=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
@@ -757,6 +808,7 @@ async function refreshGuideSources(){
    const data=await response.json();
    const sources=data.sources||data;
    for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
+   announceSourceUpdates(sources);
    const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt);
    const checked=guideDate(data.checkedAt,true);
    const prefix=checked?'Ultima verifica automatica: '+checked+'. ':'';
@@ -769,6 +821,7 @@ async function refreshGuideSources(){
  }catch(error){
    for(const [id] of GUIDE_SOURCES)showSourceState(id,null);
    $('sourceComparison').textContent='Impossibile verificare ora le date. Controlla la versione direttamente sui siti prima di scegliere.';
+   sourceToast('Controllo aggiornamenti non riuscito. Puoi comunque aprire i siti delle fonti.');
  }
 }
 for(const [id] of GUIDE_SOURCES){
