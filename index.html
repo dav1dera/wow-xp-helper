@@ -193,7 +193,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
  <div class="stephead"><div class="stepnum">2</div><div><h2 id="heading1">Importa le tue guide in RestedXP</h2><p>RestedXP serve per importarle; poi giocherai con Polestar.</p></div></div>
  <div class="skipbox"><strong>Le guide sono già importate e aggiornate?</strong><p>Non rifare Import e non fare Purge.</p><button class="secondary" id="alreadyReady" type="button">SÌ, LE HO GIÀ → CONTINUA</button></div>
  <div class="setup-line"><strong>Se devi importarle, scegli una fonte:</strong>
-  <p class="source-intro">Scegli un generatore di codici per WoW Forever. Le etichette distinguono gli aggiornamenti <strong>delle guide</strong>, le versioni dichiarate e quelli <strong>del sito</strong>. Il controllo delle fonti avviene automaticamente ogni ora; la pagina ricontrolla ogni 10 minuti quando è aperta.</p>
+  <p class="source-intro">Scegli un generatore di codici per WoW Forever. Le etichette distinguono gli aggiornamenti <strong>delle guide</strong>, le versioni dichiarate e quelli <strong>del sito</strong>. GitHub Pages pubblica i controlli programmati ogni ora (con possibili ritardi); Inariaa viene verificata anche direttamente su GitHub all'apertura e ogni 10 minuti quando la pagina è attiva.</p>
   <div class="source-choices" aria-label="Generatori di guide RestedXP e aggiornamenti">
    <article class="source-option" data-source="inariaa">
     <div class="source-top">
@@ -747,11 +747,14 @@ function showSourceState(id,item){
    title='Sito: '+(date||'n/d');
    explanation='Data di modifica del sito/repository: NON equivale alla data del contenuto delle guide.';
  }else if(item?.version){
-   title=(String(item.version).startsWith('v')?'':'v')+item.version+' · data n/d';
+   title=(String(item.version).startsWith('v')?'':'v')+item.version+(item.declaredSiteDate?' · Sito: '+(guideDate(item.declaredSiteDate)||item.declaredSiteDate):' · data n/d');
    explanation='Versione riportata dalla fonte; la data di modifica delle guide non è verificabile.';
  }else if(item?.kind==='unavailable'){
    title='Non verificata';
    explanation='Impossibile verificare ora gli aggiornamenti di questa fonte.';
+ }
+ if(item?.declaredSiteDate){
+   explanation+=' Il sito dichiara un aggiornamento in data '+(guideDate(item.declaredSiteDate)||item.declaredSiteDate)+': non prova da solo che siano state aggiornate le guide.';
  }
  if(item?._stale){
    title='Ultimo dato · '+title;
@@ -777,7 +780,7 @@ function sourceSignature(item){
  if(!item||item.kind==='unavailable')return null;
  if(item.guideUpdatedAt)return {kind:'guide',value:item.guideUpdatedAt};
  if(item.declaredGuideDate)return {kind:'declared',value:item.declaredGuideDate+'|'+(item.version||'')};
- if(item.version)return {kind:'version',value:String(item.version)};
+ if(item.version)return {kind:'version',value:String(item.version)+'|'+(item.declaredSiteDate||'')};
  if(item.siteUpdatedAt)return {kind:'site',value:item.siteUpdatedAt};
  return null;
 }
@@ -824,22 +827,50 @@ function announceSourceUpdates(sources,showRoutineToast=false){
    sourceToast('Verifica fonti: '+available+'/'+GUIDE_SOURCES.length+' con dati disponibili. Tocca le date per i dettagli.');
  }
 }
+// Inariaa's own footer reads the GitHub commit for guide.txt, not the site's build date.
+// Read the same API directly: a scheduled GitHub Pages deploy can be delayed by hours.
+async function fetchLiveInariaaDate(){
+ const url='https://api.github.com/repos/Inariaa/rxp_decrypter/commits?path=guide.txt&per_page=1';
+ const response=await fetch(url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+ if(!response.ok)throw Error('Inariaa GitHub HTTP '+response.status);
+ const commits=await response.json();
+ const iso=commits?.[0]?.commit?.committer?.date;
+ if(typeof iso!=='string'||!Number.isFinite(Date.parse(iso)))throw Error('Data del commit Inariaa non valida');
+ return {kind:'guide-file-commit',guideUpdatedAt:iso,
+   sourceUrl:'https://github.com/Inariaa/rxp_decrypter/commits/main/guide.txt',
+   notes:'Data del commit di guide.txt, letta direttamente dall’API GitHub come nel footer di Inariaa. Non garantisce che ogni capitolo sia stato modificato.'};
+}
+async function loadGuideSources(){
+ const [published,live]=await Promise.allSettled([
+   (async()=>{const response=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
+     if(!response.ok)throw Error('HTTP '+response.status);
+     return response.json();})(),
+   fetchLiveInariaaDate()
+ ]);
+ if(published.status==='rejected'&&live.status==='rejected')throw Error('Nessuna fonte di aggiornamento raggiungibile');
+ const data=published.status==='fulfilled'?published.value:{};
+ const received={...(data.sources||data)};
+ const liveDate=live.status==='fulfilled'?live.value:null;
+ if(liveDate&&(!received.inariaa?.guideUpdatedAt||
+     liveDate.guideUpdatedAt>=received.inariaa.guideUpdatedAt)){
+   received.inariaa={...received.inariaa,...liveDate};
+ }
+ return {received,checkedAt:data.checkedAt||null,liveChecked:!!liveDate};
+}
 let sourceCheckInitialized=false,sourceRefreshPending=false;
 async function refreshGuideSources(){
  if(sourceRefreshPending)return;
  sourceRefreshPending=true;
  try{
-   const response=await fetch(new URL('guide-sources.json',document.baseURI),{cache:'no-store'});
-   if(!response.ok)throw Error('HTTP '+response.status);
-   const data=await response.json();
-   const received=data.sources||data;
+   const {received,checkedAt,liveChecked}=await loadGuideSources();
    const sources=withLastKnownSources(received);
    for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
    announceSourceUpdates(received,!sourceCheckInitialized);
    sourceCheckInitialized=true;
    const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt&&!sources[id]?._stale);
-   const checked=guideDate(data.checkedAt,true);
-   const prefix=checked?'Ultima verifica automatica: '+checked+'. ':'';
+   const checked=guideDate(checkedAt,true);
+   const prefix=(checked?'Ultimo controllo pubblicato: '+checked+'. ':'')+
+     (liveChecked?'Inariaa verificata direttamente su GitHub adesso. ':'');
    const stale=GUIDE_SOURCES.filter(([id])=>sources[id]?._stale).length;
    const staleNote=stale?' '+stale+' fonte/i mostrano l’ultimo dato noto perché il controllo attuale non è riuscito.':'';
    if(verified.length>=2){
