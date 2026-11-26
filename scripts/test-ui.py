@@ -63,19 +63,21 @@ assert 'guide-sources.json' in source, "Guide freshness JSON is not loaded"
 for item in ("sourceToast", "sourceToastMessage", "sourceToastClose"):
     assert item in ui.ids, f"Missing source update toast: {item}"
 assert "announceSourceUpdates(received,!sourceCheckInitialized)" in source, "Guide update toast must use newly fetched data"
+assert "if(item.version)return {kind:'version'" in source, "Guide version must take priority over dates and website changes"
+assert "if(item.siteUpdatedAt)return" not in source, "Website commit must not trigger a guide update notification"
 assert "setInterval(()=>{if(!document.hidden)refreshGuideSources();},10*60*1000)" in source, "Open pages must refresh automatically"
 assert "withLastKnownSources" in source, "Temporary errors must preserve previously confirmed dates"
 assert "fetchLiveInariaaDate" in source and "api.github.com/repos/Inariaa/rxp_decrypter/commits?path=guide.txt" in source, "Inariaa commit must be checked live"
 assert "loadGuideSources()" in source, "Published metadata and live Inariaa should be combined"
-assert "declaredSiteDate" in source, "Visible website update dates must be distinguished from guide dates"
+assert "guideReleaseDate" in source, "Embedded guide release date must be displayed distinctly"
 for link in ("https://averyp-git.github.io/rested-exp-free/", "https://rxp.kostya.sexy/"):
     assert link in ui.links, f"Missing additional RestedXP source: {link}"
 assert source.count('class="source-option"') == 4, "The guide sources must have four verified cards"
-for phrase in ("siteUpdatedAt", "guideUpdatedAt", "declaredGuideDate", "source-hint", "is-open"):
+for phrase in ("guideReleaseDate", "guideUpdatedAt", "declaredGuideDate", "source-hint", "is-open"):
     assert phrase in source, f"Missing freshness provenance or popover behavior: {phrase}"
 
 assert "src/rxp/saved.mjs" in source, "Updated RestedXP cache reader is not used"
-assert 'non pubblica una data verificabile' in source, "Source date uncertainty warning missing"
+assert 'non dichiara una versione' in source, "Missing distinction between versions and dates"
 for crawler in ("robots", "googlebot", "bingbot"):
     tag = f'<meta name="{crawler}" content="noindex, nofollow, noarchive, noimageindex">'
     assert tag in source.split("</head>", 1)[0], f"Missing noindex meta for {crawler}"
