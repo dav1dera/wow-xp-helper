@@ -77,7 +77,7 @@ for phrase in ("guideReleaseDate", "guideUpdatedAt", "declaredGuideDate", "sourc
     assert phrase in source, f"Missing freshness provenance or popover behavior: {phrase}"
 
 assert "src/rxp/saved.mjs" in source, "Updated RestedXP cache reader is not used"
-assert 'non dichiara una versione' in source, "Missing distinction between versions and dates"
+assert 'non dichiara la versione' in source, "Missing distinction between versions and dates"
 for crawler in ("robots", "googlebot", "bingbot"):
     tag = f'<meta name="{crawler}" content="noindex, nofollow, noarchive, noimageindex">'
     assert tag in source.split("</head>", 1)[0], f"Missing noindex meta for {crawler}"
