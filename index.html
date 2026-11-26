@@ -200,7 +200,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
      <a class="extern" href="https://inariaa.github.io/rxp_decrypter/" target="_blank" rel="noopener noreferrer">INARIAA ↗</a>
      <button class="source-freshness" id="inariaaFreshness" type="button" aria-controls="inariaaDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di INARIAA">Verifica… <span aria-hidden="true">ⓘ</span></button>
     </div>
-    <p class="source-hint">Data del file guide.txt su GitHub</p>
+    <p class="source-hint">Ultima modifica del file delle guide; versione non dichiarata</p>
     <div class="source-tooltip" id="inariaaDetails" role="note">Controllo della fonte in corso.</div>
    </article>
    <article class="source-option" data-source="forever">
@@ -208,7 +208,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
      <a class="extern" href="https://forever-free-rxp.online/en/" target="_blank" rel="noopener noreferrer">FOREVER FREE RXP ↗</a>
      <button class="source-freshness" id="foreverFreshness" type="button" aria-controls="foreverDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di FOREVER FREE RXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
     </div>
-    <p class="source-hint">Versione mostrata dal sito</p>
+    <p class="source-hint">Versione delle guide dichiarata dalla fonte</p>
     <div class="source-tooltip" id="foreverDetails" role="note">Controllo della fonte in corso.</div>
    </article>
    <article class="source-option" data-source="avery">
@@ -216,7 +216,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
      <a class="extern" href="https://averyp-git.github.io/rested-exp-free/" target="_blank" rel="noopener noreferrer">AVERY RESTED EXP ↗</a>
      <button class="source-freshness" id="averyFreshness" type="button" aria-controls="averyDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di AVERY RESTED EXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
     </div>
-    <p class="source-hint">Data del sito su GitHub, non delle guide</p>
+    <p class="source-hint">Versione RXPGuides inclusa, dal footer Avery</p>
     <div class="source-tooltip" id="averyDetails" role="note">Controllo della fonte in corso.</div>
    </article>
    <article class="source-option" data-source="kostya">
@@ -224,7 +224,7 @@ kbd{font:700 12px/1.1 ui-monospace,Consolas,monospace;background:#304665;color:#
      <a class="extern" href="https://rxp.kostya.sexy/" target="_blank" rel="noopener noreferrer">FOREVER RXP ↗</a>
      <button class="source-freshness" id="kostyaFreshness" type="button" aria-controls="kostyaDetails" aria-expanded="false" aria-label="Informazioni sugli aggiornamenti di FOREVER RXP">Verifica… <span aria-hidden="true">ⓘ</span></button>
     </div>
-    <p class="source-hint">Versione e data dichiarate dal sito</p>
+    <p class="source-hint">Versione e data delle guide ufficiali 1–60</p>
     <div class="source-tooltip" id="kostyaDetails" role="note">Controllo della fonte in corso.</div>
    </article>
   </div>
@@ -733,32 +733,32 @@ function guideDate(iso,withTime=false){
 }
 function showSourceState(id,item){
  const badge=$(id+'Freshness'),detail=$(id+'Details');
- let title='Data n/d',explanation='La fonte non pubblica una data verificabile delle guide.';
- if(item?.guideUpdatedAt){
+ let title='Guide: n/d',explanation='Questa fonte non dichiara una versione o una data verificabile delle guide.';
+ if(item?.version){
+   const version=String(item.version).replace(/^v/i,'');
+   title='Guide v'+version;
+   explanation='Versione delle guide RestedXP dichiarata dalla fonte: v'+version+'.';
+   if(item.guideReleaseDate){
+     explanation+=' Release del pacchetto inclusa: '+(guideDate(item.guideReleaseDate)||item.guideReleaseDate)+'. È un dato del pacchetto, non il giorno del build del sito.';
+   }
+   if(item.declaredGuideDate){
+     explanation+=' Data delle guide dichiarata sul sito: '+(guideDate(item.declaredGuideDate)||item.declaredGuideDate)+'.';
+   }
+ }else if(item?.guideUpdatedAt){
    const date=guideDate(item.guideUpdatedAt,true);
-   title=date?'Guide: '+date:'Data n/d';
-   explanation='Data e ora del commit del file delle guide verificata su GitHub: '+(date||'non disponibile')+'.';
+   title=date?'Guide: '+date:'Guide: n/d';
+   explanation='La fonte non dichiara la versione; questa è data e ora dell’ultima modifica verificata del file guide.txt, non dell’intero sito.';
  }else if(item?.declaredGuideDate){
    const date=guideDate(item.declaredGuideDate);
-   title=(item.version?'v'+item.version+' · ':'')+'Dich.: '+(date||'n/d');
-   explanation='Aggiornamento delle guide dichiarato sul sito, non verificato su un file indipendente.';
- }else if(item?.siteUpdatedAt){
-   const date=guideDate(item.siteUpdatedAt,true);
-   title='Sito: '+(date||'n/d');
-   explanation='Data di modifica del sito/repository: NON equivale alla data del contenuto delle guide.';
- }else if(item?.version){
-   title=(String(item.version).startsWith('v')?'':'v')+item.version+(item.declaredSiteDate?' · Sito: '+(guideDate(item.declaredSiteDate)||item.declaredSiteDate):' · data n/d');
-   explanation='Versione riportata dalla fonte; la data di modifica delle guide non è verificabile.';
+   title=date?'Guide: '+date:'Guide: n/d';
+   explanation='Data di aggiornamento delle guide dichiarata dal sito, senza numero di versione verificabile.';
  }else if(item?.kind==='unavailable'){
    title='Non verificata';
-   explanation='Impossibile verificare ora gli aggiornamenti di questa fonte.';
- }
- if(item?.declaredSiteDate){
-   explanation+=' Il sito dichiara un aggiornamento in data '+(guideDate(item.declaredSiteDate)||item.declaredSiteDate)+': non prova da solo che siano state aggiornate le guide.';
+   explanation='Impossibile verificare ora la versione o la data delle guide.';
  }
  if(item?._stale){
    title='Ultimo dato · '+title;
-   explanation='Fonte non verificabile durante l’ultimo controllo: è mostrato il valore precedente salvato in questo browser. '+explanation;
+   explanation='Verifica recente non riuscita: è mostrato il dato salvato in precedenza nel browser. '+explanation;
  }
  badge.firstChild.textContent=title+' ';
  detail.textContent=explanation+(item?.notes?' '+item.notes:'');
@@ -778,10 +778,10 @@ $('sourceToastClose').addEventListener('click',()=>{
 });
 function sourceSignature(item){
  if(!item||item.kind==='unavailable')return null;
+ // Versions take precedence; ignore website commits, build dates and 'Updated' site labels.
+ if(item.version)return {kind:'version',value:String(item.version)+'|'+(item.guideReleaseDate||'')+'|'+(item.declaredGuideDate||'')};
  if(item.guideUpdatedAt)return {kind:'guide',value:item.guideUpdatedAt};
- if(item.declaredGuideDate)return {kind:'declared',value:item.declaredGuideDate+'|'+(item.version||'')};
- if(item.version)return {kind:'version',value:String(item.version)+'|'+(item.declaredSiteDate||'')};
- if(item.siteUpdatedAt)return {kind:'site',value:item.siteUpdatedAt};
+ if(item.declaredGuideDate)return {kind:'declared',value:item.declaredGuideDate};
  return null;
 }
 function withLastKnownSources(sources){
@@ -807,7 +807,7 @@ function announceSourceUpdates(sources,showRoutineToast=false){
  const storageKey='wowxphelper:guide-source-snapshot:v1';
  let previous={};
  try{previous=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(_){}
- const next={...previous},changed={guide:[],declared:[],version:[],site:[]};
+ const next={...previous},changed={guide:[],declared:[],version:[]};
  for(const [id,name] of GUIDE_SOURCES){
    const now=sourceSignature(sources[id]);
    if(!now)continue;
@@ -817,11 +817,9 @@ function announceSourceUpdates(sources,showRoutineToast=false){
  }
  try{localStorage.setItem(storageKey,JSON.stringify(next));}catch(_){}
  if(changed.guide.length){
-   sourceToast('File delle guide modificato su GitHub: '+changed.guide.join(', ')+'. Controlla i nuovi contenuti prima di importare.');
+   sourceToast('Nuove modifiche al file delle guide: '+changed.guide.join(', ')+'. Controlla la data prima di importare.');
  }else if(changed.declared.length||changed.version.length){
-   sourceToast('Versione o data dichiarata cambiata: '+[...changed.declared,...changed.version].join(', ')+'. Non ancora verificata sul file delle guide.');
- }else if(changed.site.length){
-   sourceToast('Sito aggiornato: '+changed.site.join(', ')+'. Questo non prova che le guide siano nuove.');
+   sourceToast('Versione o data delle guide cambiata: '+[...changed.declared,...changed.version].join(', ')+'. Controlla i dettagli della fonte.');
  }else if(showRoutineToast){
    const available=GUIDE_SOURCES.filter(([id])=>sources[id]&&sources[id].kind!=='unavailable').length;
    sourceToast('Verifica fonti: '+available+'/'+GUIDE_SOURCES.length+' con dati disponibili. Tocca le date per i dettagli.');
@@ -867,18 +865,19 @@ async function refreshGuideSources(){
    for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
    announceSourceUpdates(received,!sourceCheckInitialized);
    sourceCheckInitialized=true;
-   const verified=GUIDE_SOURCES.filter(([id])=>sources[id]?.guideUpdatedAt&&!sources[id]?._stale);
    const checked=guideDate(checkedAt,true);
    const prefix=(checked?'Ultimo controllo pubblicato: '+checked+'. ':'')+
-     (liveChecked?'Inariaa verificata direttamente su GitHub adesso. ':'');
+     (liveChecked?'Inariaa verificata direttamente adesso. ':'');
    const stale=GUIDE_SOURCES.filter(([id])=>sources[id]?._stale).length;
-   const staleNote=stale?' '+stale+' fonte/i mostrano l’ultimo dato noto perché il controllo attuale non è riuscito.':'';
-   if(verified.length>=2){
-      const latest=verified.sort((a,b)=>sources[b[0]].guideUpdatedAt.localeCompare(sources[a[0]].guideUpdatedAt))[0];
-      $('sourceComparison').textContent=prefix+'Fra le fonti con date dei file verificate, la più recente è '+latest[1]+'. Le altre non sono confrontabili senza data delle guide.'+staleNote;
-   }else{
-      $('sourceComparison').textContent=prefix+'Non è possibile stabilire con certezza quale fonte sia più aggiornata: almeno una non pubblica una data verificabile delle guide. Una versione o una data del sito non basta.'+staleNote;
-   }
+   const staleNote=stale?' '+stale+' fonte/i usano l’ultimo dato noto.':'';
+   const versions=GUIDE_SOURCES.filter(([id])=>sources[id]?.version&&!sources[id]?._stale)
+     .map(([id,name])=>name+' v'+String(sources[id].version).replace(/^v/i,''));
+   const dated=GUIDE_SOURCES.filter(([id])=>!sources[id]?.version&&sources[id]?.guideUpdatedAt&&!sources[id]?._stale)
+     .map(([id,name])=>name+': file guide modificato '+guideDate(sources[id].guideUpdatedAt,true));
+   $('sourceComparison').textContent=prefix+
+     (versions.length?'Versioni dichiarate: '+versions.join(', ')+'. ':'')+
+     (dated.length?dated.join('; ')+'. ':'')+
+     'Una data di modifica e un numero di versione non sono direttamente confrontabili.'+staleNote;
  }catch(error){
    const sources=withLastKnownSources({});
    for(const [id] of GUIDE_SOURCES)showSourceState(id,sources[id]);
