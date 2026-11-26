@@ -46,7 +46,7 @@ def extract_version(page,pattern):
 
 def meta(key,kind="unavailable",version=None,**kwargs):
     return {"kind":kind,"guideUpdatedAt":None,"siteUpdatedAt":None,
-            "declaredGuideDate":None,"version":version,"sourceUrl":SOURCE_URLS[key],
+            "declaredGuideDate":None,"declaredSiteDate":None,"version":version,"sourceUrl":SOURCE_URLS[key],
             "notes":"La data di aggiornamento delle guide non è verificabile.",**kwargs}
 
 def inariaa():
@@ -59,8 +59,17 @@ def inariaa():
 def forever():
     page=fetch(SOURCE_URLS["forever"])
     version=extract_version(page,r"(?:Rested\s*XP|RestedXP|RXP)\s*(?:version\s*)?v?(\d+\.\d+\.\d+)")
-    return meta("forever",kind="published-version",version=version,
-        notes="Versione RestedXP pubblicata sul sito; la data delle guide non è verificabile.")
+    # The visible 'Updated: DD.MM.YYYY' is a site claim, not a verified guide-file commit.
+    plain=re.sub(r"\s+"," ",re.sub(r"<[^>]+>"," ",html.unescape(page)))
+    match=re.search(r"\bUpdated\s*:\s*(\d{1,2})[./-](\d{1,2})[./-](20\d{2})",plain,re.I)
+    declared=None
+    if match:
+        try:
+            declared=dt.date(int(match.group(3)),int(match.group(2)),int(match.group(1))).isoformat()
+        except ValueError:
+            pass
+    return meta("forever",kind="published-version",version=version,declaredSiteDate=declared,
+        notes="Versione RestedXP e data 'Updated' indicate dal sito. La data non certifica un aggiornamento del file delle guide.")
 
 def avery():
     # This repository hosts a single bundled index.html (~1.3 MB). Its commit
