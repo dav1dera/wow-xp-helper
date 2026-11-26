@@ -65,6 +65,9 @@ for item in ("sourceToast", "sourceToastMessage", "sourceToastClose"):
 assert "announceSourceUpdates(received,!sourceCheckInitialized)" in source, "Guide update toast must use newly fetched data"
 assert "setInterval(()=>{if(!document.hidden)refreshGuideSources();},10*60*1000)" in source, "Open pages must refresh automatically"
 assert "withLastKnownSources" in source, "Temporary errors must preserve previously confirmed dates"
+assert "fetchLiveInariaaDate" in source and "api.github.com/repos/Inariaa/rxp_decrypter/commits?path=guide.txt" in source, "Inariaa commit must be checked live"
+assert "loadGuideSources()" in source, "Published metadata and live Inariaa should be combined"
+assert "declaredSiteDate" in source, "Visible website update dates must be distinguished from guide dates"
 for link in ("https://averyp-git.github.io/rested-exp-free/", "https://rxp.kostya.sexy/"):
     assert link in ui.links, f"Missing additional RestedXP source: {link}"
 assert source.count('class="source-option"') == 4, "The guide sources must have four verified cards"
