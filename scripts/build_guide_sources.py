@@ -46,8 +46,9 @@ def extract_version(page,pattern):
 
 def meta(key,kind="unavailable",version=None,**kwargs):
     return {"kind":kind,"guideUpdatedAt":None,"siteUpdatedAt":None,
-            "declaredGuideDate":None,"declaredSiteDate":None,"version":version,"sourceUrl":SOURCE_URLS[key],
-            "notes":"La data di aggiornamento delle guide non è verificabile.",**kwargs}
+            "declaredGuideDate":None,"declaredSiteDate":None,"guideReleaseDate":None,
+            "version":version,"sourceUrl":SOURCE_URLS[key],
+            "notes":"Versione o data delle guide non verificabile.",**kwargs}
 
 def inariaa():
     date=gh_commit("https://api.github.com/repos/Inariaa/rxp_decrypter/commits?path=guide.txt&per_page=1")
@@ -69,15 +70,31 @@ def forever():
         except ValueError:
             pass
     return meta("forever",kind="published-version",version=version,declaredSiteDate=declared,
-        notes="Versione RestedXP e data 'Updated' indicate dal sito. La data non certifica un aggiornamento del file delle guide.")
+        notes="Versione RestedXP dichiarata sul sito. Il campo 'Updated' riguarda il sito e non viene usato per datare le guide.")
 
 def avery():
-    # This repository hosts a single bundled index.html (~1.3 MB). Its commit
-    # is a site update, NOT independently dated guide-file contents.
-    when=gh_commit("https://api.github.com/repos/averyp-git/rested-exp-free/commits?path=index.html&per_page=1")
-    return meta("avery",kind="site-commit",siteUpdatedAt=when,
-        sourceUrl="https://github.com/averyp-git/rested-exp-free/commits/main/index.html",
-        notes="Ultima modifica del sito/repository Avery. Non equivale a una data verificata delle guide.")
+    # Read the generator's *embedded addon version* from the page footer metadata,
+    # not its GitHub commit or build timestamp. Current format:
+    # const meta = {"built":"...","addon":{"version":"v4.11.35","released":"2026-11-08",...}};
+    page=fetch("https://raw.githubusercontent.com/averyp-git/rested-exp-free/main/index.html")
+    match=re.search(r"\bconst\s+meta\s*=\s*(\{[^\r\n;]+\})\s*;",page)
+    if not match:
+        raise ValueError("Avery addon metadata not present")
+    addon=json.loads(match.group(1)).get("addon") or {}
+    version=str(addon.get("version","")).strip()
+    if not re.fullmatch(r"v?\d+\.\d+\.\d+",version):
+        raise ValueError("Avery addon version missing or invalid")
+    version=version.lstrip("v")
+    released=addon.get("released")
+    release_date=None
+    if isinstance(released,str):
+        try:
+            release_date=dt.date.fromisoformat(released).isoformat()
+        except ValueError:
+            pass
+    return meta("avery",kind="embedded-guide-version",version=version,
+        guideReleaseDate=release_date,
+        notes="Versione RXPGuides dichiarata nei metadati della pagina Avery; data 'released' del pacchetto inclusa, non data di creazione del sito né conferma indipendente dei contenuti.")
 
 def kostya():
     page=fetch(SOURCE_URLS["kostya"])
@@ -97,7 +114,7 @@ def kostya():
             pass
     return meta("kostya",kind="site-declared-guide-date",
         version=version,declaredGuideDate=claimed,
-        notes="Versione e data eventualmente dichiarate da Forever RXP; non confermate su un file guide indipendente.")
+        notes="Versione e data della guida ufficiale 1-60 dichiarate sulla pagina Forever RXP; non verificate su un file separato.")
 
 TASKS={"inariaa":inariaa,"forever":forever,"avery":avery,"kostya":kostya}
 
